@@ -17,7 +17,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
-./src/FirebaseConfig.js
+
+#api key
+.env
 
 npm-debug.log*
 yarn-debug.log*

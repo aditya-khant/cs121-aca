@@ -14,7 +14,7 @@ class Tutee extends Component {
         this.state = {
           username: '',
           problem: '',
-          subject: ''
+          subject: 'math'
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,25 +46,20 @@ class Tutee extends Component {
     
   render() {
     return (
-       <div>
-       <MuiThemeProvider theme={Theme}>
+        <div>
           <h1>Tutee</h1>
         <form onSubmit={this.handleSubmit}>
             <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username}/>
-            <select id="lang" onChange={this.handleChange} value={this.state.subject}>
+            <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
+            <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
                   <option value="Math">Math</option>
                   <option value="Biology">Biology</option>
                   <option value="English">English</option>
                </select>
-               <p></p>
-               <p>{this.state.subject}</p>
-            <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
-        <Button variant="contained" color="secondary">
-          Add Question
-        </Button>
+        <button>Add Question</button>
       </form>
-      </MuiThemeProvider>
        </div>
+
     );
     }
 }

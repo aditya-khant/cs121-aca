@@ -42,6 +42,24 @@ handleChange(e) {
       [e.target.name]: e.target.value
     });
   };
+
+pickSubject(problem, subject) {
+    // Takes in a problem array with username, problem, subject, and id
+    // and the subject the tutor wants to see from the dropdown
+    // and returns the problems that match that subject
+    if (problem.subject === subject) {
+        return (
+            <div key={problem.id}>
+                <div>
+                    <div>
+                        <h3>{problem.problem}</h3>
+                        <p>{problem.username}</p>
+                    </div>
+                </div>
+            </div>
+        )} 
+        return null
+}
  
 render(){
     return (
@@ -54,18 +72,7 @@ render(){
                 <option value="English">English</option>
             </select>
             {this.state.problems.map((problem) => {
-                if (problem.subject === this.state.subject) {
-                return (
-                    <div key={problem.id}>
-                        <div>
-                            <div>
-                                <h3>{problem.problem}</h3>
-                                <p>{problem.username}</p>
-                            </div>
-                        </div>
-                    </div>
-                )} 
-                return null
+                return this.pickSubject(problem, this.state.subject)
             })}
         </div>
      );

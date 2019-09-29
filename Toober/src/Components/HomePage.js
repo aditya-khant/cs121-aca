@@ -1,17 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
-class HomePage extends Component {
-  constructor() {
-    super();
-  }
-
-
-  
-render(){
+const HomePage = () => {
   return (
      <div>
      <MuiThemeProvider theme={Theme}>
@@ -25,7 +18,6 @@ render(){
       </MuiThemeProvider>
      </div>
   );
-}
 }
  
 export default HomePage;

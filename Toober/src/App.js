@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './Components/HomePage';
@@ -6,9 +6,9 @@ import Tutor from './Components/TutorPage';
 import Tutee from './Components/TuteePage';
 import Navigation from './Components/Navigation';
 
-
-class App extends Component {
-  render() {
+// This document sets the URLs in Route
+// Referenced by Navigation.js
+const App = () => {
     return (
         <BrowserRouter>
           <div>
@@ -22,6 +22,5 @@ class App extends Component {
         </BrowserRouter>
     );
   }
-}
- 
+
 export default App;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './Components/HomePage';
@@ -6,19 +6,10 @@ import Tutor from './Components/TutorPage';
 import Tutee from './Components/TuteePage';
 import Navigation from './Components/Navigation';
 
-/*components required to use material-ui*/
-import {MuiThemeProvider,createMuiTheme} from '@material-ui/core/styles';
-import {CssBaseline} from '@material-ui/core';
-
-/*default material-ui theme generation*/
-const theme=createMuiTheme()
-
-
-class App extends Component {
-  render() {
+// This document sets the URLs in Route
+// Referenced by Navigation.js
+const App = () => {
     return (
-      <MuiThemeProvider theme={theme}>
-        <CssBaseline/> 
         <BrowserRouter>
           <div>
           <Navigation />
@@ -29,9 +20,7 @@ class App extends Component {
             </Switch>
           </div> 
         </BrowserRouter>
-      </MuiThemeProvider>
     );
   }
-}
- 
+
 export default App;

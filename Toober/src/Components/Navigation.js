@@ -18,6 +18,7 @@ const Navigation = () => {
                   <Tab label="Home" component={Link} to="/" /*Link and to are how we integrate with react-router*//>
                   <Tab label="Tutor" component={Link} to="/Tutor" /*We set up the "to" suffix in App.js*//>
                   <Tab label="Tutee" component={Link} to="/Tutee" />
+                  <Tab label="Chat" component={Link} to="/Chat" />
                </Typography>
             </Toolbar>
           </AppBar>

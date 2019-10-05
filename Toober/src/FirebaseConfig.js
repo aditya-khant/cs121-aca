@@ -2,13 +2,12 @@ import firebase from 'firebase';
 
 const firebaseConfig = {
   apiKey: process.env.API_KEY,
-  authDomain: "tooberdatabaseuse.firebaseapp.com",
-  databaseURL: "https://tooberdatabaseuse.firebaseio.com",
-  projectId: "tooberdatabaseuse",
-  storageBucket: "tooberdatabaseuse.appspot.com",
-  messagingSenderId: "1068632627328",
-  appId: "1:1068632627328:web:37062820035a58af82ae65",
-  measurementId: "G-WR7MRVXCLZ"
+  authDomain: "fir-tutorialchat-70cc4.firebaseapp.com",
+  databaseURL: "https://fir-tutorialchat-70cc4.firebaseio.com",
+  projectId: "fir-tutorialchat-70cc4",
+  storageBucket: "fir-tutorialchat-70cc4.appspot.com",
+  messagingSenderId: "441844295635",
+  appId: "1:441844295635:web:1024895ac820b72a727126"
 };
 
 firebase.initializeApp(firebaseConfig);

@@ -9,7 +9,9 @@
     "react-dom": "^16.9.0",
     "react-router": "^5.1.0",
     "react-router-dom": "^5.1.0",
-    "react-scripts": "3.1.2"
+    "react-scripts": "3.1.2",
+    "talkjs": "^0.13.0",
+    "typescript": "^3.6.3"
   },
   "scripts": {
     "start": "react-scripts start",

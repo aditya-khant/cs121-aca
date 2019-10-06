@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './Form.css';
 import Message from '../Messages/Message';
 import firebase from 'firebase';
+import { Link } from "react-router-dom";
+
 
 export default class Form extends Component {
   constructor(props) {
@@ -11,13 +13,29 @@ export default class Form extends Component {
       message: '',
       list: [],
     };
-    this.messageRef = firebase.database().ref().child('messages');
+    
+    this.messageRef = firebase.database().ref('/messages/');
+    this.messageRef.on('value', (snapshot) => {
+      if(snapshot.val() == null) {
+        this.createWelcome();
+      };
+    });
+
     this.listenMessages();
   }
   componentWillReceiveProps(nextProps) {
     if(nextProps.user) {
       this.setState({'userName': nextProps.user.displayName});
     }
+  }
+  createWelcome() {
+    var welcomeMessage = {
+      userName: 'Toober',
+      message: 'Start chatting!'
+    }
+    this.messageRef.push(welcomeMessage);
+    this.setState({message: ''});
+    this.setState({userName: ''});
   }
   handleChange(e) {
     // Update the state when necessary
@@ -44,10 +62,17 @@ export default class Form extends Component {
   listenMessages() {
     this.messageRef
       .on('value', message => {
+        if (message.val() !== null) {
         this.setState({
           list: Object.values(message.val()),
         });
+      };
       });
+  }
+
+  exit() {
+    const messages = firebase.database().ref('/messages/');
+    messages.remove();
   }
 
   render() {
@@ -87,6 +112,7 @@ export default class Form extends Component {
             send
           </button>
         </div>
+        <Link to = '/'><button onClick={this.exit}>Exit</button></Link>
       </div>
     );
   }

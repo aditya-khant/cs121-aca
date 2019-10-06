@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Form.css';
-import Message from '../Messages/Message';
+import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
 

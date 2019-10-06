@@ -5,7 +5,7 @@ import Home from './Components/HomePage';
 import Tutor from './Components/TutorPage';
 import Tutee from './Components/TuteePage';
 import Navigation from './Components/Navigation';
-import Chat from './Components/ChatPage';
+import Chat from './Components/Chat/ChatPage';
 
 // This document sets the URLs in Route
 // Referenced by Navigation.js

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './ChatPage.css';
-import Form from './ChatForm/Form.js';
+import Form from './Form.js';
 
 class ChatPage extends Component {
   constructor(props) {

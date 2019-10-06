@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
  
+import { Link } from "react-router-dom";
+
 class Tutor extends Component {
     constructor() {
         super();
@@ -52,8 +54,11 @@ pickSubject(problem, subject) {
             <div key={problem.id}>
                 <div>
                     <div>
-                        <h3>{problem.problem}</h3>
+                        <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
+                        <Link to='/Chat'>
+                            <button>Chat</button>
+                        </Link>
                     </div>
                 </div>
             </div>

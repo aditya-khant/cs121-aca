@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
- 
-import { Link } from "react-router-dom";
+import Popup from './Popup.js'
 
 class Tutor extends Component {
     constructor(props) {
@@ -9,10 +8,17 @@ class Tutor extends Component {
         // We will populate this list with data from Firebase
         this.state = {
           problems: [],
-          subject: 'Math'
+          subject: 'Math', 
+          showPopup: false
         }
         this.handleChange = this.handleChange.bind(this);
     }
+
+    togglePopup() {  
+        this.setState({  
+             showPopup: !this.state.showPopup  
+            });  
+         }  
 
 componentDidMount() {
     // Loading data from Firebase
@@ -56,9 +62,14 @@ pickSubject(problem, subject) {
                     <div>
                         <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
-                        <Link to= {{ pathname: '/Chat', query: {user: problem.username}}}>
-                            <button>Chat</button>   
-                        </Link>
+                        {/* <Link to= {{ pathname: '/Chat', query: {user: problem.username}}}> */}
+                        <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>   
+                        {/* </Link> */}
+                        {this.state.showPopup ?  
+                        <Popup  
+                            text='Click "Close Button" to hide popup'  
+                            closePopup={this.togglePopup.bind(this)}  
+                        /> : null }  
                     </div>
                 </div>
             </div>

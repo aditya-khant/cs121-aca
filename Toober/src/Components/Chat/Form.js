@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 export default class Form extends Component {
   constructor(props) {
     super(props);
+    console.log(props.user)
     this.state = {
       userName: props.user,
       message: '',

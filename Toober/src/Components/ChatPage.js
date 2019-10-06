@@ -9,9 +9,12 @@ class ChatPage extends Component {
       user: null,
     }
   }
+  
   render() {
     return (
       <div className="app">
+        <div className="app__header">
+        </div>
         <div className="app__list">
           <Form user={this.state.user} />
         </div>

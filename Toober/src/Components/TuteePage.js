@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
-import { Link } from "react-router-dom";
 
 
 class Tutee extends Component {

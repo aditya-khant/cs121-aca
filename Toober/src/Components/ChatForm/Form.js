@@ -7,7 +7,7 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: 'Sebastian',
+      userName: '',
       message: '',
       list: [],
     };
@@ -19,9 +19,13 @@ export default class Form extends Component {
       this.setState({'userName': nextProps.user.displayName});
     }
   }
-  handleChange(event) {
-    this.setState({message: event.target.value});
-  }
+  handleChange(e) {
+    // Update the state when necessary
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
   handleSend() {
     if (this.state.message) {
       var newItem = {
@@ -39,7 +43,6 @@ export default class Form extends Component {
 
   listenMessages() {
     this.messageRef
-      .limitToLast(10)
       .on('value', message => {
         this.setState({
           list: Object.values(message.val()),
@@ -51,14 +54,29 @@ export default class Form extends Component {
     return (
       <div className="form">
         <div className="form__message">
+        <div className="scroller">
+
           { this.state.list.map((item, index) =>
             <Message key={index} message={item} />
           )}
+        </div>
         </div>
         <div className="form__row">
           <input
             className="form__input"
             type="text"
+            name="userName"
+            placeholder="Chat"
+            value={this.state.userName}
+            onChange={this.handleChange.bind(this)}
+            onKeyPress={this.handleKeyPress.bind(this)}
+          />
+        </div>
+        <div className="form__row">
+          <input
+            className="form__input"
+            type="text"
+            name="message"
             placeholder="Type message"
             value={this.state.message}
             onChange={this.handleChange.bind(this)}

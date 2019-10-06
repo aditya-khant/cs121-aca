@@ -6,10 +6,10 @@ class ChatPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
-    }
+      user: props.location.query.user
+    } 
   }
-  
+
   render() {
     return (
       <div className="app">

@@ -9,7 +9,7 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
+      userName: props.user,
       message: '',
       list: [],
     };
@@ -83,7 +83,7 @@ export default class Form extends Component {
             <Message key={index} message={item} />
           )}
         </div>
-
+{/* 
         <div className="form__row">
           <input
             className="form__input"
@@ -94,7 +94,7 @@ export default class Form extends Component {
             onChange={this.handleChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}
           />
-        </div>
+        </div> */}
         <div className="form__row">
           <input
             className="form__input"

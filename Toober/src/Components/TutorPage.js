@@ -4,8 +4,8 @@ import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
 
 class Tutor extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         // We will populate this list with data from Firebase
         this.state = {
           problems: [],
@@ -56,8 +56,8 @@ pickSubject(problem, subject) {
                     <div>
                         <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
-                        <Link to='/Chat'>
-                            <button>Chat</button>
+                        <Link to= {{ pathname: '/Chat', query: {user: problem.username}}}>
+                            <button>Chat</button>   
                         </Link>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import Home from './Components/HomePage';
@@ -9,7 +9,10 @@ import Chat from './Components/ChatPage';
 
 // This document sets the URLs in Route
 // Referenced by Navigation.js
-const App = () => {
+
+class App extends Component {
+
+  render() {
     return (
         <BrowserRouter>
           <div>
@@ -24,5 +27,6 @@ const App = () => {
         </BrowserRouter>
     );
   }
+}
 
 export default App;

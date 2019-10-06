@@ -9,14 +9,11 @@ const HomePage = () => {
      <div>
      <MuiThemeProvider theme={Theme}>
         <h1>Home Page</h1>
-      <Button variant="contained" color="secondary" href="/Tutor">
+      <Button variant="contained" color="secondary" href="/Tutor" >
         Tutor
       </Button>
       <Button variant="contained" color="secondary" href="/Tutee">
         Tutee
-      </Button>
-      <Button variant="contained" color="secondary" href="/Chat">
-        Chat
       </Button>
       </MuiThemeProvider>
      </div>

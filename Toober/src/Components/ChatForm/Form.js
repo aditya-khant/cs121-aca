@@ -53,20 +53,18 @@ export default class Form extends Component {
   render() {
     return (
       <div className="form">
-        <div className="form__message">
         <div className="scroller">
-
           { this.state.list.map((item, index) =>
             <Message key={index} message={item} />
           )}
         </div>
-        </div>
+
         <div className="form__row">
           <input
             className="form__input"
             type="text"
             name="userName"
-            placeholder="Chat"
+            placeholder="Your Username"
             value={this.state.userName}
             onChange={this.handleChange.bind(this)}
             onKeyPress={this.handleKeyPress.bind(this)}

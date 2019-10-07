@@ -20,16 +20,19 @@ export default class FormDialog extends Component {
     };
 
     handleClickOpen = () => {
+      // When it is clicked, the popup should open
       this.setState({setOpen:true});
       this.setState({open:true});
     };
   
     handleClose = () => {
+        // if it's canceled the popup closes
         this.setState({setOpen: false});
         this.setState({open: false});
     };
 
     handleChange = (e) => {
+        // saves the username that the tutor enters
         this.setState({userName: e.target.value});
     };
 

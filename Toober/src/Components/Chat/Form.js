@@ -9,6 +9,7 @@ export default class Form extends Component {
 
   constructor(props) {
     super(props);
+    // sets the state from props
     this.state = {
       userName: props.user,
       tuteeName: props.tuteeName,
@@ -16,8 +17,10 @@ export default class Form extends Component {
       list: [],
     };
     
+    // gets a snapshot of the databse
     this.messageRef = firebase.database().ref('/messages/');
     this.messageRef.on('value', (snapshot) => {
+      // if there are no messages in the database, we will generate a welcome message
       if(snapshot.val() == null) {
         this.createWelcome();
       };
@@ -25,20 +28,22 @@ export default class Form extends Component {
 
     this.listenMessages();
   }
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.user) {
-      this.setState({'userName': nextProps.user.displayName});
-    }
-  }
+
   createWelcome() {
+    // creates the welcome message
     var welcomeMessage = {
       userName: this.state.tuteeName,
       message: 'Start chatting with me, the tutee!'
     }
+    // pushes it to the database
+    // which will later get read and updated on the page
     this.messageRef.push(welcomeMessage);
+
+    // sets the state back to empty
     this.setState({message: ''});
     this.setState({userName: ''});
   }
+
   handleChange(e) {
     // Update the state when necessary
     this.setState({
@@ -47,23 +52,31 @@ export default class Form extends Component {
   };
 
   handleSend() {
+    // when the message is typed
+    // this sends it
     if (this.state.message) {
+      // sets the message and username for the databse
       var newItem = {
         userName: this.state.userName,
         message: this.state.message,
       }
+      // pushes the message
       this.messageRef.push(newItem);
       this.setState({ message: '' });
     }
   }
+
   handleKeyPress(event) {
+    // allows you to hit enter to send your message
     if (event.key !== 'Enter') return;
     this.handleSend();
   }
 
   listenMessages() {
+    // renders the data from the database
     this.messageRef
       .on('value', message => {
+        // prints anything with a non-null message
         if (message.val() !== null) {
         this.setState({
           list: Object.values(message.val()),
@@ -73,6 +86,7 @@ export default class Form extends Component {
   }
 
   exit() {
+    // when you press the exit button, it clears the messages from the databse
     const messages = firebase.database().ref('/messages/');
     messages.remove();
   }
@@ -85,18 +99,6 @@ export default class Form extends Component {
             <Message key={index} message={item} />
           )}
         </div>
-{/* 
-        <div className="form__row">
-          <input
-            className="form__input"
-            type="text"
-            name="userName"
-            placeholder="Your Username"
-            value={this.state.userName}
-            onChange={this.handleChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-          />
-        </div> */}
         <div className="form__row">
           <input
             className="form__input"

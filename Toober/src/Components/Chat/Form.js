@@ -6,11 +6,12 @@ import { Link } from "react-router-dom";
 
 
 export default class Form extends Component {
+
   constructor(props) {
     super(props);
-    console.log(props.user)
     this.state = {
       userName: props.user,
+      tuteeName: props.tuteeName,
       message: '',
       list: [],
     };
@@ -31,8 +32,8 @@ export default class Form extends Component {
   }
   createWelcome() {
     var welcomeMessage = {
-      userName: 'Toober',
-      message: 'Start chatting!'
+      userName: this.state.tuteeName,
+      message: 'Start chatting with me, the tutee!'
     }
     this.messageRef.push(welcomeMessage);
     this.setState({message: ''});

@@ -16,7 +16,7 @@ class Tutor extends Component {
 
     togglePopup() {  
         this.setState({  
-             showPopup: !this.state.showPopup  
+             showPopup: !this.state.showPopup
             });  
          }  
 
@@ -62,14 +62,8 @@ pickSubject(problem, subject) {
                     <div>
                         <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
-                        {/* <Link to= {{ pathname: '/Chat', query: {user: problem.username}}}> */}
-                        <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>   
-                        {/* </Link> */}
-                        {this.state.showPopup ?  
-                        <Popup  
-                            text='Click "Close Button" to hide popup'  
-                            closePopup={this.togglePopup.bind(this)}  
-                        /> : null }  
+                        <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>
+                        {this.state.showPopup ? <Popup tuteeName = {problem.username} /> : null }
                     </div>
                 </div>
             </div>

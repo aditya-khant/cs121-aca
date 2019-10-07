@@ -8,6 +8,9 @@ import { Link } from "react-router-dom";
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
+import { AuthContext } from "../Auth";
+import app from "../FirebaseConfig";
+
 const Navigation = () => {
     return (
       <div>
@@ -18,6 +21,9 @@ const Navigation = () => {
                   <Tab label="Home" component={Link} to="/" /*Link and to are how we integrate with react-router*//>
                   <Tab label="Tutor" component={Link} to="/Tutor" /*We set up the "to" suffix in App.js*//>
                   <Tab label="Tutee" component={Link} to="/Tutee" />
+                  <Tab label="Login" component={Link} to="/Login" />
+                  <Tab label="Sign Up" component={Link} to="/Signup" />
+                  <button onClick={() => app.auth().signOut()}>Sign out</button>
                </Typography>
             </Toolbar>
           </AppBar>

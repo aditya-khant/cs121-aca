@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
- 
+import Popup from './Popup.js'
+
 class Tutor extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         // We will populate this list with data from Firebase
         this.state = {
           problems: [],
-          subject: 'Math'
+          subject: 'Math', 
+          showPopup: false
         }
         this.handleChange = this.handleChange.bind(this);
     }
+
+    togglePopup() {  
+        this.setState({  
+             showPopup: !this.state.showPopup
+            });  
+         }  
 
 componentDidMount() {
     // Loading data from Firebase
@@ -52,8 +60,10 @@ pickSubject(problem, subject) {
             <div key={problem.id}>
                 <div>
                     <div>
-                        <h3>{problem.problem}</h3>
+                        <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
+                        <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>
+                        {this.state.showPopup ? <Popup tuteeName = {problem.username} /> : null }
                     </div>
                 </div>
             </div>

@@ -1,26 +1,36 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 
 import Home from './Components/HomePage';
 import Tutor from './Components/TutorPage';
 import Tutee from './Components/TuteePage';
 import Navigation from './Components/Navigation';
+import Login from './Components/Login';
+import SignUp from './Components/SignUp';
+
+import { AuthProvider } from "./Auth";
+import PrivateRoute from "./PrivateRoute";
 
 // This document sets the URLs in Route
 // Referenced by Navigation.js
 const App = () => {
     return (
-        <BrowserRouter>
+      <AuthProvider>
+        <Router>
           <div>
           <Navigation />
               <Switch>
-              <Route path="/" component={Home} exact/>
-              <Route path="/tutor" component={Tutor}/>
-              <Route path="/tutee" component={Tutee}/>
+              <PrivateRoute exact path="/" component={Home}/>
+              <PrivateRoute exact path="/tutor" component={Tutor}/>
+              <PrivateRoute exact path="/tutee" component={Tutee}/>
+              <Route exact path="/login" component={Login}/>
+              <Route exact path="/signup" component={SignUp}/>
             </Switch>
           </div> 
-        </BrowserRouter>
+        </Router>
+      </AuthProvider>
     );
-  }
+  };
 
 export default App;

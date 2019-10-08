@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useContext } from "react";
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -12,6 +12,17 @@ import { AuthContext } from "../Auth";
 import app from "../FirebaseConfig";
 
 const Navigation = () => {
+    const { currentUser } = useContext(AuthContext);
+    if(currentUser)
+    {
+      var login = "/Login";
+      var loginText = "Logout";
+    }
+    else
+    {
+      var login = "/Login";
+      var loginText = "Login";
+    }
     return (
       <div>
        <MuiThemeProvider theme={Theme}>
@@ -21,7 +32,7 @@ const Navigation = () => {
                   <Tab label="Home" component={Link} to="/" /*Link and to are how we integrate with react-router*//>
                   <Tab label="Tutor" component={Link} to="/Tutor" /*We set up the "to" suffix in App.js*//>
                   <Tab label="Tutee" component={Link} to="/Tutee" />
-                  <Tab label="Login" component={Link} to="/Login" />
+                  <Tab label={loginText} component={Link} to={login} />
                   <Tab label="Sign Up" component={Link} to="/Signup" />
                   <button onClick={() => app.auth().signOut()}>Sign out</button>
                </Typography>

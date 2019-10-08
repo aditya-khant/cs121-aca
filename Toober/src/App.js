@@ -21,7 +21,7 @@ const App = () => {
           <div>
           <Navigation />
               <Switch>
-              <PrivateRoute exact path="/" component={Home} exact/>
+              <PrivateRoute exact path="/" component={Home}/>
               <PrivateRoute exact path="/tutor" component={Tutor}/>
               <PrivateRoute exact path="/tutee" component={Tutee}/>
               <Route exact path="/login" component={Login}/>

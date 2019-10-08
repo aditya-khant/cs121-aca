@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
-import { withRouter } from "react-router";
+import React, { useCallback, useContext } from "react";
+import { withRouter, Redirect } from "react-router";
 import app from "../FirebaseConfig";
+import { AuthContext } from "../Auth";
 
 const SignUp = ({ history }) => {
   const handleSignUp = useCallback(async event => {
@@ -15,6 +16,12 @@ const SignUp = ({ history }) => {
       alert(error);
     }
   }, [history]);
+
+  const { currentUser } = useContext(AuthContext);
+  if (currentUser)
+  {
+    return <Redirect to="/" />;
+  }
 
   return (
     <div>

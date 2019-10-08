@@ -1,14 +1,15 @@
 import firebase from 'firebase';
+import "firebase/auth";
 
-const firebaseConfig = {
+const app  = firebase.initializeApp({
   apiKey: process.env.API_KEY,
-  authDomain: "chatpoc-ad7c2.firebaseapp.com",
-  databaseURL: "https://chatpoc-ad7c2.firebaseio.com",
-  projectId: "chatpoc-ad7c2",
-  storageBucket: "chatpoc-ad7c2.appspot.com",
-  messagingSenderId: "956577952304",
-  appId: "1:956577952304:web:41445bad53598406d4f3f5"
-};
+  authDomain: "tooberdatabaseuse.firebaseapp.com",
+  databaseURL: "https://tooberdatabaseuse.firebaseio.com",
+  projectId: "tooberdatabaseuse",
+  storageBucket: "tooberdatabaseuse.appspot.com",
+  messagingSenderId: "1068632627328",
+  appId: "1:1068632627328:web:37062820035a58af82ae65",
+  measurementId: "G-WR7MRVXCLZ"
+});
 
-firebase.initializeApp(firebaseConfig);
-export default firebase;
+export default app;

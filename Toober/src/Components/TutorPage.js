@@ -35,6 +35,7 @@ componentDidMount() {
                 username: problems[id].user,
                 problem: problems[id].problem,
                 subject: problems[id].subject,
+                uid: problems[id].uid,
                 id: id
             });
         }
@@ -63,7 +64,7 @@ pickSubject(problem, subject) {
                         <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
                         <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>
-                        {this.state.showPopup ? <Popup tuteeName = {problem.username} /> : null }
+                        {this.state.showPopup ? <Popup tuteeName = {problem.username} tuteeUID = {problem.uid} /> : null }
                     </div>
                 </div>
             </div>

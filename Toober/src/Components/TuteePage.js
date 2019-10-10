@@ -10,7 +10,8 @@ class Tutee extends Component {
         this.state = {
           username: '',
           problem: '',
-          subject: 'Math'
+          subject: 'Math', 
+          uid: firebase.auth().currentUser.uid
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,7 +34,8 @@ class Tutee extends Component {
     const item = {
       user: this.state.username,
       problem: this.state.problem,
-      subject: this.state.subject
+      subject: this.state.subject, 
+      uid: this.state.uid
     }
     // If it cannot push to Firebase, we return an error
     itemsRef.push(item).catch(function(error) {
@@ -43,7 +45,8 @@ class Tutee extends Component {
     this.setState({
       username: '',
       problem: '',
-      subject: 'Math'
+      subject: 'Math',
+      uid: firebase.auth().currentUser.uid
     })
   }
     

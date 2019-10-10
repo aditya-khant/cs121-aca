@@ -15,7 +15,8 @@ export default class FormDialog extends Component {
           userName: '',
           open: false,
           setOpen: false,
-          tuteeName: props.tuteeName
+          tuteeName: props.tuteeName,
+          tuteeUID: props.tuteeUID
         };
     };
 
@@ -60,7 +61,7 @@ export default class FormDialog extends Component {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Link to= {{ pathname: '/Chat', query: {user: this.state.userName, tuteeName: this.state.tuteeName}}}>
+            <Link to= {{ pathname: '/Chat', query: {user: this.state.userName, tuteeName: this.state.tuteeName, tuteeUID: this.state.tuteeUID}}}>
             <Button onClick={this.handleClose} color="primary">
               Continue
             </Button>

@@ -9,17 +9,19 @@ class ChatPage extends Component {
     this.state = {
       // From the properties, it gets the tutor's username and the tutee's username
       user: props.location.query.user,
-      tuteeName: props.location.query.tuteeName
+      tuteeName: props.location.query.tuteeName,
+      tuteeUID: props.location.query.tuteeUID
     } 
   }
 
   render() {
+    console.log(this.state.tuteeUID)
     return (
       <div className="app">
         <div className="app__header">
         </div>
         <div className="app__list">
-          <Form user={this.state.user} tuteeName={this.state.tuteeName} />
+          <Form user={this.state.user} tuteeName={this.state.tuteeName} tuteeUID = {this.state.tuteeUID} />
         </div>
       </div>
     );

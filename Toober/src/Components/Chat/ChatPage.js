@@ -6,6 +6,7 @@ class ChatPage extends Component {
 
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       // From the properties, it gets the tutor's username and the tutee's username
       user: props.location.query.user,
@@ -15,7 +16,6 @@ class ChatPage extends Component {
   }
 
   render() {
-    console.log(this.state.tuteeUID)
     return (
       <div className="app">
         <div className="app__header">

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import Popup from './Popup.js'
+import { Link } from "react-router-dom";
 
 class Tutor extends Component {
     constructor(props) {
@@ -8,7 +9,8 @@ class Tutor extends Component {
         // We will populate this list with data from Firebase
         this.state = {
           problems: [],
-          subject: 'Math', 
+          subject: 'Math',
+          email: firebase.auth().currentUser.email, 
           showPopup: false
         }
         this.handleChange = this.handleChange.bind(this);
@@ -63,8 +65,11 @@ pickSubject(problem, subject) {
                     <div>
                         <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
-                        <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>
-                        {this.state.showPopup ? <Popup tuteeName = {problem.username} tuteeUID = {problem.uid} /> : null }
+                        
+                        {/* {this.state.showPopup ? <Popup tuteeName = {problem.username} tuteeUID = {problem.uid} /> : null } */}
+                        <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid}}}>
+                        <button>Go to chat!</button>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
     // sets the state from props
-    var nothing = props.user;
+    var nothing = props.user; 
     this.state = {
       userName: props.user,
       tuteeName: props.tuteeName,
@@ -19,7 +19,7 @@ export default class Form extends Component {
       message: '',
       list: []
     };
-    var concatstuff = this.state.tutorUID.concat(this.state.tuteeUID);
+    
     // gets a snapshot of the databse
     this.messageRef = firebase.database().ref(this.state.tutorUID.concat(this.state.tuteeUID));
     this.messageRef.on('value', (snapshot) => {
@@ -36,15 +36,25 @@ export default class Form extends Component {
     // creates the welcome message
     var welcomeMessage = {
       userName: this.state.tuteeName,
-      message: 'Start chatting with me, the tutee!'
+      message: 'Start chatting with me!',
+      tuteeUID: this.state.tuteeUID,
+      tutorUID: this.state.tutorUID
     }
+    // var users = {
+    //   userName: "Toober",
+    //   message: "You are now connected with " + this.state.tuteeName,
+    //   tuteeUID: this.state.tuteeUID,
+    //   tutorUID: this.state.tutorUID
+    // }
     // pushes it to the database
     // which will later get read and updated on the page
+    // this.messageRef.push(users);
+
     this.messageRef.push(welcomeMessage);
 
     // sets the state back to empty
     this.setState({message: ''});
-    this.setState({userName: ''});
+    this.setState({userName: this.state.user});
   }
 
   handleChange(e) {

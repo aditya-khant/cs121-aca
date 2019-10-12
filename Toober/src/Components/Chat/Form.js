@@ -15,7 +15,7 @@ export default class Form extends Component {
       userName: props.user,
       tuteeName: props.tuteeName,
       tuteeUID: props.tuteeUID,
-      tutorUID: firebase.auth().currentUser.uid,
+      tutorUID: props.tutorUID,
       message: '',
       list: []
     };
@@ -35,8 +35,8 @@ export default class Form extends Component {
   createWelcome() {
     // creates the welcome message
     var welcomeMessage = {
-      userName: this.state.tuteeName,
-      message: 'Start chatting with me!',
+      userName: "Toober",
+      message: 'Start chatting!',
       tuteeUID: this.state.tuteeUID,
       tutorUID: this.state.tutorUID
     }
@@ -54,7 +54,7 @@ export default class Form extends Component {
 
     // sets the state back to empty
     this.setState({message: ''});
-    this.setState({userName: this.state.user});
+    //this.setState({userName: this.state.user});
   }
 
   handleChange(e) {

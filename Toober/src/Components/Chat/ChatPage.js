@@ -6,13 +6,13 @@ class ChatPage extends Component {
 
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       // From the properties, it gets the tutor's username and the tutee's username
       user: props.location.query.user,
       tuteeName: props.location.query.tuteeName,
-      tuteeUID: props.location.query.tuteeUID
-    } 
+      tuteeUID: props.location.query.tuteeUID,
+      tutorUID: props.location.query.tutorUID
+    }
   }
 
   render() {
@@ -21,7 +21,7 @@ class ChatPage extends Component {
         <div className="app__header">
         </div>
         <div className="app__list">
-          <Form user={this.state.user} tuteeName={this.state.tuteeName} tuteeUID = {this.state.tuteeUID} />
+          <Form user={this.state.user} tuteeName={this.state.tuteeName} tuteeUID = {this.state.tuteeUID} tutorUID  = {this.state.tutorUID} />
         </div>
       </div>
     );

@@ -67,7 +67,7 @@ pickSubject(problem, subject) {
                         <p>{problem.username}</p>
                         
                         {/* {this.state.showPopup ? <Popup tuteeName = {problem.username} tuteeUID = {problem.uid} /> : null } */}
-                        <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid}}}>
+                        <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
                         <button>Go to chat!</button>
                         </Link>
                     </div>

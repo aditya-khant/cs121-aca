@@ -23,6 +23,8 @@ const Login = ({ history }) => {
     return <Redirect to="/" />;
   }
 
+
+
   return (
     <div>
       <h1>Log in</h1>

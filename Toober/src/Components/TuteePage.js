@@ -13,11 +13,14 @@ class Tutee extends Component {
           problem: '',
           subject: 'Math', 
           uid: firebase.auth().currentUser.uid,
+          tutoruid: "",
           email: firebase.auth().currentUser.email,
           showPopup: false
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.addUser = this.addUser.bind(this);
+        this.addUser();
       }
     
   
@@ -60,10 +63,24 @@ class Tutee extends Component {
     })
   }
 
-  clicked() {
-    var fire = firebase.database().ref();
-    console.log(fire);
-  }
+  addUser(e) {
+    // e.preventDefault();
+    // Loading data from Firebase
+    const userRef = firebase.database().ref('users');
+    var tutor = "";
+    userRef.on('value', (snapshot) => {
+        let userList = snapshot.val();
+        
+        // Loops over the data we get from Firebase and populates state
+        // So that the Tutor can see it
+        for (let user in userList) {
+            if (snapshot.child((userList[user].uid.concat(firebase.auth().currentUser.uid))).exists) {
+              this.setState ({ tutoruid: userList[user].uid });
+              break;
+            }
+        }
+    });
+}
     
   render() {
     return (
@@ -78,16 +95,10 @@ class Tutee extends Component {
                 <option value="English">English</option>
             </select>
             <button /*This will not work with a Material UI "Button"!*/ >Add Question</button>
-
-            {/* <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid}}}> */}
-            <button onClick = {this.clicked} >Go to chat!</button>
-            {/* </Link> */}
-
-
-            {/* <Link ><button>Go to chat!</button></Link>
-            <button onClick={this.togglePopup.bind(this)}>Go to chat!</button>
-          {this.state.showPopup ? <Popup tuteeName = {this.state.username} tuteeUID = {this.state.uid}/> : null } */}
           </form>
+          {/* <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid}}}> */}
+          <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: this.state.tutoruid}}}><button>Go to chat!</button></Link>
+          {/* </Link> */}
         </div>
       );
     }

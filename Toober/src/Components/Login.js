@@ -8,9 +8,11 @@ const Login = ({ history }) => {
     event.preventDefault();
     const { email, password } = event.target.elements;
     try {
+      // Wait until user puts in info
       await app
         .auth()
         .signInWithEmailAndPassword(email.value, password.value);
+      // Goes to main page after successful login
       history.push("/");
     } catch (error) {
       alert(error);
@@ -20,6 +22,7 @@ const Login = ({ history }) => {
   const { currentUser } = useContext(AuthContext);
  
   if (currentUser) {
+    // If the user is logged in already, make sure they can't access login page
     return <Redirect to="/" />;
   }
 

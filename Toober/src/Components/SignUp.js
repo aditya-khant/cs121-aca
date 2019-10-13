@@ -7,6 +7,7 @@ const SignUp = ({ history }) => {
   const handleSignUp = useCallback(async event => {
     event.preventDefault();
     const { email, password } = event.target.elements;
+    // Wait until the user has created an account
     try {
       await app
         .auth()
@@ -18,6 +19,7 @@ const SignUp = ({ history }) => {
     }
   }, [history]);
 
+  // Users already logged in shouldn't be able to sign in again
   const { currentUser } = useContext(AuthContext);
   if (currentUser)
   {

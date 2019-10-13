@@ -5,6 +5,7 @@ import { AuthContext } from "./Auth";
 const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
   const {currentUser} = useContext(AuthContext);
   return (
+    // Goes to login if user isn't logged in and tries to access private route
     <Route
       {...rest}
       render={routeProps =>

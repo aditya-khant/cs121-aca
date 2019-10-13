@@ -20,6 +20,7 @@ import PrivateRoute from "./PrivateRoute";
 class App extends Component {
 
   render() {
+    // Creates NavBar for navigation. Private pages only accessible through login
     return (
       <AuthProvider>
         <Router>

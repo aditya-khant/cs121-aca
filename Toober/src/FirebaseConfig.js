@@ -2,7 +2,7 @@ import firebase from 'firebase';
 import "firebase/auth";
 
 const app  = firebase.initializeApp({
-  apiKey: process.env.API_KEY,
+  apiKey: process.env.apiKey,
   authDomain: "tooberdatabaseuse.firebaseapp.com",
   databaseURL: "https://tooberdatabaseuse.firebaseio.com",
   projectId: "tooberdatabaseuse",

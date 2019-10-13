@@ -12,6 +12,7 @@ const SignUp = ({ history }) => {
       await app
         .auth()
         .createUserWithEmailAndPassword(email.value, password.value);
+      addToUser(event);
       history.push("/");
     } catch (error) {
       alert(error);
@@ -23,7 +24,23 @@ const SignUp = ({ history }) => {
   if (currentUser)
   {
     return <Redirect to="/" />;
-  }
+  };
+
+  const addToUser = ({e}) => {
+    // Either initializes a problems collection in Firebase
+    // Or sends it to the existing one
+    const itemsRef = app.database().ref('/users/');
+    
+    // Sets up the submission item
+    const item = {
+      uid: app.auth().currentUser.uid
+    }
+    // If it cannot push to Firebase, we return an error
+    itemsRef.push(item).catch(function(error) {
+      console.error("Error saving message to Database:", error);
+    });
+  };
+
 
   return (
     <div>

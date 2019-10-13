@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
-
+import { Link } from "react-router-dom";
 
 class Tutee extends Component {
     constructor() {
@@ -10,10 +10,14 @@ class Tutee extends Component {
         this.state = {
           username: '',
           problem: '',
-          subject: 'Math'
+          subject: 'Math', 
+          uid: firebase.auth().currentUser.uid,
+          tutoruid: "",
+          email: firebase.auth().currentUser.email
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.addUser = this.addUser.bind(this);
       }
     
   handleChange(e) {
@@ -31,9 +35,10 @@ class Tutee extends Component {
 
     // Sets up the submission item
     const item = {
-      user: this.state.username,
+      user: this.state.email,
       problem: this.state.problem,
-      subject: this.state.subject
+      subject: this.state.subject, 
+      uid: this.state.uid
     }
     // If it cannot push to Firebase, we return an error
     itemsRef.push(item).catch(function(error) {
@@ -43,9 +48,37 @@ class Tutee extends Component {
     this.setState({
       username: '',
       problem: '',
-      subject: 'Math'
+      subject: 'Math',
+      uid: firebase.auth().currentUser.uid
     })
   }
+
+  componentDidMount() {
+    this.addUser();
+  }
+
+  addUser() {
+    // Bug: With 3 users, it connects people with the wrong peron.
+    //      It connects them if their IDs are not the same, not if the collection exists
+    // Loading data from Firebase
+    const userRef = firebase.database().ref('users');
+    userRef.on('value', (snapshot) => {
+        let userList = snapshot.val();
+        var tutoruid = "";
+        // Loops over user UIDs and checks if there is a collection
+        // with the tutee UID as the second part of the collection name
+        for (let user in userList) {
+            if (snapshot.child((userList[user].uid.concat(firebase.auth().currentUser.uid))).exists) {
+              if (userList[user].uid !== firebase.auth().currentUser.uid) {
+                // If there is, make the tutorUID what was found
+                tutoruid = userList[user].uid;
+                break;
+              }
+            }
+        }
+        this.setState ({tutoruid : tutoruid}) ;
+    });
+}
     
   render() {
     return (
@@ -61,6 +94,9 @@ class Tutee extends Component {
             </select>
             <button /*This will not work with a Material UI "Button"!*/ >Add Question</button>
           </form>
+          <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: this.state.tutoruid}}}>
+            <button>Go to chat!</button>
+          </Link>
         </div>
       );
     }

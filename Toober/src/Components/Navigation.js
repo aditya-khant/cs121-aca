@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -13,15 +13,17 @@ import app from "../FirebaseConfig";
 
 const Navigation = () => {
     const { currentUser } = useContext(AuthContext);
+    var login = "";
+    var loginText = ""
     if(currentUser)
     {
-      var login = "/Login";
-      var loginText = "Logout";
+      login = "/Login";
+      loginText = "Logout";
     }
     else
     {
-      var login = "/Login";
-      var loginText = "Login";
+      login = "/Login";
+      loginText = "Login";
     }
     return (
       <div>

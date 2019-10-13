@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
-import app from "../FirebaseConfig";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {

@@ -13,35 +13,39 @@ export default class Form extends Component {
     this.state = {
       userName: props.user,
       tuteeName: props.tuteeName,
+      tuteeUID: props.tuteeUID,
+      tutorUID: props.tutorUID,
       message: '',
-      list: [],
+      list: []
     };
-    
-    // gets a snapshot of the databse
-    this.messageRef = firebase.database().ref('/messages/');
+  }
+
+  componentDidMount() {
+    this.messageRef = firebase.database().ref(this.state.tutorUID.concat(this.state.tuteeUID));
     this.messageRef.on('value', (snapshot) => {
       // if there are no messages in the database, we will generate a welcome message
       if(snapshot.val() == null) {
         this.createWelcome();
       };
     });
-
     this.listenMessages();
+  }
+
+  componentWillUnmount() {
+    this.messageRef.off();
   }
 
   createWelcome() {
     // creates the welcome message
     var welcomeMessage = {
-      userName: this.state.tuteeName,
-      message: 'Start chatting with me, the tutee!'
+      userName: "Toober",
+      message: 'Start chatting!',
+      tuteeUID: this.state.tuteeUID,
+      tutorUID: this.state.tutorUID
     }
-    // pushes it to the database
-    // which will later get read and updated on the page
-    this.messageRef.push(welcomeMessage);
 
-    // sets the state back to empty
+    this.messageRef.push(welcomeMessage);
     this.setState({message: ''});
-    this.setState({userName: ''});
   }
 
   handleChange(e) {
@@ -85,11 +89,11 @@ export default class Form extends Component {
       });
   }
 
-  exit() {
-    // when you press the exit button, it clears the messages from the databse
-    const messages = firebase.database().ref('/messages/');
-    messages.remove();
-  }
+  // exit() {
+  //   // when you press the exit button, it clears the messages from the database
+  //   const messages = firebase.database().ref(this.concatstuff);
+  //   this.messageRef.remove();
+  // }
 
   render() {
     return (
@@ -116,7 +120,7 @@ export default class Form extends Component {
             send
           </button>
         </div>
-        <Link to = '/'><button onClick={this.exit}>Exit</button></Link>
+        <Link to = '/'><button>Exit</button></Link>
       </div>
     );
   }

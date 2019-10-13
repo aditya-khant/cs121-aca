@@ -20,7 +20,7 @@ const Login = ({ history }) => {
   }, [history]);
 
   const { currentUser } = useContext(AuthContext);
-
+ 
   if (currentUser) {
     // If the user is logged in already, make sure they can't access login page
     return <Redirect to="/" />;

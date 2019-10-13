@@ -10,7 +10,6 @@ export default class Form extends Component {
   constructor(props) {
     super(props);
     // sets the state from props
-    var nothing = props.user; 
     this.state = {
       userName: props.user,
       tuteeName: props.tuteeName,
@@ -19,8 +18,9 @@ export default class Form extends Component {
       message: '',
       list: []
     };
-    
-    // gets a snapshot of the databse
+  }
+
+  componentDidMount() {
     this.messageRef = firebase.database().ref(this.state.tutorUID.concat(this.state.tuteeUID));
     this.messageRef.on('value', (snapshot) => {
       // if there are no messages in the database, we will generate a welcome message
@@ -28,8 +28,11 @@ export default class Form extends Component {
         this.createWelcome();
       };
     });
-
     this.listenMessages();
+  }
+
+  componentWillUnmount() {
+    this.messageRef.off();
   }
 
   createWelcome() {

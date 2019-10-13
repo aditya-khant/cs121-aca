@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
-import Popup from './Popup.js'
 import { Link } from "react-router-dom";
 
 class Tutee extends Component {
@@ -14,22 +13,13 @@ class Tutee extends Component {
           subject: 'Math', 
           uid: firebase.auth().currentUser.uid,
           tutoruid: "",
-          email: firebase.auth().currentUser.email,
-          showPopup: false
+          email: firebase.auth().currentUser.email
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addUser = this.addUser.bind(this);
-        this.addUser();
       }
     
-  
-  togglePopup() {  
-    this.setState({  
-          showPopup: !this.state.showPopup
-        });  
-      }  
-
   handleChange(e) {
     // Update the state when necessary
     this.setState({
@@ -63,22 +53,26 @@ class Tutee extends Component {
     })
   }
 
-  addUser(e) {
-    // e.preventDefault();
+  componentDidMount() {
+    this.addUser();
+  }
+
+  addUser() {
     // Loading data from Firebase
     const userRef = firebase.database().ref('users');
-    var tutor = "";
     userRef.on('value', (snapshot) => {
         let userList = snapshot.val();
-        
-        // Loops over the data we get from Firebase and populates state
-        // So that the Tutor can see it
+        var tutoruid = "";
+        // Loops over the data we get from Firebase and checks if the collection exists
         for (let user in userList) {
             if (snapshot.child((userList[user].uid.concat(firebase.auth().currentUser.uid))).exists) {
-              this.setState ({ tutoruid: userList[user].uid });
-              break;
+              if (userList[user].uid !== firebase.auth().currentUser.uid) {
+                tutoruid = userList[user].uid;
+                break;
+              }
             }
         }
+        this.setState ({tutoruid : tutoruid}) ;
     });
 }
     

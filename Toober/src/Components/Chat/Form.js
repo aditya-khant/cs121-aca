@@ -43,21 +43,9 @@ export default class Form extends Component {
       tuteeUID: this.state.tuteeUID,
       tutorUID: this.state.tutorUID
     }
-    // var users = {
-    //   userName: "Toober",
-    //   message: "You are now connected with " + this.state.tuteeName,
-    //   tuteeUID: this.state.tuteeUID,
-    //   tutorUID: this.state.tutorUID
-    // }
-    // pushes it to the database
-    // which will later get read and updated on the page
-    // this.messageRef.push(users);
 
     this.messageRef.push(welcomeMessage);
-
-    // sets the state back to empty
     this.setState({message: ''});
-    //this.setState({userName: this.state.user});
   }
 
   handleChange(e) {
@@ -132,7 +120,6 @@ export default class Form extends Component {
             send
           </button>
         </div>
-        {/* <Link to = '/'><button onClick={this.exit}>Exit</button></Link> */}
         <Link to = '/'><button>Exit</button></Link>
       </div>
     );

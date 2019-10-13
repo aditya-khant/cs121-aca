@@ -58,15 +58,19 @@ class Tutee extends Component {
   }
 
   addUser() {
+    // Bug: With 3 users, it connects people with the wrong peron.
+    //      It connects them if their IDs are not the same, not if the collection exists
     // Loading data from Firebase
     const userRef = firebase.database().ref('users');
     userRef.on('value', (snapshot) => {
         let userList = snapshot.val();
         var tutoruid = "";
-        // Loops over the data we get from Firebase and checks if the collection exists
+        // Loops over user UIDs and checks if there is a collection
+        // with the tutee UID as the second part of the collection name
         for (let user in userList) {
             if (snapshot.child((userList[user].uid.concat(firebase.auth().currentUser.uid))).exists) {
               if (userList[user].uid !== firebase.auth().currentUser.uid) {
+                // If there is, make the tutorUID what was found
                 tutoruid = userList[user].uid;
                 break;
               }
@@ -90,9 +94,9 @@ class Tutee extends Component {
             </select>
             <button /*This will not work with a Material UI "Button"!*/ >Add Question</button>
           </form>
-          {/* <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid}}}> */}
-          <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: this.state.tutoruid}}}><button>Go to chat!</button></Link>
-          {/* </Link> */}
+          <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: this.state.tutoruid}}}>
+            <button>Go to chat!</button>
+          </Link>
         </div>
       );
     }

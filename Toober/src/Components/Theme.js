@@ -6,8 +6,8 @@ import blue from '@material-ui/core/colors/blue';
 const Theme = createMuiTheme({
     palette: {
       // Colors can be changed here
-      primary: yellow,
-      secondary: blue
+      primary: blue,
+      secondary: yellow
   }, 
   typography: {
     // Everything is default rendered with font size 20

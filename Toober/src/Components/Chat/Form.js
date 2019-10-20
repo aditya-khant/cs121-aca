@@ -16,12 +16,15 @@ export default class Form extends Component {
       tuteeUID: props.tuteeUID,
       tutorUID: props.tutorUID,
       message: '',
-      list: []
+      list: [],
+      problem: props.problemID
     };
   }
 
   componentDidMount() {
-    this.messageRef = firebase.database().ref(this.state.tutorUID.concat(this.state.tuteeUID));
+    const chatRef = firebase.database().ref('chat');
+
+    this.messageRef = firebase.database().ref(this.state.problem.concat(this.state.tutorUID));
     this.messageRef.on('value', (snapshot) => {
       // if there are no messages in the database, we will generate a welcome message
       if(snapshot.val() == null) {

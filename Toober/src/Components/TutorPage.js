@@ -63,7 +63,7 @@ pickSubject(problem, subject) {
                         <p>{problem.username}</p>
                         <p>{problem.id}</p>
                         
-                        <Link to= {{ pathname: '/Chat', query: {problemsId: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
+                        <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
                         <button>Go to chat!</button>
                         </Link>
                     </div>

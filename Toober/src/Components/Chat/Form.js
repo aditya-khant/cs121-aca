@@ -22,13 +22,18 @@ export default class Form extends Component {
   }
 
   componentDidMount() {
-    const chatRef = firebase.database().ref('chat');
-
-    this.messageRef = firebase.database().ref(this.state.problem.concat(this.state.tutorUID));
+    this.chatRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID));
+    this.messageRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID) +'/messages');
     this.messageRef.on('value', (snapshot) => {
       // if there are no messages in the database, we will generate a welcome message
       if(snapshot.val() == null) {
         this.createWelcome();
+      };
+    });
+    this.chatRef.on('value', (snapshot) => {
+      // if there are no messages in the database, we will generate a welcome message
+      if(snapshot.val() == null) {
+        this.createChat();
       };
     });
     this.listenMessages();
@@ -48,6 +53,18 @@ export default class Form extends Component {
     }
 
     this.messageRef.push(welcomeMessage);
+    this.setState({message: ''});
+  }
+
+  createWelcome() {
+    // creates the chat in firebase
+    var welcomeMessage = {
+      problem: this.state.problem,
+      tuteeUID: this.state.tuteeUID,
+      tutorUID: this.state.tutorUID
+    }
+
+    this.chatRef.push(welcomeMessage);
     this.setState({message: ''});
   }
 

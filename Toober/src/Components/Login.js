@@ -2,6 +2,9 @@ import React, { useCallback, useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import app from "../FirebaseConfig";
 import { AuthContext } from "../Auth";
+import {Grid, TextField, Button} from '@material-ui/core';
+import Theme from './Theme.js';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 const Login = ({ history }) => {
   const handleLogin = useCallback(async event => {
@@ -27,8 +30,11 @@ const Login = ({ history }) => {
   }
 
   return (
-    <div>
-      <h1>Log in</h1>
+    <div style={{ padding: 20}}>
+      <MuiThemeProvider theme={Theme}>
+      <Grid container direction = "row">
+        <Grid item>
+        <h1>Log in</h1>
       <form onSubmit={handleLogin}>
         <label>
           Email
@@ -38,8 +44,11 @@ const Login = ({ history }) => {
           Password
           <input name="password" type="password" placeholder="Password" />
         </label>
-        <button type="submit">Log in</button>
+        <Button variant="contained" color="primary" type="submit">Log in</Button>
       </form>
+        </Grid>
+      </Grid>
+      </MuiThemeProvider>
     </div>
   );
 };

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Theme from './Theme.js';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 class Tutor extends Component {
     constructor(props) {
@@ -75,34 +77,28 @@ pickSubject(problem, subject) {
  
 render(){
     return (
-        <div>
-            <Grid container justify="flex-start"  direction="row" >
-                <Grid item>
-                    <h1>Tutor</h1>
+        <div style={{ padding: 20}}>
+            <MuiThemeProvider theme={Theme}>
+                <h1>Tutor Welcome {this.state.email}</h1>
+                <h2>Pick a Subject</h2>
+                <Grid container spacing={3} justify="flex-start"  direction="row" >
+                    <Grid item>
+                        <Select
+                            value={this.state.subject}
+                            onChange={this.handleChange}
+                            name = {"subject"}
+                            >
+                            <MenuItem value={"Math"}>Math</MenuItem>
+                            <MenuItem value={"Biology"}>Biology</MenuItem>
+                            <MenuItem value={"English"}>English</MenuItem>
+                        </Select>
+                    </ Grid>
                 </ Grid>
-            </ Grid>
-            <Grid container spacing={3} justify="flex-start"  direction="row" >
-                <Grid item>
-                    <h2>Pick a Subject</h2>
-                </ Grid>
-            </ Grid>
-            <Grid container spacing={3} justify="flex-start"  direction="row" >
-                <Grid item>
-                    <Select
-                        value={this.state.subject}
-                        onChange={this.handleChange}
-                        name = {"subject"}
-                        >
-                        <MenuItem value={"Math"}>Math</MenuItem>
-                        <MenuItem value={"Biology"}>Biology</MenuItem>
-                        <MenuItem value={"English"}>English</MenuItem>
-                    </Select>
-                </ Grid>
-            </ Grid>
-            
-            {this.state.problems.map((problem) => {
-                return this.pickSubject(problem, this.state.subject)
-            })}
+                
+                {this.state.problems.map((problem) => {
+                    return this.pickSubject(problem, this.state.subject)
+                })}
+            </MuiThemeProvider>
         </div>
      );
  }

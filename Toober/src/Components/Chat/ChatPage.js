@@ -11,7 +11,8 @@ class ChatPage extends Component {
       user: props.location.query.user,
       tuteeName: props.location.query.tuteeName,
       tuteeUID: props.location.query.tuteeUID,
-      tutorUID: props.location.query.tutorUID
+      tutorUID: props.location.query.tutorUID,
+      problemID: props.location.query.problemID
     }
   }
 
@@ -21,7 +22,7 @@ class ChatPage extends Component {
         <div className="app__header">
         </div>
         <div className="app__list">
-          <Form user={this.state.user} tuteeName={this.state.tuteeName} tuteeUID = {this.state.tuteeUID} tutorUID  = {this.state.tutorUID} />
+          <Form user={this.state.user} tuteeName={this.state.tuteeName} tuteeUID = {this.state.tuteeUID} tutorUID  = {this.state.tutorUID} problemID = {this.state.problemID}/>
         </div>
       </div>
     );

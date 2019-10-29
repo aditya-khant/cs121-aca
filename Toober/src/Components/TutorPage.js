@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
+import Grid from '@material-ui/core/Grid';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Theme from './Theme.js';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 class Tutor extends Component {
     constructor(props) {
@@ -41,6 +46,7 @@ componentDidMount() {
 
 handleChange(e) {
     // Update the state when necessary
+    console.log(e.target.name)
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -57,8 +63,9 @@ pickSubject(problem, subject) {
                     <div>
                         <h2>{problem.problem}</h2>
                         <p>{problem.username}</p>
+                        <p>{problem.id}</p>
                         
-                        <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
+                        <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
                         <button>Go to chat!</button>
                         </Link>
                     </div>
@@ -70,17 +77,28 @@ pickSubject(problem, subject) {
  
 render(){
     return (
-        <div>
-           <h1>Tutor</h1>
-            <h2> Problem Sets</h2>
-            <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
-                <option value="Math">Math</option>
-                <option value="Biology">Biology</option>
-                <option value="English">English</option>
-            </select>
-            {this.state.problems.map((problem) => {
-                return this.pickSubject(problem, this.state.subject)
-            })}
+        <div style={{ padding: 20}}>
+            <MuiThemeProvider theme={Theme}>
+                <h1>Tutor Welcome {this.state.email}</h1>
+                <h2>Pick a Subject</h2>
+                <Grid container spacing={3} justify="flex-start"  direction="row" >
+                    <Grid item>
+                        <Select
+                            value={this.state.subject}
+                            onChange={this.handleChange}
+                            name = {"subject"}
+                            >
+                            <MenuItem value={"Math"}>Math</MenuItem>
+                            <MenuItem value={"Biology"}>Biology</MenuItem>
+                            <MenuItem value={"English"}>English</MenuItem>
+                        </Select>
+                    </ Grid>
+                </ Grid>
+                
+                {this.state.problems.map((problem) => {
+                    return this.pickSubject(problem, this.state.subject)
+                })}
+            </MuiThemeProvider>
         </div>
      );
  }

@@ -37,6 +37,7 @@ const Navigation = () => {
                   <Tab label={loginText} component={Link} to={login} />
                   <Tab label="Sign Up" component={Link} to="/Signup" />
                   <button onClick={() => app.auth().signOut()}>Sign out</button>
+                  
                </Typography>
             </Toolbar>
           </AppBar>

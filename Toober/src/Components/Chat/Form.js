@@ -3,7 +3,7 @@ import './Form.css';
 import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
-
+import {retrieve} from "../../Helpers"
 
 export default class Form extends Component {
 
@@ -16,16 +16,25 @@ export default class Form extends Component {
       tuteeUID: props.tuteeUID,
       tutorUID: props.tutorUID,
       message: '',
-      list: []
+      list: [],
+      problem: props.problemID
     };
   }
 
   componentDidMount() {
-    this.messageRef = firebase.database().ref(this.state.tutorUID.concat(this.state.tuteeUID));
+
+    this.chatRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID));
+    this.messageRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID) +'/messages');
     this.messageRef.on('value', (snapshot) => {
       // if there are no messages in the database, we will generate a welcome message
       if(snapshot.val() == null) {
         this.createWelcome();
+      };
+    });
+    this.chatRef.on('value', (snapshot) => {
+      // if there are no messages in the database, we will generate a welcome message
+      if(snapshot.val() == null) {
+        this.createChat();
       };
     });
     this.listenMessages();
@@ -37,14 +46,27 @@ export default class Form extends Component {
 
   createWelcome() {
     // creates the welcome message
+    let problemName = retrieve("problems", this.state.problem, "problem")
+    let tuteeName = this.state.tuteeUID
+    let tutorName = this.state.tutorUID
     var welcomeMessage = {
       userName: "Toober",
-      message: 'Start chatting!',
+      message: `Start chatting! Problem: ${problemName} Tutor: ${tutorName} Tutee: ${tuteeName}`,
+    }
+
+    this.messageRef.push(welcomeMessage);
+    this.setState({message: ''});
+  }
+
+  createChat() {
+    // creates the chat in firebase
+    var welcomeMessage = {
+      problem: this.state.problem,
       tuteeUID: this.state.tuteeUID,
       tutorUID: this.state.tutorUID
     }
 
-    this.messageRef.push(welcomeMessage);
+    this.chatRef.set(welcomeMessage);
     this.setState({message: ''});
   }
 

@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import Grid from '@material-ui/core/Grid';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import {Grid, Select, MenuItem, List, ListItem, ListItemText, Paper, Button} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
@@ -58,19 +56,16 @@ pickSubject(problem, subject) {
     // and returns the problems that match that subject
     if (problem.subject === subject) {
         return (
-            <div key={problem.id}>
-                <div>
-                    <div>
-                        <h2>{problem.problem}</h2>
-                        <p>{problem.username}</p>
-                        <p>{problem.id}</p>
-                        
-                        <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
-                        <button>Go to chat!</button>
-                        </Link>
-                    </div>
-                </div>
-            </div>
+            <Paper>
+                <ListItem key={problem.id}>
+                <ListItemText primary={problem.problem} secondary={problem.username} />
+                <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
+                    <Button variant="contained" color="secondary">Go to chat!</Button>
+                </Link>
+                    
+            </ListItem>
+            </Paper>
+            
         )} 
         return null
 }
@@ -79,7 +74,7 @@ render(){
     return (
         <div style={{ padding: 20}}>
             <MuiThemeProvider theme={Theme}>
-                <h1>Tutor Welcome {this.state.email}</h1>
+                <h1>Tutor</h1>
                 <h2>Pick a Subject</h2>
                 <Grid container spacing={3} justify="flex-start"  direction="row" >
                     <Grid item>
@@ -87,6 +82,7 @@ render(){
                             value={this.state.subject}
                             onChange={this.handleChange}
                             name = {"subject"}
+                            autoWidth = "true"
                             >
                             <MenuItem value={"Math"}>Math</MenuItem>
                             <MenuItem value={"Biology"}>Biology</MenuItem>

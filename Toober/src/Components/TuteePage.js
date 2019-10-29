@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {List, ListItem, ListItemText, Button, Grid} from '@material-ui/core';
+import {List, ListItem, ListItemText, Button, Grid, Paper} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
@@ -128,7 +128,7 @@ listChats(){
         <MuiThemeProvider theme={Theme}>
         <Grid container direction = "row">
           <Grid item>
-            <h1>Tutee: Welcome {this.state.email},</h1>
+            <h1>Tutee</h1>
               <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
                 <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username}/>
                 <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
@@ -144,14 +144,16 @@ listChats(){
             <List>
               {chatList.map((problem) => {
                 return (
-                  <ListItem>
-                    <ListItemText primary={problem.problem} secondary={problem.subject} />
-                    <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
-                    <Button variant="contained" color="secondary">
-                      Chat!
-                    </Button>
-                  </Link>
-                  </ListItem>
+                  <Paper>
+                    <ListItem>
+                      <ListItemText primary={problem.problem} secondary={problem.subject} />
+                      <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
+                      <Button variant="contained" color="secondary">
+                        Chat!
+                      </Button>
+                    </Link>
+                    </ListItem>
+                  </Paper>
 
                 )})}
             </List>

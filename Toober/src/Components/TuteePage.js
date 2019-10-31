@@ -138,6 +138,7 @@ listChats(){
                     <option value="English">English</option>
                 </select>
                 <Button variant="contained" color="primary" type="submit">Add Question</Button>
+                <Button variant="contained" color="secondary" onClick={}>Upload Image</Button>
               </form>
           </Grid>
         </Grid>

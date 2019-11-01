@@ -19,7 +19,7 @@
 .env.production.local
 
 #api key
-.env.txt
+.env
 
 npm-debug.log*
 yarn-debug.log*

@@ -33,8 +33,13 @@ class Tutee extends Component {
 
       onDrop(picture) {
         // Function that handles image uploads
+        let urlCreator = window.URL || window.webkitURL;
+        let imageBlob = new Blob(picture);
+        let imageUrl = urlCreator.createObjectURL(imageBlob);
+        console.log(imageUrl);
         this.setState({
             pictures: picture,
+            pictures_src: imageUrl
         });
 
         alert("Picture Uploaded")

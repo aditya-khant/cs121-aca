@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import {List, ListItem, ListItemText, Button, Grid, Paper} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import ImageUploader from 'react-images-upload';
+import {cleanupText} from '../Helpers.js';
 
 class Tutee extends Component {
     constructor() {
@@ -17,15 +19,32 @@ class Tutee extends Component {
           uid: firebase.auth().currentUser.uid,
           tutoruid: "",
           email: firebase.auth().currentUser.email,
-          chatList:[]
+          chatList:[],
+          pictures: "",
+          pictures_src: ""
+
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addUser = this.addUser.bind(this);
         this.listChats = this.listChats.bind(this);
-
-
+        this.onDrop = this.onDrop.bind(this);
       }
+
+      onDrop(picture) {
+        // Function that handles image uploads
+        let urlCreator = window.URL || window.webkitURL;
+        let imageBlob = new Blob(picture);
+        let imageUrl = urlCreator.createObjectURL(imageBlob);
+        console.log(imageUrl);
+        this.setState({
+            pictures: picture,
+            pictures_src: imageUrl
+        });
+
+        alert("Picture Uploaded")
+
+    }
     
   handleChange(e) {
     // Update the state when necessary
@@ -38,14 +57,26 @@ class Tutee extends Component {
     e.preventDefault();
     // Either initializes a problems collection in Firebase
     // Or sends it to the existing one
+    let imageID = ""
     const itemsRef = firebase.database().ref('/problems/');
-
+    if (this.state.pictures != "") {
+      const file_to_upload = new Blob(this.state.pictures)
+      const storageRef = firebase.storage().ref();
+      imageID = 'questions/'+cleanupText(this.state.uid)+cleanupText(this.state.problem) + '.jpg' 
+      const questionRef = storageRef.child(imageID);
+      console.log(typeof(file_to_upload))
+      questionRef.put(file_to_upload).then(function(snapshot) {
+        console.log('Uploaded a blob or file!');
+      });
+    }
+   
     // Sets up the submission item
     const item = {
       user: this.state.email,
       problem: this.state.problem,
       subject: this.state.subject, 
-      uid: this.state.uid
+      uid: this.state.uid,
+      imageid: imageID
     }
     // If it cannot push to Firebase, we return an error
     itemsRef.push(item).catch(function(error) {
@@ -56,14 +87,14 @@ class Tutee extends Component {
       username: '',
       problem: '',
       subject: 'Math',
-      uid: firebase.auth().currentUser.uid
+      uid: firebase.auth().currentUser.uid,
+      pictures: ""
     })
   }
 
   componentDidMount() {
     this.addUser();
     this.listChats();
-    
   }
 
   addUser() {
@@ -119,9 +150,7 @@ listChats(){
 }
     
   render() {
-
     const chatList = this.state.chatList;
-    console.log(chatList);
    
     return (
       <div style={{ padding: 20}}>
@@ -138,6 +167,15 @@ listChats(){
                     <option value="English">English</option>
                 </select>
                 <Button variant="contained" color="primary" type="submit">Add Question</Button>
+                <ImageUploader
+                    withIcon={true}
+                    buttonText='Upload image'
+                    onChange={this.onDrop}
+                    imgExtension={['.jpg', '.png', '.gif']}
+                    maxFileSize={5242880}
+                    singleImage={true}
+                />
+                <img src={this.state.pictures} />
               </form>
           </Grid>
         </Grid>

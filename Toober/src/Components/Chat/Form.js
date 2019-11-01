@@ -28,7 +28,7 @@ export default class Form extends Component {
     this.messageRef.on('value', (snapshot) => {
       // if there are no messages in the database, we will generate a welcome message
       if(snapshot.val() == null) {
-        this.createWelcome();
+         this.createWelcome();
       };
     });
     this.chatRef.on('value', (snapshot) => {
@@ -44,17 +44,35 @@ export default class Form extends Component {
     this.messageRef.off();
   }
 
-  createWelcome() {
+  async createWelcome() {
     // creates the welcome message
-    let problemName = retrieve("problems", this.state.problem, "problem")
-    let tuteeName = this.state.tuteeUID
-    let tutorName = this.state.tutorUID
-    var welcomeMessage = {
+    const problemName = await retrieve("problems", this.state.problem, "problem")
+    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
+    console.log(`ImageRelURL ${imageRelURL}`)
+    const tuteeName = this.state.tuteeUID;
+    const tutorName = this.state.tutorUID;
+    let messageRef = this.messageRef;
+    const welcomeMessage = {
       userName: "Toober",
       message: `Start chatting! Problem: ${problemName} Tutor: ${tutorName} Tutee: ${tuteeName}`,
+      type: "text",
+      image: ""
     }
-
-    this.messageRef.push(welcomeMessage);
+    messageRef.push(welcomeMessage);
+    if (imageRelURL !== "" || imageRelURL != undefined){
+      const storageRef = firebase.storage().ref();
+      
+      let url = await storageRef.child(imageRelURL).getDownloadURL()
+      console.log(url)
+      let imageURL = url
+      const welcomeImg = {
+        userName: "Toober",
+        type: "img",
+        image: imageURL,
+        message: ""
+      }
+      messageRef.push(welcomeImg);
+    }
     this.setState({message: ''});
   }
 
@@ -85,6 +103,7 @@ export default class Form extends Component {
       var newItem = {
         userName: this.state.userName,
         message: this.state.message,
+        type: "text"
       }
       // pushes the message
       this.messageRef.push(newItem);

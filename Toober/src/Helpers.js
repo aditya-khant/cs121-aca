@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 
-export function retrieve(category, id, key){
+export async function retrieve(category, id, key){
     // Retrieves the value of a specific key of an id in a category
     const ref = firebase.database().ref(category+'/'+id);
     let out;

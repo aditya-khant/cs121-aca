@@ -20,7 +20,9 @@ class Tutee extends Component {
           tutoruid: "",
           email: firebase.auth().currentUser.email,
           chatList:[],
-          pictures: ""
+          pictures: "",
+          pictures_src: ""
+
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,14 +32,13 @@ class Tutee extends Component {
       }
 
       onDrop(picture) {
-        // Function that handles image dropping
+        // Function that handles image uploads
         this.setState({
             pictures: picture,
         });
+
         alert("Picture Uploaded")
-        const imType = typeof(picture)
-        console.log(`Image type: ${imType}`)
-        console.log(`Image: ${picture}`)
+
     }
     
   handleChange(e) {
@@ -51,13 +52,15 @@ class Tutee extends Component {
     e.preventDefault();
     // Either initializes a problems collection in Firebase
     // Or sends it to the existing one
-    const imageID = ""
+    let imageID = ""
     const itemsRef = firebase.database().ref('/problems/');
-    if (this.state.pictures !== "") {
+    if (this.state.pictures != "") {
+      const file_to_upload = new Blob(this.state.pictures)
       const storageRef = firebase.storage().ref();
-      const imageID = 'questions/'+cleanupText(this.state.uid)+cleanupText(this.state.problem) + '.jpg' 
+      imageID = 'questions/'+cleanupText(this.state.uid)+cleanupText(this.state.problem) + '.jpg' 
       const questionRef = storageRef.child(imageID);
-      questionRef.put(this.state.pictures).then(function(snapshot) {
+      console.log(typeof(file_to_upload))
+      questionRef.put(file_to_upload).then(function(snapshot) {
         console.log('Uploaded a blob or file!');
       });
     }
@@ -142,9 +145,7 @@ listChats(){
 }
     
   render() {
-
     const chatList = this.state.chatList;
-    console.log(chatList);
    
     return (
       <div style={{ padding: 20}}>
@@ -169,6 +170,7 @@ listChats(){
                     maxFileSize={5242880}
                     singleImage={true}
                 />
+                <img src={this.state.pictures} />
               </form>
           </Grid>
         </Grid>

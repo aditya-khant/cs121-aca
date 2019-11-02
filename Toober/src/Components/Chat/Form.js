@@ -17,7 +17,9 @@ export default class Form extends Component {
       tutorUID: props.tutorUID,
       message: '',
       list: [],
-      problem: props.problemID
+      problem: props.problemID,
+      problemText: "",
+      problemImgUrl: ""
     };
   }
 
@@ -37,7 +39,23 @@ export default class Form extends Component {
         this.createChat();
       };
     });
+    this.setProblemTextandImage();
     this.listenMessages();
+    
+    
+  }
+
+  async setProblemTextandImage(){
+    // Downloads the problem's text and image and sets it in the state
+    const problemName = await retrieve("problems", this.state.problem, "problem")
+    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
+    const storageRef = firebase.storage().ref();
+    const url = await storageRef.child(imageRelURL).getDownloadURL()
+    this.setState({
+       problemText: problemName,
+       problemImgUrl: url,
+    })
+
   }
 
   componentWillUnmount() {
@@ -46,33 +64,17 @@ export default class Form extends Component {
 
   async createWelcome() {
     // creates the welcome message
-    const problemName = await retrieve("problems", this.state.problem, "problem")
-    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
-    console.log(`ImageRelURL ${imageRelURL}`)
+    
     const tuteeName = this.state.tuteeUID;
     const tutorName = this.state.tutorUID;
     let messageRef = this.messageRef;
     const welcomeMessage = {
       userName: "Toober",
-      message: `Start chatting! Problem: ${problemName} Tutor: ${tutorName} Tutee: ${tuteeName}`,
+      message: "Start chatting",
       type: "text",
       image: ""
     }
     messageRef.push(welcomeMessage);
-    if (imageRelURL !== "" || imageRelURL != undefined){
-      const storageRef = firebase.storage().ref();
-      
-      let url = await storageRef.child(imageRelURL).getDownloadURL()
-      console.log(url)
-      let imageURL = url
-      const welcomeImg = {
-        userName: "Toober",
-        type: "img",
-        image: imageURL,
-        message: ""
-      }
-      messageRef.push(welcomeImg);
-    }
     this.setState({message: ''});
   }
 
@@ -136,8 +138,30 @@ export default class Form extends Component {
   //   this.messageRef.remove();
   // }
 
+
+
   render() {
+    let header;
+    const imageURL = this.state.problemImgUrl;
+    const problemName = this.state.problemText;
+    if (imageURL != ""){
+      header = (
+        <div>
+          <h1>{problemName}</h1>
+          <img src={imageURL} width="50%" />
+        </div>
+      )
+    } else {
+      header = (
+        <div>
+          <h1>{problemName}</h1>
+        </div>
+      )
+    }
+
     return (
+    <div>
+      {header}
       <div className="form">
         <div className="scroller">
           { this.state.list.map((item, index) =>
@@ -163,6 +187,7 @@ export default class Form extends Component {
         </div>
         <Link to = '/'><button>Exit</button></Link>
       </div>
+    </div>
     );
   }
 }

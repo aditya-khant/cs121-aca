@@ -4,6 +4,7 @@ import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
 import {retrieve} from "../../Helpers"
+import {Grid} from "@material-ui/core"
 
 export default class Form extends Component {
 
@@ -160,34 +161,41 @@ export default class Form extends Component {
     }
 
     return (
-    <div>
-      {header}
-      <div className="form">
-        <div className="scroller">
-          { this.state.list.map((item, index) =>
-            <Message key={index} message={item} />
-          )}
-        </div>
-        <div className="form__row">
-          <input
-            className="form__input"
-            type="text"
-            name="message"
-            placeholder="Type message"
-            value={this.state.message}
-            onChange={this.handleChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-          />
-          <button
-            className="form__button"
-            onClick={this.handleSend.bind(this)}
-          >
-            send
-          </button>
-        </div>
-        <Link to = '/'><button>Exit</button></Link>
-      </div>
+    <div padding={20}>
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          {header}
+        </Grid>
+        <Grid item xs={9}>
+          <div className="form">
+            <div className="scroller">
+              { this.state.list.map((item, index) =>
+                <Message key={index} message={item} />
+              )}
+            </div>
+            <div className="form__row">
+              <input
+                className="form__input"
+                type="text"
+                name="message"
+                placeholder="Type message"
+                value={this.state.message}
+                onChange={this.handleChange.bind(this)}
+                onKeyPress={this.handleKeyPress.bind(this)}
+              />
+              <button
+                className="form__button"
+                onClick={this.handleSend.bind(this)}
+              >
+                send
+              </button>
+            </div>
+            <Link to = '/'><button>Exit</button></Link>
+          </div>
+         </Grid>
+      </Grid>
     </div>
+    
     );
   }
 }

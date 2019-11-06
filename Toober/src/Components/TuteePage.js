@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {List, ListItem, ListItemText, Button, Grid, Paper, TextField, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText} from '@material-ui/core';
+import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, TextField, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
@@ -21,7 +21,9 @@ class Tutee extends Component {
           email: firebase.auth().currentUser.email,
           chatList:[],
           pictures: "",
-          pictures_src: ""
+          pictures_src: "",
+          isLoading: true,
+          open: false
 
         }
         this.handleChange = this.handleChange.bind(this);
@@ -49,6 +51,7 @@ class Tutee extends Component {
     };
 
     handleClickOpen(){
+      console.log("Click Open")
       this.setState({
           open: true,
       })
@@ -137,6 +140,9 @@ class Tutee extends Component {
 }
 
 listChats(){
+  this.setState({
+    isLoading: true
+  });
   const chatRef = firebase.database().ref("chat");
   let newChats = []
   chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', (snapshot) => {
@@ -153,32 +159,46 @@ listChats(){
     }
     
   });
-
-  if (newChats != []){
-    this.setState({
-      chatList: newChats
-    });
-  } else {
-    console.log("0 New")
-  }
-
-
+  this.setState({
+    chatList: newChats,
+    isLoading: false
+  });
+ 
 }
     
   render() {
     const chatList = this.state.chatList;
+    let list;
+    if (this.state.isLoading){
+      list = (
+        <CircularProgress />
+      );
+    }else {
+      list = (
+        <List>
+              {chatList.map((problem) => {
+                return (
+                  <Paper>
+                    <ListItem>
+                      <ListItemText primary={problem.problem} secondary={problem.subject} />
+                      <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
+                      <Button variant="contained" color="secondary">
+                        Chat!
+                      </Button>
+                    </Link>
+                    </ListItem>
+                  </Paper>
+
+                )})}
+            </List>
+      )
+    }
    
     return (
       <div style={{ padding: 20}}>
-      
+        
         <MuiThemeProvider theme={Theme}>
-        <Grid container direction = "row">
-          <Grid item>
-            <h1>Tutee</h1>
-            <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-              Add Question
-            </Button>
-            <Dialog open={this.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
               <DialogContent>
               <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
@@ -204,30 +224,21 @@ listChats(){
                </form>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleClose} color="secondary">
+                <Button onClick={this.handleClose} color="primary">
                   Cancel
                 </Button>
-                
               </DialogActions>
-            </Dialog>                     
+          </Dialog>   
+        <Grid container direction = "row">
+          <Grid item>
+            <h1>Tutee</h1>
+            <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+              Add Question
+            </Button>
+                             
           </Grid>
         </Grid>
-            <List>
-              {chatList.map((problem) => {
-                return (
-                  <Paper>
-                    <ListItem>
-                      <ListItemText primary={problem.problem} secondary={problem.subject} />
-                      <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
-                      <Button variant="contained" color="secondary">
-                        Chat!
-                      </Button>
-                    </Link>
-                    </ListItem>
-                  </Paper>
-
-                )})}
-            </List>
+            {list}
           </MuiThemeProvider>
         </div>
       );

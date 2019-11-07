@@ -5,8 +5,22 @@ import { AuthContext } from "../Auth";
 import {Grid, TextField, Button} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase';
 
 const Login = ({ history }) => {
+
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'redirect',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+    signInSuccessUrl: '/',
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ]
+  };
+  
   const handleLogin = useCallback(async event => {
     event.preventDefault();
     const { email, password } = event.target.elements;
@@ -46,6 +60,7 @@ const Login = ({ history }) => {
         </label>
         <Button variant="contained" color="primary" type="submit">Log in</Button>
       </form>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
         </Grid>
       </Grid>
       </MuiThemeProvider>

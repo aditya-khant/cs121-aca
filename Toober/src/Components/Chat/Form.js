@@ -149,7 +149,7 @@ export default class Form extends Component {
       header = (
         <div>
           <h1>{problemName}</h1>
-          <img src={imageURL} width="50%" />
+          <img src={imageURL} width="100%" />
         </div>
       )
     } else {

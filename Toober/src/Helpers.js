@@ -30,5 +30,5 @@ export function cleanupText(text){
 }
 
 export function isNullEmptyUndef(value){
-    return value === undefined || value === "" || value === [] || value ==={};
+    return value === undefined || value === "" || value === [] || value ==={} || value === null;
 }

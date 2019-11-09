@@ -5,7 +5,7 @@ import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, Tex
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
-import {cleanupText} from '../Helpers.js';
+import {cleanupText, isNullEmptyUndef} from '../Helpers.js';
 
 class Tutee extends Component {
     constructor() {
@@ -147,17 +147,19 @@ listChats(){
   let newChats = []
   chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', (snapshot) => {
     const chat_dict = snapshot.val();
-    
-    for (const [, value] of Object.entries(chat_dict)) {
-      const problemID = value.problem
-      const tutorUID = value.tutorUID
-      const problemRef = firebase.database().ref('problems/'+problemID);
-      problemRef.on('value',(snapshot2) => { 
-        const snapVal = snapshot2.val(); 
-        newChats.push({problem: snapVal.problem, subject: snapVal.subject, problemID:problemID, tutorUID: tutorUID});
-      });
+    if (!isNullEmptyUndef(chat_dict)){
+      for (const [, value] of Object.entries(chat_dict)) {
+        const problemID = value.problem
+        const tutorUID = value.tutorUID
+        const problemRef = firebase.database().ref('problems/'+problemID);
+        problemRef.on('value',(snapshot2) => { 
+          const snapVal = snapshot2.val(); 
+          newChats.push({problem: snapVal.problem, subject: snapVal.subject, problemID:problemID, tutorUID: tutorUID});
+        });
+      }
+      
     }
-    
+  
   });
   this.setState({
     chatList: newChats,

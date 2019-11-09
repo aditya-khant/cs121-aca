@@ -15,10 +15,9 @@ const Login = ({ history }) => {
     signInFlow: 'redirect',
     // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
     signInSuccessUrl: '/',
-    // We will display Google and Facebook as auth providers.
+    // We will display Google as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      firebase.auth.OAuthProvider.PROVIDER_ID,
     ]
   };
 

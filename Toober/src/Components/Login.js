@@ -18,23 +18,9 @@ const Login = ({ history }) => {
     // We will display Google and Facebook as auth providers.
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.OAuthProvider.PROVIDER_ID,
     ]
   };
-  
-  const handleLogin = useCallback(async event => {
-    event.preventDefault();
-    const { email, password } = event.target.elements;
-    try {
-      // Wait until user puts in info
-      await app
-        .auth()
-        .signInWithEmailAndPassword(email.value, password.value);
-      // Goes to main page after successful login
-      history.push("/");
-    } catch (error) {
-      alert(error);
-    }
-  }, [history]);
 
   const { currentUser } = useContext(AuthContext);
  
@@ -49,17 +35,6 @@ const Login = ({ history }) => {
       <Grid container direction = "row">
         <Grid item>
         <h1>Log in</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          Email
-          <input name="email" type="email" placeholder="Email" />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" placeholder="Password" />
-        </label>
-        <Button variant="contained" color="primary" type="submit">Log in</Button>
-      </form>
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
         </Grid>
       </Grid>

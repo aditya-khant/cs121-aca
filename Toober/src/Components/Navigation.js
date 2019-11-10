@@ -48,7 +48,6 @@ const Navigation = () => {
                 <Button startIcon={<Teach />} color ="inherit" size="large" underline="none" component={Link} to="/Tutor" >Tutor</Button>
                 <Button startIcon={<School />} color ="inherit" size="large" underline="none" component={Link} to="/Tutee" >Tutee</Button>
                 <Button startIcon={<LockOpen />}color ="inherit" size="large" underline="none" component={Link} to="/Login">Login</Button>
-                <Button startIcon={<AccountCircle />} color ="inherit" size="large" underline="none" component={Link} to="/Signup" >Signup</Button>
                </Typography>
             </Toolbar>
           </AppBar>

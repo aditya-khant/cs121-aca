@@ -51,7 +51,6 @@ class Tutee extends Component {
     };
 
     handleClickOpen(){
-      console.log("Click Open")
       this.setState({
           open: true,
       })

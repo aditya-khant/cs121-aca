@@ -61,7 +61,7 @@ pickSubject(problem, subject) {
             <Paper>
                 <ListItem key={problem.id}>
                 <ListItemText primary={problem.problem} secondary={problem.username} />
-                <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
+                <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: problem.username, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid, isTutor: true, }}}>
                     <Button variant="contained" color="secondary">Go to chat!</Button>
                 </Link>
                     

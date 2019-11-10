@@ -3,8 +3,8 @@ import './Form.css';
 import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
-import {retrieve} from "../../Helpers"
-import {Grid} from "@material-ui/core"
+import {retrieve, isNullEmptyUndef} from "../../Helpers"
+import {Grid, Button, Dialog,DialogTitle, DialogActions} from "@material-ui/core"
 
 export default class Form extends Component {
 
@@ -20,12 +20,22 @@ export default class Form extends Component {
       list: [],
       problem: props.problemID,
       problemText: "",
-      problemImgUrl: ""
+      problemImgUrl: "", 
+      isTutor: props.isTutor,
+      timeStart: 0,
+      open: false
     };
+    this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
 
+    if (this.state.isTutor){
+        let startTime = Date.now()
+        this.setState({
+          timeStart: startTime,
+        })
+    }
     this.chatRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID));
     this.messageRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID) +'/messages');
     this.messageRef.on('value', (snapshot) => {
@@ -43,7 +53,6 @@ export default class Form extends Component {
     this.setProblemTextandImage();
     this.listenMessages();
     
-    
   }
 
   async setProblemTextandImage(){
@@ -51,16 +60,23 @@ export default class Form extends Component {
     const problemName = await retrieve("problems", this.state.problem, "problem")
     const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
     const storageRef = firebase.storage().ref();
-    const url = await storageRef.child(imageRelURL).getDownloadURL()
+    let url = "";
+    try{
+      url = await storageRef.child(imageRelURL).getDownloadURL()
+    } catch {
+
+    }
     this.setState({
        problemText: problemName,
        problemImgUrl: url,
     })
 
+
   }
 
   componentWillUnmount() {
     this.messageRef.off();
+    this.exit()
   }
 
   async createWelcome() {
@@ -98,6 +114,18 @@ export default class Form extends Component {
     });
   };
 
+  handleClickOpen(){
+    this.setState({
+        open: true,
+    })
+  };
+
+  handleClose(){
+      this.setState({
+          open: false,
+      })
+  };
+
   handleSend() {
     // when the message is typed
     // this sends it
@@ -133,11 +161,22 @@ export default class Form extends Component {
       });
   }
 
-  // exit() {
-  //   // when you press the exit button, it clears the messages from the database
-  //   const messages = firebase.database().ref(this.concatstuff);
-  //   this.messageRef.remove();
-  // }
+  async exit() {
+    // when you press the exit button, it sets the timer for the tutor
+    console.log(this.state.isTutor)
+    if (this.state.isTutor){
+      let startTime = this.state.startTime;
+      let rawDiff = Date.now() - startTime;
+      let minDiff = Math.round((rawDiff/1000)/60)
+      let currTime = await retrieve("users", this.state.tutorUID, "tutorTime");
+      if (!isNullEmptyUndef(currTime)){
+        minDiff += currTime
+      }
+      let userRef = firebase.database().ref('users/'+ this.state.tutorUID);
+      userRef.push({tutorTime: minDiff})
+    }
+    this.handleClickOpen()
+  }
 
 
 
@@ -145,6 +184,7 @@ export default class Form extends Component {
     let header;
     const imageURL = this.state.problemImgUrl;
     const problemName = this.state.problemText;
+    const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
     if (imageURL != ""){
       header = (
         <div>
@@ -162,6 +202,20 @@ export default class Form extends Component {
 
     return (
     <div padding={20}>
+       <Dialog open={this.state.open} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Are you sure you want to quit?</DialogTitle>   
+              <DialogActions>
+                <Link to={exitLink}>
+                  <Button color="primary">
+                    Yes
+                  </Button>
+                </ Link>
+                <Button onClick={this.handleClose} color="primary">
+                  No
+                </Button>
+
+              </DialogActions>
+          </Dialog>  
       <Grid container spacing={2}>
         <Grid item xs={3}>
           {header}
@@ -190,7 +244,7 @@ export default class Form extends Component {
                 send
               </button>
             </div>
-            <Link to = '/'><button>Exit</button></Link>
+            <Button color="primary" onClick={this.exit}>Exit</Button>
           </div>
          </Grid>
       </Grid>

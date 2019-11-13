@@ -13,7 +13,7 @@ export default class Form extends Component {
     // sets the state from props
     this.state = {
       userName: props.user,
-      tuteeName: props.tuteeName,
+      isTutor: props.tuteeName,
       tuteeUID: props.tuteeUID,
       tutorUID: props.tutorUID,
       message: '',
@@ -21,16 +21,17 @@ export default class Form extends Component {
       problem: props.problemID,
       problemText: "",
       problemImgUrl: "", 
-      isTutor: props.isTutor,
       timeStart: 0,
       open: false
     };
+
+    console.log(props)
     this.exit = this.exit.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
 
+    console.log(this.state)
     if (this.state.isTutor){
         let startTime = Date.now()
         this.setState({
@@ -115,17 +116,6 @@ export default class Form extends Component {
     });
   };
 
-  handleClickOpen(){
-    this.setState({
-        open: true,
-    })
-  };
-
-  handleClose(){
-      this.setState({
-          open: false,
-      })
-  };
 
   handleSend() {
     // when the message is typed
@@ -164,19 +154,17 @@ export default class Form extends Component {
 
   async exit() {
     // when you press the exit button, it sets the timer for the tutor
-    console.log(this.state.isTutor)
-    if (this.state.isTutor){
-      let startTime = this.state.startTime;
-      let rawDiff = Date.now() - startTime;
+    const {isTutor, tutorUID, timeStart} = this.state;
+    if (isTutor){
+      let rawDiff = Date.now() - timeStart;
       let minDiff = Math.round((rawDiff/1000)/60)
-      let currTime = await retrieve("users", this.state.tutorUID, "tutorTime");
+      let currTime = await retrieve("users", tutorUID, "tutorTime");
       if (!isNullEmptyUndef(currTime)){
         minDiff += currTime
       }
-      let userRef = firebase.database().ref('users/'+ this.state.tutorUID);
-      userRef.push({tutorTime: minDiff})
+      let userRef = firebase.database().ref('users/'+ tutorUID);
+      userRef.update({tutorTime: minDiff})
     }
-    this.handleClickOpen()
   }
 
 
@@ -203,20 +191,6 @@ export default class Form extends Component {
 
     return (
     <div padding={20}>
-       <Dialog open={this.state.open} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Are you sure you want to quit?</DialogTitle>   
-              <DialogActions>
-                <Link to={exitLink}>
-                  <Button color="primary">
-                    Yes
-                  </Button>
-                </ Link>
-                <Button onClick={this.handleClose} color="primary">
-                  No
-                </Button>
-
-              </DialogActions>
-          </Dialog>  
       <Grid container spacing={2}>
         <Grid item xs={3}>
           {header}
@@ -245,7 +219,7 @@ export default class Form extends Component {
                 send
               </button>
             </div>
-            <Button color="primary" onClick={this.exit}>Exit</Button>
+            <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
           </div>
          </Grid>
       </Grid>

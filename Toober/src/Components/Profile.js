@@ -19,6 +19,7 @@ class Profile extends Component {
             this.state.email = user.email;
             this.state.photoUrl = user.photoURL;
         }
+
     }
 
     render() {

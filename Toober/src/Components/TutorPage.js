@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {Grid, Select, MenuItem, List, ListItem, ListItemText, Paper, Button} from '@material-ui/core';
+import {Grid, Select, MenuItem, ListItem, ListItemText, Paper, Button} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 

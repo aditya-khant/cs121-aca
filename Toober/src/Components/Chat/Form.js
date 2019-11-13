@@ -4,7 +4,7 @@ import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
 import {retrieve, isNullEmptyUndef} from "../../Helpers"
-import {Grid, Button} from "@material-ui/core"
+import {Grid, Button, Dialog, DialogTitle, DialogContent, DialogActions} from "@material-ui/core"
 
 export default class Form extends Component {
 
@@ -27,7 +27,22 @@ export default class Form extends Component {
 
     console.log(props)
     this.exit = this.exit.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
+
+  handleClickOpen(){
+    this.setState({
+        open: true,
+    })
+  };
+
+  handleClose(){
+      this.setState({
+          open: false,
+      })
+  };
+  
 
   componentDidMount() {
 
@@ -166,7 +181,6 @@ export default class Form extends Component {
   }
 
 
-
   render() {
     let header;
     const imageURL = this.state.problemImgUrl;
@@ -187,8 +201,10 @@ export default class Form extends Component {
       )
     }
 
-    return (
-    <div padding={20}>
+    if (!this.state.isTutor)
+    {
+      return(
+   <div padding={20}>
       <Grid container spacing={2}>
         <Grid item xs={3}>
           {header}
@@ -217,12 +233,66 @@ export default class Form extends Component {
                 send
               </button>
             </div>
-            <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
+                <Dialog  open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+                  <DialogTitle id="form-dialog-title">Exit</DialogTitle>
+                  <DialogContent> 
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={this.handleClose} color="primary">
+                      Cancel
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                {/* <Link to={exitLink} ><Button color="primary">Exit</Button></Link> */}
+
+                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+                  Exit
+                </Button>
+
           </div>
          </Grid>
       </Grid>
     </div>
+      )
+    } else {
+      return (
+        <div padding={20}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              {header}
+            </Grid>
+            <Grid item xs={9}>
+              <div className="form">
+                <div className="scroller">
+                  { this.state.list.map((item, index) =>
+                    <Message key={index} message={item} />
+                  )}
+                </div>
+                <div className="form__row">
+                  <input
+                    className="form__input"
+                    type="text"
+                    name="message"
+                    placeholder="Type message"
+                    value={this.state.message}
+                    onChange={this.handleChange.bind(this)}
+                    onKeyPress={this.handleKeyPress.bind(this)}
+                  />
+                  <button
+                    className="form__button"
+                    onClick={this.handleSend.bind(this)}
+                  >
+                    send
+                  </button>
+                </div>
+
+                <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
     
+              </div>
+             </Grid>
+          </Grid>
+        </div>    
     );
   }
+}
 }

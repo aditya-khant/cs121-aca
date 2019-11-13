@@ -83,7 +83,7 @@ render(){
                             value={this.state.subject}
                             onChange={this.handleChange}
                             name = {"subject"}
-                            autoWidth = "true"
+                            autoWidth = {true}
                             >
                             <MenuItem value={"Math"}>Math</MenuItem>
                             <MenuItem value={"Biology"}>Biology</MenuItem>

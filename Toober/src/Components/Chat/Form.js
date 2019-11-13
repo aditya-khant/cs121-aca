@@ -4,7 +4,7 @@ import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
 import {retrieve, isNullEmptyUndef} from "../../Helpers"
-import {Grid, Button, Dialog,DialogTitle, DialogActions} from "@material-ui/core"
+import {Grid, Button} from "@material-ui/core"
 
 export default class Form extends Component {
 
@@ -84,8 +84,6 @@ export default class Form extends Component {
   async createWelcome() {
     // creates the welcome message
     
-    const tuteeName = this.state.tuteeUID;
-    const tutorName = this.state.tutorUID;
     let messageRef = this.messageRef;
     const welcomeMessage = {
       userName: "Toober",
@@ -174,11 +172,11 @@ export default class Form extends Component {
     const imageURL = this.state.problemImgUrl;
     const problemName = this.state.problemText;
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
-    if (imageURL != ""){
+    if (imageURL !== ""){
       header = (
         <div>
           <h1>{problemName}</h1>
-          <img src={imageURL} width="100%" />
+          <img src={imageURL} width="100%" alt="Problem" />
         </div>
       )
     } else {

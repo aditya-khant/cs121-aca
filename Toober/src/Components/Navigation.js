@@ -13,8 +13,6 @@ import {Teach} from 'mdi-material-ui';
 
 const Navigation = () => {
     const { currentUser } = useContext(AuthContext);
-    var login = "";
-    var loginText = ""
     
     if(currentUser)
     {

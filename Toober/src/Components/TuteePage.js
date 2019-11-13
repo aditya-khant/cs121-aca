@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, TextField, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText} from '@material-ui/core';
+import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, Dialog, DialogActions, DialogTitle, DialogContent} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
@@ -72,7 +72,7 @@ class Tutee extends Component {
     // Or sends it to the existing one
     let imageID = ""
     const itemsRef = firebase.database().ref('/problems/');
-    if (this.state.pictures != "") {
+    if (this.state.pictures !== "") {
       const file_to_upload = new Blob(this.state.pictures)
       const storageRef = firebase.storage().ref();
       imageID = 'questions/'+cleanupText(this.state.uid)+cleanupText(this.state.problem) + '.jpg' 
@@ -172,7 +172,7 @@ listChats(){
               <DialogContent>
               <Grid container justify="center"  direction="row">
               <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
-                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
+                <input type="text" name="problem" placeholder="Enter your problem here" onChange={this.handleChange} value={this.state.problem}/>
                 <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
                     <option value="Math">Math</option>
                     <option value="Biology">Biology</option>

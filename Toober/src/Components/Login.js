@@ -1,12 +1,11 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
-import app from "../FirebaseConfig";
+import firebase from "firebase";
 import { AuthContext } from "../Auth";
-import {Grid, TextField, Button} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import firebase from 'firebase';
 
 const Login = ({ history }) => {
 

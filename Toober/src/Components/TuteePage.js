@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {List, ListItem, ListItemText, Button, Grid, Paper} from '@material-ui/core';
+import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, TextField, Dialog, DialogActions, DialogTitle, DialogContent, DialogContentText} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
-import {cleanupText} from '../Helpers.js';
+import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
 
 class Tutee extends Component {
     constructor() {
@@ -19,13 +19,16 @@ class Tutee extends Component {
           uid: firebase.auth().currentUser.uid,
           tutoruid: "",
           email: firebase.auth().currentUser.email,
-          chatList:[],
           pictures: "",
-          pictures_src: ""
+          pictures_src: "",
+          isLoading: true,
+          open: false
 
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClickOpen = this.handleClickOpen.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.addUser = this.addUser.bind(this);
         this.listChats = this.listChats.bind(this);
         this.onDrop = this.onDrop.bind(this);
@@ -44,7 +47,19 @@ class Tutee extends Component {
 
         alert("Picture Uploaded")
 
-    }
+    };
+
+    handleClickOpen(){
+      this.setState({
+          open: true,
+      })
+    };
+  
+    handleClose(){
+        this.setState({
+            open: false,
+        })
+    };
     
   handleChange(e) {
     // Update the state when necessary
@@ -68,7 +83,8 @@ class Tutee extends Component {
       questionRef.put(file_to_upload).then(function(snapshot) {
         console.log('Uploaded a blob or file!');
       });
-    }
+    };
+   
    
     // Sets up the submission item
     const item = {
@@ -88,7 +104,8 @@ class Tutee extends Component {
       problem: '',
       subject: 'Math',
       uid: firebase.auth().currentUser.uid,
-      pictures: ""
+      pictures: "",
+      open: false
     })
   }
 
@@ -123,63 +140,36 @@ class Tutee extends Component {
 listChats(){
   const chatRef = firebase.database().ref("chat");
   let newChats = []
-  chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', (snapshot) => {
+  chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', async (snapshot) => {
     const chat_dict = snapshot.val();
-    
-    for (const [, value] of Object.entries(chat_dict)) {
-      const problemID = value.problem
-      const tutorUID = value.tutorUID
-      const problemRef = firebase.database().ref('problems/'+problemID);
-      problemRef.on('value',(snapshot2) => { 
-        const snapVal = snapshot2.val(); 
-        newChats.push({problem: snapVal.problem, subject: snapVal.subject, problemID:problemID, tutorUID: tutorUID});
-      });
-    }
-    
-  });
-
-  if (newChats != []){
+    if (!isNullEmptyUndef(chat_dict)){
+      for (const [, value] of Object.entries(chat_dict)) {
+        const problemID = value.problem;
+        const tutorUID = value.tutorUID;
+        const snapVal = await retrieveMultiple("problems",problemID, ["problem","subject"]);
+        newChats.push({problem: snapVal["problem"], subject: snapVal["subject"], problemID:problemID, tutorUID: tutorUID});
+      }
+      
+    } 
     this.setState({
-      chatList: newChats
+      chatList: newChats,
+      isLoading:false, 
     });
-  } else {
-    console.log("0 New")
-  }
-
-
+  });
+  
+ 
 }
     
   render() {
     const chatList = this.state.chatList;
-   
-    return (
-      <div style={{ padding: 20}}>
-        <MuiThemeProvider theme={Theme}>
-        <Grid container direction = "row">
-          <Grid item>
-            <h1>Tutee</h1>
-              <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
-                <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username}/>
-                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
-                <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
-                    <option value="Math">Math</option>
-                    <option value="Biology">Biology</option>
-                    <option value="English">English</option>
-                </select>
-                <Button variant="contained" color="primary" type="submit">Add Question</Button>
-                <ImageUploader
-                    withIcon={true}
-                    buttonText='Upload image'
-                    onChange={this.onDrop}
-                    imgExtension={['.jpg', '.png', '.gif']}
-                    maxFileSize={5242880}
-                    singleImage={true}
-                />
-                <img src={this.state.pictures} />
-              </form>
-          </Grid>
-        </Grid>
-            <List>
+    let list;
+    if (this.state.isLoading){
+      list = (
+        <CircularProgress />
+      );
+    }else {
+      list = (
+        <List>
               {chatList.map((problem) => {
                 return (
                   <Paper>
@@ -195,6 +185,54 @@ listChats(){
 
                 )})}
             </List>
+      )
+    }
+   
+    return (
+      <div style={{ padding: 20}}>
+        
+        <MuiThemeProvider theme={Theme}>
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
+              <DialogContent>
+              <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
+                <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username}/>
+                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
+                <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
+                    <option value="Math">Math</option>
+                    <option value="Biology">Biology</option>
+                    <option value="English">English</option>
+                </select>
+              
+              <ImageUploader
+                    withIcon={false}
+                    buttonText='Upload image'
+                    onChange={this.onDrop}
+                    imgExtension={['.jpg', '.png', '.gif']}
+                    maxFileSize={5242880}
+                    singleImage={true}
+                />
+                <Button type="submit" color="primary">
+                  Submit
+                </Button>
+               </form>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleClose} color="primary">
+                  Cancel
+                </Button>
+              </DialogActions>
+          </Dialog>   
+        <Grid container direction = "row">
+          <Grid item>
+            <h1>Tutee</h1>
+            <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+              Add Question
+            </Button>
+                             
+          </Grid>
+        </Grid>
+            {list}
           </MuiThemeProvider>
         </div>
       );

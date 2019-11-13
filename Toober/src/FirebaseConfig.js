@@ -3,13 +3,13 @@ import "firebase/auth";
 
 const app  = firebase.initializeApp({
   apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: "tooberdatabaseuse.firebaseapp.com",
-  databaseURL: "https://tooberdatabaseuse.firebaseio.com",
-  projectId: "tooberdatabaseuse",
-  storageBucket: "tooberdatabaseuse.appspot.com",
-  messagingSenderId: "1068632627328",
-  appId: "1:1068632627328:web:37062820035a58af82ae65",
-  measurementId: "G-WR7MRVXCLZ"
+  authDomain: "toober-cs121.firebaseapp.com",
+  databaseURL: "https://toober-cs121.firebaseio.com",
+  projectId: "toober-cs121",
+  storageBucket: "toober-cs121.appspot.com",
+  messagingSenderId: "1043077781547",
+  appId: "1:1043077781547:web:1f8291a8f0e47d0faf326e",
+  measurementId: "G-4H706LE0PM"
 });
 
 export default app;

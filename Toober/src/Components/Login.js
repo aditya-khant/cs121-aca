@@ -5,22 +5,21 @@ import { AuthContext } from "../Auth";
 import {Grid, TextField, Button} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase';
 
 const Login = ({ history }) => {
-  const handleLogin = useCallback(async event => {
-    event.preventDefault();
-    const { email, password } = event.target.elements;
-    try {
-      // Wait until user puts in info
-      await app
-        .auth()
-        .signInWithEmailAndPassword(email.value, password.value);
-      // Goes to main page after successful login
-      history.push("/");
-    } catch (error) {
-      alert(error);
-    }
-  }, [history]);
+
+  const uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'redirect',
+    // Redirect to /signedIn after sign in is successful. Alternatively you can provide a callbacks.signInSuccess function.
+    signInSuccessUrl: '/',
+    // We will display Google as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ]
+  };
 
   const { currentUser } = useContext(AuthContext);
  
@@ -35,17 +34,7 @@ const Login = ({ history }) => {
       <Grid container direction = "row">
         <Grid item>
         <h1>Log in</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          Email
-          <input name="email" type="email" placeholder="Email" />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" placeholder="Password" />
-        </label>
-        <Button variant="contained" color="primary" type="submit">Log in</Button>
-      </form>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
         </Grid>
       </Grid>
       </MuiThemeProvider>

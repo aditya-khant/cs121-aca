@@ -3,7 +3,8 @@ import './Form.css';
 import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
-import {retrieve} from "../../Helpers"
+import {retrieve, isNullEmptyUndef} from "../../Helpers"
+import {Grid, Button, Dialog,DialogTitle, DialogActions} from "@material-ui/core"
 
 export default class Form extends Component {
 
@@ -17,12 +18,25 @@ export default class Form extends Component {
       tutorUID: props.tutorUID,
       message: '',
       list: [],
-      problem: props.problemID
+      problem: props.problemID,
+      problemText: "",
+      problemImgUrl: "", 
+      isTutor: props.isTutor,
+      timeStart: 0,
+      open: false
     };
+    this.exit = this.exit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
 
+    if (this.state.isTutor){
+        let startTime = Date.now()
+        this.setState({
+          timeStart: startTime,
+        })
+    }
     this.chatRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID));
     this.messageRef = firebase.database().ref('chat/' + this.state.problem.concat(this.state.tutorUID) +'/messages');
     this.messageRef.on('value', (snapshot) => {
@@ -37,42 +51,48 @@ export default class Form extends Component {
         this.createChat();
       };
     });
+    this.setProblemTextandImage();
     this.listenMessages();
+    
+  }
+
+  async setProblemTextandImage(){
+    // Downloads the problem's text and image and sets it in the state
+    const problemName = await retrieve("problems", this.state.problem, "problem")
+    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
+    const storageRef = firebase.storage().ref();
+    let url = "";
+    try{
+      url = await storageRef.child(imageRelURL).getDownloadURL()
+    } catch {
+
+    }
+    this.setState({
+       problemText: problemName,
+       problemImgUrl: url,
+    })
+
+
   }
 
   componentWillUnmount() {
     this.messageRef.off();
+    this.exit()
   }
 
   async createWelcome() {
     // creates the welcome message
-    const problemName = await retrieve("problems", this.state.problem, "problem")
-    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
-    console.log(`ImageRelURL ${imageRelURL}`)
+    
     const tuteeName = this.state.tuteeUID;
     const tutorName = this.state.tutorUID;
     let messageRef = this.messageRef;
     const welcomeMessage = {
       userName: "Toober",
-      message: `Start chatting! Problem: ${problemName} Tutor: ${tutorName} Tutee: ${tuteeName}`,
+      message: "Start chatting",
       type: "text",
       image: ""
     }
     messageRef.push(welcomeMessage);
-    if (imageRelURL !== "" || imageRelURL != undefined){
-      const storageRef = firebase.storage().ref();
-      
-      let url = await storageRef.child(imageRelURL).getDownloadURL()
-      console.log(url)
-      let imageURL = url
-      const welcomeImg = {
-        userName: "Toober",
-        type: "img",
-        image: imageURL,
-        message: ""
-      }
-      messageRef.push(welcomeImg);
-    }
     this.setState({message: ''});
   }
 
@@ -93,6 +113,18 @@ export default class Form extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
+  };
+
+  handleClickOpen(){
+    this.setState({
+        open: true,
+    })
+  };
+
+  handleClose(){
+      this.setState({
+          open: false,
+      })
   };
 
   handleSend() {
@@ -130,39 +162,95 @@ export default class Form extends Component {
       });
   }
 
-  // exit() {
-  //   // when you press the exit button, it clears the messages from the database
-  //   const messages = firebase.database().ref(this.concatstuff);
-  //   this.messageRef.remove();
-  // }
+  async exit() {
+    // when you press the exit button, it sets the timer for the tutor
+    console.log(this.state.isTutor)
+    if (this.state.isTutor){
+      let startTime = this.state.startTime;
+      let rawDiff = Date.now() - startTime;
+      let minDiff = Math.round((rawDiff/1000)/60)
+      let currTime = await retrieve("users", this.state.tutorUID, "tutorTime");
+      if (!isNullEmptyUndef(currTime)){
+        minDiff += currTime
+      }
+      let userRef = firebase.database().ref('users/'+ this.state.tutorUID);
+      userRef.push({tutorTime: minDiff})
+    }
+    this.handleClickOpen()
+  }
+
+
 
   render() {
+    let header;
+    const imageURL = this.state.problemImgUrl;
+    const problemName = this.state.problemText;
+    const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
+    if (imageURL != ""){
+      header = (
+        <div>
+          <h1>{problemName}</h1>
+          <img src={imageURL} width="100%" />
+        </div>
+      )
+    } else {
+      header = (
+        <div>
+          <h1>{problemName}</h1>
+        </div>
+      )
+    }
+
     return (
-      <div className="form">
-        <div className="scroller">
-          { this.state.list.map((item, index) =>
-            <Message key={index} message={item} />
-          )}
-        </div>
-        <div className="form__row">
-          <input
-            className="form__input"
-            type="text"
-            name="message"
-            placeholder="Type message"
-            value={this.state.message}
-            onChange={this.handleChange.bind(this)}
-            onKeyPress={this.handleKeyPress.bind(this)}
-          />
-          <button
-            className="form__button"
-            onClick={this.handleSend.bind(this)}
-          >
-            send
-          </button>
-        </div>
-        <Link to = '/'><button>Exit</button></Link>
-      </div>
+    <div padding={20}>
+       <Dialog open={this.state.open} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Are you sure you want to quit?</DialogTitle>   
+              <DialogActions>
+                <Link to={exitLink}>
+                  <Button color="primary">
+                    Yes
+                  </Button>
+                </ Link>
+                <Button onClick={this.handleClose} color="primary">
+                  No
+                </Button>
+
+              </DialogActions>
+          </Dialog>  
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          {header}
+        </Grid>
+        <Grid item xs={9}>
+          <div className="form">
+            <div className="scroller">
+              { this.state.list.map((item, index) =>
+                <Message key={index} message={item} />
+              )}
+            </div>
+            <div className="form__row">
+              <input
+                className="form__input"
+                type="text"
+                name="message"
+                placeholder="Type message"
+                value={this.state.message}
+                onChange={this.handleChange.bind(this)}
+                onKeyPress={this.handleKeyPress.bind(this)}
+              />
+              <button
+                className="form__button"
+                onClick={this.handleSend.bind(this)}
+              >
+                send
+              </button>
+            </div>
+            <Button color="primary" onClick={this.exit}>Exit</Button>
+          </div>
+         </Grid>
+      </Grid>
+    </div>
+    
     );
   }
 }

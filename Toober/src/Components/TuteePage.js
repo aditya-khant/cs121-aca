@@ -17,7 +17,6 @@ class Tutee extends Component {
           problem: '',
           subject: 'Math', 
           uid: firebase.auth().currentUser.uid,
-          tutoruid: "",
           email: firebase.auth().currentUser.email,
           pictures: "",
           pictures_src: "",
@@ -29,7 +28,6 @@ class Tutee extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.addUser = this.addUser.bind(this);
         this.listChats = this.listChats.bind(this);
         this.onDrop = this.onDrop.bind(this);
       }
@@ -110,30 +108,9 @@ class Tutee extends Component {
   }
 
   componentDidMount() {
-    this.addUser();
     this.listChats();
   }
 
-  addUser() {
-   // Loading data from Firebase
-    const userRef = firebase.database().ref('users');
-    userRef.on('value', (snapshot) => {
-        let userList = snapshot.val();
-        var tutoruid = "";
-        // Loops over user UIDs and checks if there is a collection
-        // with the tutee UID as the second part of the collection name
-        for (let user in userList) {
-            if (snapshot.child((userList[user].uid.concat(firebase.auth().currentUser.uid))).exists) {
-              if (userList[user].uid !== firebase.auth().currentUser.uid) {
-                // If there is, make the tutorUID what was found
-                tutoruid = userList[user].uid;
-                break;
-              }
-            }
-        }
-        this.setState ({tutoruid : tutoruid}) ;
-    });
-}
 
 listChats(){
   const chatRef = firebase.database().ref("chat");
@@ -173,7 +150,7 @@ listChats(){
                   <Paper>
                     <ListItem>
                       <ListItemText primary={problem.problem} secondary={problem.subject} />
-                      <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
+                      <Link style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
                       <Button variant="contained" color="secondary">
                         Chat!
                       </Button>
@@ -194,7 +171,6 @@ listChats(){
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
               <DialogContent>
               <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
-                <input type="text" name="username" placeholder="What's your name?" onChange={this.handleChange} value={this.state.username}/>
                 <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
                 <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
                     <option value="Math">Math</option>

@@ -18,7 +18,6 @@ class Tutor extends Component {
     }
 
    
-  
 componentDidMount() {
     // Loading data from Firebase
     const problemRef = firebase.database().ref('problems');
@@ -61,7 +60,7 @@ pickSubject(problem, subject) {
             <Paper>
                 <ListItem key={problem.id}>
                 <ListItemText primary={problem.problem} secondary={problem.username} />
-                <Link to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: true, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid, isTutor: "a", }}}>
+                <Link  style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: true, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid, isTutor: "a", }}}>
                     <Button variant="contained" color="secondary">Go to chat!</Button>
                 </Link>
                     

@@ -26,6 +26,7 @@ export default class Form extends Component {
       open: false
     };
     this.exit = this.exit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {

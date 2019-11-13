@@ -175,7 +175,7 @@ listChats(){
                   <Paper>
                     <ListItem>
                       <ListItemText primary={problem.problem} secondary={problem.subject} />
-                      <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: this.state.email, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
+                      <Link to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
                       <Button variant="contained" color="secondary">
                         Chat!
                       </Button>

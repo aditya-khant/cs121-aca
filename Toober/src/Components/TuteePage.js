@@ -170,6 +170,7 @@ listChats(){
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
               <DialogContent>
+              <Grid container justify="center"  direction="row">
               <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
                 <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
                 <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
@@ -186,13 +187,14 @@ listChats(){
                     maxFileSize={5242880}
                     singleImage={true}
                 />
-                <Button type="submit" color="primary">
+                <Button variant="contained" type="submit" color="primary">
                   Submit
                 </Button>
                </form>
+               </Grid>
               </DialogContent>
               <DialogActions>
-                <Button onClick={this.handleClose} color="primary">
+                <Button onClick={this.handleClose}  variant="contained" color="primary">
                   Cancel
                 </Button>
               </DialogActions>

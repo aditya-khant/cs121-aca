@@ -13,7 +13,7 @@ const HomePage = () => {
      <div>
      <MuiThemeProvider theme={Theme}>
       <div>
-      <Grid container spacing={3} justify="center"  direction="row" >
+      <Grid container justify="center"  direction="row" >
         <Grid item >
             <h1>Please select your role:</h1>
         </ Grid>

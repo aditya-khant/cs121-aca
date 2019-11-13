@@ -21,11 +21,6 @@ class Profile extends Component {
             this.state.email = user.email;
             this.state.photoUrl = user.photoURL;
         }
-
-    console.log(user.displayName);
-    console.log(user.email);
-    console.log(user.photoURL);
-
     }   
 
     render() {

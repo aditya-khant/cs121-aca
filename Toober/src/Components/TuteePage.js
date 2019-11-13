@@ -170,7 +170,7 @@ listChats(){
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
               <DialogContent>
-              <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
+              <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
                 <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
                 <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
                     <option value="Math">Math</option>

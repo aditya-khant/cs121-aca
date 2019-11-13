@@ -3,8 +3,9 @@ import './Form.css';
 import Message from './Message';
 import firebase from 'firebase';
 import { Link } from "react-router-dom";
-import {retrieve, isNullEmptyUndef} from "../../Helpers"
-import {Grid, Button, Dialog, DialogTitle, DialogContent, DialogActions} from "@material-ui/core"
+import {retrieve, isNullEmptyUndef} from "../../Helpers";
+import {Grid, Button} from "@material-ui/core";
+import Feedback from './Feedback';
 
 export default class Form extends Component {
 
@@ -22,27 +23,11 @@ export default class Form extends Component {
       problemText: "",
       problemImgUrl: "", 
       timeStart: 0,
-      open: false
     };
 
     console.log(props)
     this.exit = this.exit.bind(this);
-    this.handleClickOpen = this.handleClickOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
-
-  handleClickOpen(){
-    this.setState({
-        open: true,
-    })
-  };
-
-  handleClose(){
-      this.setState({
-          open: false,
-      })
-  };
-  
 
   componentDidMount() {
 
@@ -233,22 +218,7 @@ export default class Form extends Component {
                 send
               </button>
             </div>
-                <Dialog  open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-                  <DialogTitle id="form-dialog-title">Exit</DialogTitle>
-                  <DialogContent> 
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={this.handleClose} color="primary">
-                      Cancel
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-                {/* <Link to={exitLink} ><Button color="primary">Exit</Button></Link> */}
-
-                <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-                  Exit
-                </Button>
-
+                <Feedback></Feedback>
           </div>
          </Grid>
       </Grid>

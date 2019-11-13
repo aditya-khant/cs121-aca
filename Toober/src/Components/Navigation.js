@@ -28,7 +28,7 @@ const Navigation = () => {
                   <Button startIcon={<Teach />} color ="inherit" size="large" underline="none" component={Link} to="/Tutor" >Tutor</Button>
                   <Button startIcon={<School />} color ="inherit" size="large" underline="none" component={Link} to="/Tutee" >Tutee</Button>
                    <Button startIcon={<Lock />}color ="inherit" size="large" underline="none" component={Link} onClick={() => app.auth().signOut()}>Logout</Button>
-                   <Button startIcon={<AccountCircle />} color="inherit" >{"Welcome "+ app.auth().currentUser.email} </Button>     
+                   <Button startIcon={<AccountCircle />} color="inherit" to="/profile">{"Welcome "+ app.auth().currentUser.email} </Button>     
                  </Typography>
               </Toolbar>
             </AppBar>

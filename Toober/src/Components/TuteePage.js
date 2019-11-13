@@ -115,9 +115,7 @@ class Tutee extends Component {
   }
 
   addUser() {
-    // Bug: With 3 users, it connects people with the wrong peron.
-    //      It connects them if their IDs are not the same, not if the collection exists
-    // Loading data from Firebase
+   // Loading data from Firebase
     const userRef = firebase.database().ref('users');
     userRef.on('value', (snapshot) => {
         let userList = snapshot.val();

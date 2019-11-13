@@ -20,7 +20,8 @@ const Login = ({ history }) => {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ]
   };
-
+  console.log(process.env.REACT_APP_API_KEY);
+  
   const { currentUser } = useContext(AuthContext);
  
   if (currentUser) {

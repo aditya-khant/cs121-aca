@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
-import {Grid, Paper, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
+import {Grid, Paper, CircularProgress, List, ListItem, ListItemText, Tab, AppBar} from "@material-ui/core"
 import {isNullEmptyUndef, retrieve} from '../Helpers.js';
 
 
@@ -38,6 +38,8 @@ class Profile extends Component {
 
     listProblems() {
       const problemRef = firebase.database().ref("problems");
+      const chatRef = firebase.database().ref("chat");
+      
       let newProblems = [];
       problemRef.orderByChild("uid").equalTo(this.state.uid).on('value', async (snapshot) => {
         const problem_dict = snapshot.val();
@@ -51,8 +53,7 @@ class Profile extends Component {
         } 
         console.log(newProblems)
         this.setState({
-          problemList: newProblems,
-          isLoading:false,
+          problemList: newProblems
         });
       });
     }
@@ -60,18 +61,20 @@ class Profile extends Component {
     async getTime(){
       const tutorTime = await retrieve("users", this.state.uid, "tutorTime");
       this.setState({
-        time: tutorTime
+        time: tutorTime,
+        isLoading: false
       })
     }
 
     render() {
       const problemList = this.state.problemList;
       let list;
+      let theTime;
       if (this.state.isLoading){
         list = (
           <CircularProgress />
         );
-      }else {
+      } else {
         list = (
           <List>
                 {problemList.map((problem) => {
@@ -84,7 +87,8 @@ class Profile extends Component {
   
                   )})}
               </List>
-        )
+        );
+        theTime = this.state.time;
       }
         var user = firebase.auth().currentUser;
         let header;
@@ -95,7 +99,7 @@ class Profile extends Component {
                 header = (
                   <div>
                     <h1>{userName}</h1>
-                    <img src={imageURL} alt = "the user" width="100%" />
+                    <img src={imageURL} alt = "the user" width="50%" />
                   </div>
                 )
               } else {
@@ -103,21 +107,23 @@ class Profile extends Component {
                   <div>
                     <h1>{userName}</h1>
                   </div>
-                )
+                 )
               }
         }
         return (
+
         <div>
             <Grid item xs={3}>
           {header}
         </Grid>
+
         <Grid item xs={9}>
           <h3>My Current Problems</h3>
           {list}
         </Grid>
         <Grid item xs={9}>
           <h3>My Tutor Time</h3>
-          {this.state.time}
+          <p>{theTime}</p>
         </Grid>
         </div>
         )

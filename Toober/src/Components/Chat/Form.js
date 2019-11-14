@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Form.css';
 import Message from './Message';
-import firebase from 'firebase';
+import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
 import {retrieve, isNullEmptyUndef} from "../../Helpers";
 import {Grid, Button} from "@material-ui/core";
@@ -23,15 +23,14 @@ export default class Form extends Component {
       problemText: "",
       problemImgUrl: "", 
       timeStart: 0,
+      tableRef: props.problemID.concat(props.tutorUID)
     };
 
-    console.log(props)
     this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
 
-    console.log(this.state)
     if (this.state.isTutor){
         let startTime = Date.now()
         this.setState({
@@ -218,7 +217,7 @@ export default class Form extends Component {
                 send
               </button>
             </div>
-                <Feedback></Feedback>
+                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef}></Feedback>
           </div>
          </Grid>
       </Grid>

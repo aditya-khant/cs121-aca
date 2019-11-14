@@ -5,6 +5,7 @@ import firebase from 'firebase';
 import { Link } from "react-router-dom";
 import {retrieve, isNullEmptyUndef} from "../../Helpers"
 import {Grid, Button} from "@material-ui/core"
+import ImageUploader from 'react-images-upload';
 
 export default class Form extends Component {
 
@@ -22,7 +23,8 @@ export default class Form extends Component {
       problemText: "",
       problemImgUrl: "", 
       timeStart: 0,
-      open: false
+      open: false,
+      pictures:  ""
     };
 
     console.log(props)
@@ -165,6 +167,19 @@ export default class Form extends Component {
     }
   }
 
+  onDrop(picture) {
+    // Function that handles image uploads
+    let urlCreator = window.URL || window.webkitURL;
+    let imageBlob = new Blob(picture);
+    let imageUrl = urlCreator.createObjectURL(imageBlob);
+    console.log(imageUrl);
+    this.setState({
+        pictures: picture,
+    });
+
+    alert("Picture Uploaded")
+
+};
 
 
   render() {
@@ -216,6 +231,14 @@ export default class Form extends Component {
               >
                 send
               </button>
+              <ImageUploader
+                    withIcon={false}
+                    buttonText='Upload image'
+                    onChange={this.onDrop}
+                    imgExtension={['.jpg', '.png', '.gif']}
+                    maxFileSize={5242880}
+                    singleImage={true}
+                />
             </div>
             <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
           </div>

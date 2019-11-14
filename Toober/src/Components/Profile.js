@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import {Grid, Paper, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
-import {isNullEmptyUndef} from '../Helpers.js';
+import {isNullEmptyUndef, retrieve} from '../Helpers.js';
 
 
 class Profile extends Component {
@@ -16,6 +16,7 @@ class Profile extends Component {
         photoURL: "",
         uid: firebase.auth().currentUser.uid,
         isLoading: true,
+        time: 0,
         problemList: []
     }
 
@@ -32,6 +33,7 @@ class Profile extends Component {
     
     componentDidMount() {
       this.listProblems();
+      this.getTime();
     }
 
     listProblems() {
@@ -50,9 +52,16 @@ class Profile extends Component {
         console.log(newProblems)
         this.setState({
           problemList: newProblems,
-          isLoading:false, 
+          isLoading:false,
         });
       });
+    }
+
+    async getTime(){
+      const tutorTime = await retrieve("users", this.state.uid, "tutorTime");
+      this.setState({
+        time: tutorTime
+      })
     }
 
     render() {
@@ -106,9 +115,13 @@ class Profile extends Component {
           <h3>My Current Problems</h3>
           {list}
         </Grid>
+        <Grid item xs={9}>
+          <h3>My Tutor Time</h3>
+          {this.state.time}
+        </Grid>
         </div>
         )
-}
+  }
 }
 
 export default Profile;

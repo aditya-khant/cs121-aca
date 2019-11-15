@@ -5,7 +5,6 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Grid from '@material-ui/core/Grid';
 import FancyHomeButtons from'./Subcomponents/FancyHomeButtons';
 import firebase from 'firebase';
-import { REFUSED } from 'dns';
 
 
 class HomePage extends Component {
@@ -30,8 +29,6 @@ class HomePage extends Component {
         tutorID: props.location.query.tutorID
       }
     }
-    this.closeChat = this.closeChat.bind(this);
-
   };
   
   componentDidMount() {
@@ -39,7 +36,7 @@ class HomePage extends Component {
     this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
     if(this.state.closeChat) {
-      this.closeChat();
+      this.chatRef.remove();
       if(this.state.closeQuestion) {
         this.problemRef.remove();
       }
@@ -49,20 +46,6 @@ class HomePage extends Component {
       closeChat: false,
       closeQuestion: false
     })
-  }
-
-  closeChat() {
-    // firebase.database().ref('chat/' + this.state.tableTitle + "/problem").remove().then(function() {
-    //   console.log("Remove problem succeeded.")
-    // });
-    // firebase.database().ref('chat/' + this.state.tableTitle + "/tutorUID").remove().then(function() {
-    //   console.log("Remove tutor uid succeeded.")
-    // });
-    // firebase.database().ref('chat/' + this.state.tableTitle + "/tuteeUID").remove().then(function() {
-    //   console.log("Remove tuteeUID succeeded.")
-    // });
-    // firebase.database().ref('chat/' + this.state.tableTitle + "/messages/").remove();
-    this.chatRef.remove();
   }
 
   componentWillUnmount() {

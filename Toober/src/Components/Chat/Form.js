@@ -77,6 +77,7 @@ export default class Form extends Component {
 
   componentWillUnmount() {
     this.messageRef.off();
+    this.chatRef.off();
     this.exit()
   }
 
@@ -94,7 +95,7 @@ export default class Form extends Component {
     this.setState({message: ''});
   }
 
-  createChat() {
+  async createChat() {
     // creates the chat in firebase
     var welcomeMessage = {
       problem: this.state.problem,

@@ -3,7 +3,6 @@ import firebase from '../FirebaseConfig.js';
 import {Grid, Paper, CircularProgress, List, ListItem, ListItemText, Tab, AppBar} from "@material-ui/core"
 import {isNullEmptyUndef, retrieve} from '../Helpers.js';
 
-
 class Profile extends Component {
     constructor() {
     super();
@@ -28,7 +27,6 @@ class Profile extends Component {
         }
 
     this.listProblems = this.listProblems.bind(this);
-
     }
     
     componentDidMount() {
@@ -51,9 +49,9 @@ class Profile extends Component {
           }
           
         } 
-        console.log(newProblems)
         this.setState({
-          problemList: newProblems
+          problemList: newProblems,
+          isLoading: false
         });
       });
     }
@@ -84,7 +82,6 @@ class Profile extends Component {
                         <ListItemText primary={problem.problem} secondary={problem.subject} />
                       </ListItem>
                     </Paper>
-  
                   )})}
               </List>
         );

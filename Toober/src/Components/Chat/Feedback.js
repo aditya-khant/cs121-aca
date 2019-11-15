@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Button, Dialog, DialogTitle, DialogContent, DialogActions} from "@material-ui/core";
+import {Button, Dialog, DialogTitle, DialogContent, DialogActions, Grid} from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 class Feedback extends Component {
@@ -34,10 +34,29 @@ class Feedback extends Component {
             <Dialog  open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title">Exit</DialogTitle>
             <DialogContent>
-                    <Link to= {{ pathname: '/', query: {closeChat: true, closeQuestion: true, problem: this.state.problem, tableTitle: this.state.tableTitle}}}><Button variant="outlined" color="primary">My question was answered</Button></Link>
-                    <Link to="/"><Button variant="outlined" color="primary">My question was not answered and I want to keep talking to this tutor</Button></Link>
-                    <Link to= {{ pathname: '/', query: {closeChat: true, closeQuestion: false, problem: this.state.problem, tableTitle: this.state.tableTitle}}}><Button variant="outlined" color="primary">My question was not answered but I want to talk to a new tutor</Button></Link>
-
+                <Grid container spacing = {1} direction = "column" justify = "center" alignItems="center">
+                    <Grid item>
+                <Link to= {{ pathname: '/', query: {closeChat: true, closeQuestion: true, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
+                    <Button style = {{textTransform: 'capitalize' }} variant="outlined" color="primary">
+                        My question was answered
+                    </Button>
+                </Link>
+                </Grid>
+                <Grid item>
+                <Link to="/">
+                    <Button style = {{textTransform: 'capitalize' }} variant="outlined" color="primary">
+                        My question was not answered and I want to keep talking to this tutor
+                    </Button>
+                </Link>
+                </Grid>
+                <Grid item>
+                <Link to= {{ pathname: '/', query: {closeChat: true, closeQuestion: false, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
+                    <Button style = {{textTransform: 'capitalize' }} variant="outlined" color="primary">
+                        My question was not answered but I want to talk to a new tutor
+                    </Button>
+                </Link>
+                </Grid>
+            </Grid>
             </DialogContent>
             <DialogActions>
                 <Button onClick={this.handleClose} color="primary">
@@ -45,7 +64,7 @@ class Feedback extends Component {
                 </Button>
             </DialogActions>
             </Dialog>
-            <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+            <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
                 Exit
             </Button>
         </div>

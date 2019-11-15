@@ -33,9 +33,9 @@ class App extends Component {
               <PrivateRoute exact path="/" component={Home}/>
               <PrivateRoute exact path="/tutor" component={Tutor}/>
               <PrivateRoute exact path="/tutee" component={Tutee}/>
+              <PrivateRoute exact path="/profile" component={Profile}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/signup" component={SignUp}/>
-              <PrivateRoute exact path="/profile" component={Profile}/>
             </Switch>
           </div> 
         </Router>

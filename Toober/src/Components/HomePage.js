@@ -36,13 +36,14 @@ class HomePage extends Component {
   
   componentDidMount() {
     console.log(this.state.tableTitle);
+    this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
+    this.problemRef = firebase.database().ref('problems/' + this.state.problem);
     if(this.state.closeChat) {
       this.closeChat();
       if(this.state.closeQuestion) {
-        firebase.database().ref('problems/' + this.state.problem).remove();
+        this.problemRef.remove();
       }
     }
-
 
     this.setState({
       closeChat: false,
@@ -50,11 +51,23 @@ class HomePage extends Component {
     })
   }
 
-  closeChat(ref) {
-    firebase.database().ref('chat/' + this.state.tableTitle + "/problem").remove();
-    firebase.database().ref('chat/' + this.state.tableTitle + "/tutorUID").remove();
-    firebase.database().ref('chat/' + this.state.tableTitle + "/tuteeUID").remove();
-    firebase.database().ref('chat/' + this.state.tableTitle).remove();
+  closeChat() {
+    // firebase.database().ref('chat/' + this.state.tableTitle + "/problem").remove().then(function() {
+    //   console.log("Remove problem succeeded.")
+    // });
+    // firebase.database().ref('chat/' + this.state.tableTitle + "/tutorUID").remove().then(function() {
+    //   console.log("Remove tutor uid succeeded.")
+    // });
+    // firebase.database().ref('chat/' + this.state.tableTitle + "/tuteeUID").remove().then(function() {
+    //   console.log("Remove tuteeUID succeeded.")
+    // });
+    // firebase.database().ref('chat/' + this.state.tableTitle + "/messages/").remove();
+    this.chatRef.remove();
+  }
+
+  componentWillUnmount() {
+    this.chatRef.off();
+    this.problemRef.off();
   }
 
   render() {

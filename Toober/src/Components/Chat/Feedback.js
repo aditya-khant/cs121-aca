@@ -44,7 +44,7 @@ class Feedback extends Component {
                 </Grid>
                 <Grid item>
                 <Link to="/">
-                    <Button style = {{textTransform: 'capitalize' }} variant="outlined" color="primary">
+                    <Button style = {{textTransform: 'capitalize'}} variant="outlined" color="primary">
                         My question was not answered and I want to keep talking to this tutor
                     </Button>
                 </Link>

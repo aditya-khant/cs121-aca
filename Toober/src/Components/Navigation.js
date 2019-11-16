@@ -22,11 +22,11 @@ const Navigation = () => {
            <AppBar position="static" color = 'primary' /*Material UI navigation bar look*/>
               <Toolbar>
                  <Typography  color = 'secondary'>
-                 <Button startIcon={<Home />} color ="inherit" size="large" component={Link} to="/" underline="none" >Home</Button>
-                  <Button startIcon={<Teach />} color ="inherit" size="large" underline="none" component={Link} to="/Tutor" >Tutor</Button>
-                  <Button startIcon={<School />} color ="inherit" size="large" underline="none" component={Link} to="/Tutee" >Tutee</Button>
-                   <Button startIcon={<Lock />} color ="inherit" size="large" underline="none" onClick={() => app.auth().signOut()}>Logout</Button>
-                   <Button startIcon={<AccountCircle />} color="inherit" component={Link} to="/Profile">{"Welcome "+ app.auth().currentUser.email} </Button>     
+                 <Button startIcon={<Home />} color="secondary" size="large" component={Link} to="/" underline="none" >Home</Button>
+                  <Button startIcon={<Teach />} color ="secondary" size="large" underline="none" component={Link} to="/Tutor" >Tutor</Button>
+                  <Button startIcon={<School />} color ="secondary" size="large" underline="none" component={Link} to="/Tutee" >Tutee</Button>
+                   <Button startIcon={<Lock />} color ="secondary" size="large" underline="none" onClick={() => app.auth().signOut()}>Logout</Button>
+                   <Button startIcon={<AccountCircle />} color="secondary" component={Link} to="/Profile">{"Welcome "+ app.auth().currentUser.email} </Button>     
                  </Typography>
               </Toolbar>
             </AppBar>
@@ -41,8 +41,8 @@ const Navigation = () => {
        <MuiThemeProvider theme={Theme}>
          <AppBar position="static" color = 'primary' /*Material UI navigation bar look*/>
             <Toolbar>
-               <Typography  color = 'secondary'>
-               <Button startIcon={<Home />} color ="inherit" size="large" component={Link} to="/" underline="none" >Home</Button>
+               <Typography>
+               <Button startIcon={<Home />} size="large" component={Link} to="/" underline="none" >Home</Button>
                 <Button startIcon={<Teach />} color ="inherit" size="large" underline="none" component={Link} to="/Tutor" >Tutor</Button>
                 <Button startIcon={<School />} color ="inherit" size="large" underline="none" component={Link} to="/Tutee" >Tutee</Button>
                 <Button startIcon={<LockOpen />}color ="inherit" size="large" underline="none" component={Link} to="/Login">Login</Button>

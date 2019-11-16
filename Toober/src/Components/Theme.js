@@ -9,7 +9,7 @@ const Theme = createMuiTheme({
       secondary: yellow,
       warning: orange,
       success: green,
-      danger : red,
+      danger : red
   }, 
   typography: {
     // Everything is default rendered with font size 20

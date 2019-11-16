@@ -3,13 +3,13 @@ import './Message.css';
 export default class Message extends Component {
   render() {
 
-    if (this.props.message.type == "img"){
+    if (this.props.message.type === "img"){
       return (
         <div className="message">
             <span className="message__author">
                 {this.props.message.userName}:
             </span>
-            <img src={this.props.message.image} width={"50%"} />
+            <img src={this.props.message.image} width={"50%"} alt="the problem" />
           
         </div>
       )

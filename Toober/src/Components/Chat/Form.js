@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './Form.css';
 import Message from './Message';
-import firebase from 'firebase';
+import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {retrieve, isNullEmptyUndef} from "../../Helpers"
-import {Grid, Button, Dialog,DialogTitle, DialogActions} from "@material-ui/core"
+import {retrieve, isNullEmptyUndef} from "../../Helpers";
+import {Grid, Button} from "@material-ui/core";
+import Feedback from './Feedback';
 
 export default class Form extends Component {
 
@@ -22,16 +23,14 @@ export default class Form extends Component {
       problemText: "",
       problemImgUrl: "", 
       timeStart: 0,
-      open: false
+      tableRef: props.problemID.concat(props.tutorUID)
     };
 
-    console.log(props)
     this.exit = this.exit.bind(this);
   }
 
   componentDidMount() {
 
-    console.log(this.state)
     if (this.state.isTutor){
         let startTime = Date.now()
         this.setState({
@@ -78,14 +77,13 @@ export default class Form extends Component {
 
   componentWillUnmount() {
     this.messageRef.off();
+    this.chatRef.off();
     this.exit()
   }
 
   async createWelcome() {
     // creates the welcome message
     
-    const tuteeName = this.state.tuteeUID;
-    const tutorName = this.state.tutorUID;
     let messageRef = this.messageRef;
     const welcomeMessage = {
       userName: "Toober",
@@ -97,7 +95,7 @@ export default class Form extends Component {
     this.setState({message: ''});
   }
 
-  createChat() {
+  async createChat() {
     // creates the chat in firebase
     var welcomeMessage = {
       problem: this.state.problem,
@@ -168,17 +166,16 @@ export default class Form extends Component {
   }
 
 
-
   render() {
     let header;
     const imageURL = this.state.problemImgUrl;
     const problemName = this.state.problemText;
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
-    if (imageURL != ""){
+    if (imageURL !== ""){
       header = (
         <div>
           <h1>{problemName}</h1>
-          <img src={imageURL} width="100%" />
+          <img src={imageURL} alt = "the problem" width="100%" />
         </div>
       )
     } else {
@@ -189,8 +186,10 @@ export default class Form extends Component {
       )
     }
 
-    return (
-    <div padding={20}>
+    if (!this.state.isTutor)
+    {
+      return(
+   <div padding={20}>
       <Grid container spacing={2}>
         <Grid item xs={3}>
           {header}
@@ -219,12 +218,51 @@ export default class Form extends Component {
                 send
               </button>
             </div>
-            <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
+                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef}></Feedback>
           </div>
          </Grid>
       </Grid>
     </div>
+      )
+    } else {
+      return (
+        <div padding={20}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              {header}
+            </Grid>
+            <Grid item xs={9}>
+              <div className="form">
+                <div className="scroller">
+                  { this.state.list.map((item, index) =>
+                    <Message key={index} message={item} />
+                  )}
+                </div>
+                <div className="form__row">
+                  <input
+                    className="form__input"
+                    type="text"
+                    name="message"
+                    placeholder="Type message"
+                    value={this.state.message}
+                    onChange={this.handleChange.bind(this)}
+                    onKeyPress={this.handleKeyPress.bind(this)}
+                  />
+                  <button
+                    className="form__button"
+                    onClick={this.handleSend.bind(this)}
+                  >
+                    send
+                  </button>
+                </div>
+
+                <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
     
+              </div>
+             </Grid>
+          </Grid>
+        </div>    
     );
   }
+}
 }

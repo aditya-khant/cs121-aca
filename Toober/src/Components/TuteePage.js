@@ -6,6 +6,7 @@ import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
 import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
+import Filter from 'bad-words';
 
 class Tutee extends Component {
     constructor() {
@@ -24,6 +25,9 @@ class Tutee extends Component {
           open: false
 
         }
+
+        this.filter = new Filter({placeHolder: " "});
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -83,11 +87,15 @@ class Tutee extends Component {
       });
     };
    
-   
+    let problem = this.state.problem;
+    if (this.filter.isProfane(problem)){
+      problem = this.filter.clean(problem);
+      alert("Please refrain from using profane language in your problems.");
+    }
     // Sets up the submission item
     const item = {
       user: this.state.email,
-      problem: this.state.problem,
+      problem: problem,
       subject: this.state.subject, 
       uid: this.state.uid,
       imageid: imageID

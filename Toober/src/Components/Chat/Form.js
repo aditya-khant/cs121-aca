@@ -171,7 +171,7 @@ export default class Form extends Component {
       })
       const file_to_upload = new Blob(this.state.pictures)
       const storageRef = firebase.storage().ref();
-      imageID = 'chat/'+cleanupText(this.state.tutorUID)+cleanupText(this.state.problem) + '/' + cleanupText(Date.now().toString()) + '.jpg' 
+      imageID = 'chat/'+cleanupText(this.state.problem)+cleanupText(this.state.tutorUID)+ '/' + cleanupText(Date.now().toString()) + '.jpg' 
       const questionRef = storageRef.child(imageID);
       console.log(typeof(file_to_upload))
       await questionRef.put(file_to_upload);

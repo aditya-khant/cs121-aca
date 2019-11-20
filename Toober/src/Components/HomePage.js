@@ -41,9 +41,10 @@ class HomePage extends Component {
     this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
     if(this.state.closeChat) {
+      this.removeChatImages();
       this.chatRef.remove();    
       if(this.state.closeQuestion) {
-        this.removeImage();
+        this.removeProblemImage();
         this.problemRef.remove();
       }
     }
@@ -53,17 +54,31 @@ class HomePage extends Component {
     })
   }
 
-  async removeImage() {
+  async removeProblemImage() {
     const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
     const storageRef = firebase.storage().ref();
     let url = ""
-      // removes image file
-      url = imageRelURL;
-      storageRef.child(url).delete().then(function() {
-        console.log("file deleted successfully");
-      }).catch(function(error) {
-        console.log("could not delete file")
+    // removes image file
+    url = imageRelURL;
+    storageRef.child(url).delete().then(function() {
+      console.log("file deleted successfully");
+    }).catch(function(error) {
+      console.log("could not delete file")
+    });
+  }
+
+  async removeChatImages() {
+    const storageRef = firebase.storage().ref(this.state.tutorID + this.state.problem);
+    storageRef.listAll().then(dir => {
+      dir.items.forEach(fileRef => {
+        this.deleteFile(ref.fullPath, fileRef.name);
       });
+      dir.prefixes.forEach(folderRef => {
+        this.deleteFolderContents(folderRef.fullPath);
+      })
+    }).catch(error => {
+      console.log(error);
+    })    
   }
 
   componentWillUnmount() {

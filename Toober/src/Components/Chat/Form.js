@@ -353,6 +353,7 @@ export default class Form extends Component {
     } else {
       return (
         <div padding={20}>
+          <MuiThemeProvider theme={Theme}>
           <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
               {dialogBox}         
@@ -399,6 +400,7 @@ export default class Form extends Component {
               </div>
              </Grid>
           </Grid>
+          </MuiThemeProvider>
         </div>    
     );
   }

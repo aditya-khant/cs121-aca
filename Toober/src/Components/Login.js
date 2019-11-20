@@ -5,6 +5,7 @@ import {Grid} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from "firebase";
 
 const Login = ({ history }) => {
 

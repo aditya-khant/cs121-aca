@@ -56,14 +56,14 @@ class HomePage extends Component {
   render() {
     return (
       <div>
-
-      <Grid container justify="center"  direction="row" >
-        <Grid item >
-            <h1>Please select your role:</h1>
-        </ Grid>
-        </ Grid>
-    <FancyHomeButtons />
-
+      <MuiThemeProvider theme={Theme}>
+        <Grid container justify="center"  direction="row" >
+          <Grid item >
+              <h1>Please select your role:</h1>
+          </ Grid>
+          </ Grid>
+      <FancyHomeButtons />
+    </MuiThemeProvider>
       </div>
     );
   }

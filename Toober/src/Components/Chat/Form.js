@@ -218,16 +218,26 @@ export default class Form extends Component {
 
   async exit() {
     // when you press the exit button, it sets the timer for the tutor
-    const {isTutor, tutorUID, timeStart} = this.state;
+    const {isTutor, tutorUID, timeStart, problem} = this.state;
     if (isTutor){
       let rawDiff = Date.now() - timeStart;
       let minDiff = Math.round((rawDiff/1000)/60)
+      let minSubDiff = minDiff;
+      const subject = await retrieve("problems",problem, "subject");
       let currTime = await retrieve("users", tutorUID, "tutorTime");
+      let currSubTime = await retrieve("users", tutorUID, "tutorTime_"+subject);
       if (!isNullEmptyUndef(currTime)){
         minDiff += currTime
       }
+      if (!isNullEmptyUndef(currSubTime)){
+        minSubDiff += currSubTime
+      }
+      let updateObj = {
+        tutorTime: minDiff
+      };
+      updateObj["tutorTime_"+subject] = minSubDiff;
       let userRef = firebase.database().ref('users/'+ tutorUID);
-      userRef.update({tutorTime: minDiff})
+      userRef.update(updateObj);
     }
   }
 

@@ -373,7 +373,7 @@ export default class Form extends Component {
                 Upload Image
               </Button>
             </div>
-                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} ></Feedback>
+                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback>
           </div>
          </Grid>
       </Grid>

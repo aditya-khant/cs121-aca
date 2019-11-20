@@ -12,7 +12,8 @@ class Feedback extends Component {
             open: false,
             problem: props.problemID,
             tableTitle: props.tableTitle,
-            imageURL: props.imageURL
+            imageURL: props.imageURL,
+            tutorID: props.tutorID
         }
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
@@ -39,7 +40,7 @@ class Feedback extends Component {
             <DialogContent>
                 <Grid container spacing = {1} direction = "column" justify = "center" alignItems="center">
                     <Grid item>
-                <Link to= {{ pathname: '/', query: {imageURL: this.state.imageURL, closeChat: true, closeQuestion: true, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
+                <Link to= {{ pathname: '/', query: {tutorID: this.state.tutorID, imageURL: this.state.imageURL, closeChat: true, closeQuestion: true, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
                     <Button style = {{textTransform: 'capitalize' }} variant="contained">
                         My question was answered
                     </Button>
@@ -53,7 +54,7 @@ class Feedback extends Component {
                 </Link>
                 </Grid>
                 <Grid item>
-                <Link to= {{ pathname: '/', query: {closeChat: true, closeQuestion: false, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
+                <Link to= {{ pathname: '/', query: {tutorID: this.state.tutorID, closeChat: true, closeQuestion: false, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
                     <Button style = {{textTransform: 'capitalize' }} variant="contained">
                         My question was not answered but I want to talk to a new tutor
                     </Button>

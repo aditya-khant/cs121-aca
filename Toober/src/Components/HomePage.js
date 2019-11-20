@@ -5,7 +5,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Grid from '@material-ui/core/Grid';
 import FancyHomeButtons from'./Subcomponents/FancyHomeButtons';
 import firebase from 'firebase';
-import {retrieve} from '../Helpers.js';
+import {retrieve, cleanupText} from '../Helpers.js';
 
 
 class HomePage extends Component {
@@ -67,25 +67,23 @@ class HomePage extends Component {
     });
   }
 
-  async removeChatImages() {
-    const storageRef = firebase.storage().ref(this.state.tutorID + this.state.problem);
+  removeChatImages() {
+    let path = cleanupText(this.state.problem + this.state.tutorID)
+    const storageRef = firebase.storage().ref("chat/" + path);
     storageRef.listAll().then(dir => {
       dir.items.forEach(fileRef => {
-        this.deleteFile(ref.fullPath, fileRef.name);
-      });
-      dir.prefixes.forEach(folderRef => {
-        this.deleteFolderContents(folderRef.fullPath);
+        fileRef.delete().then(function() {
+          console.log("image deleted successfully")
+        }).catch(function(error) {
+          console.log("could not delete")
+        });
       })
-    }).catch(error => {
-      console.log(error);
-    })    
+    })  
   }
 
   componentWillUnmount() {
     this.chatRef.off();
     this.problemRef.off();
-    // this.storageRef.off();
-    // this.allChats.off();
   }
 
   render() {

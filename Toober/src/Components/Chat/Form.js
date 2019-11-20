@@ -3,8 +3,13 @@ import './Form.css';
 import Message from './Message';
 import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {retrieve, isNullEmptyUndef} from "../../Helpers";
-import {Grid, Button} from "@material-ui/core";
+import {retrieve, isNullEmptyUndef, cleanupText} from "../../Helpers"
+import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
+import ImageUploader from 'react-images-upload';
+
+import Theme from '../Theme.js';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+
 import Feedback from './Feedback';
 
 export default class Form extends Component {
@@ -23,10 +28,16 @@ export default class Form extends Component {
       problemText: "",
       problemImgUrl: "", 
       timeStart: 0,
+      open: false,
+      pictures:  "",
+      loading: false,
       tableRef: props.problemID.concat(props.tutorUID)
     };
 
     this.exit = this.exit.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleSendImage = this.handleSendImage.bind(this);
+    this.onDrop = this.onDrop.bind(this);
   }
 
   componentDidMount() {
@@ -137,6 +148,53 @@ export default class Form extends Component {
     this.handleSend();
   }
 
+  handleClickOpen(){
+    //Modal Opening
+    this.setState({
+        open: true,
+    })
+  };
+
+  handleClose(){
+    //Modal Close
+      this.setState({
+          open: false,
+      })
+  };
+
+  async handleSendImage(){
+  
+    // Either initializes a problems collection in Firebase
+    // Or sends it to the existing one
+    let imageID = "";
+    if (this.state.pictures !== "") {
+      this.setState({
+        loading: true,
+      })
+      const file_to_upload = new Blob(this.state.pictures)
+      const storageRef = firebase.storage().ref();
+      imageID = 'chat/'+cleanupText(this.state.problem)+cleanupText(this.state.tutorUID)+ '/' + cleanupText(Date.now().toString()) + '.jpg' 
+      const questionRef = storageRef.child(imageID);
+      console.log(typeof(file_to_upload))
+      await questionRef.put(file_to_upload);
+      const newItem = {
+        userName: this.state.userName,
+        image: imageID,
+        type: "img"
+      }
+      // pushes the message
+      this.messageRef.push(newItem);
+      // If it cannot push to Firebase, we return an error
+      // Set state back to empty
+      this.setState({
+        pictures: "",
+        open: false,
+        loading: false,
+      })
+    };
+
+  }
+
   listenMessages() {
     // renders the data from the database
     this.messageRef
@@ -165,6 +223,19 @@ export default class Form extends Component {
     }
   }
 
+  onDrop(picture) {
+    // Function that handles image uploads
+    let urlCreator = window.URL || window.webkitURL;
+    let imageBlob = new Blob(picture);
+    let imageUrl = urlCreator.createObjectURL(imageBlob);
+    console.log(imageUrl);
+    this.setState({
+        pictures: picture,
+    });
+
+    alert("Picture Uploaded")
+
+};
 
   render() {
     let header;
@@ -186,10 +257,48 @@ export default class Form extends Component {
       )
     }
 
+    let dialogBox;
+    if (this.state.loading){
+      dialogBox = <CircularProgress />;
+    } else {
+      dialogBox = (
+        <div>
+        <DialogContent>
+            <Grid container justify="center"  direction="row">     
+              <ImageUploader
+                    withIcon={false}
+                    buttonText='Upload image'
+                    onChange={this.onDrop}
+                    imgExtension={['.jpg', '.png', '.gif']}
+                    maxFileSize={5242880}
+                    singleImage={true}
+                />
+                <Button variant="contained" color="primary" onClick={this.handleSendImage}>
+                  Send
+                </Button>
+              </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose}  variant="contained" color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+        </div>
+      );
+    }
+
+   
+
+   
     if (!this.state.isTutor)
     {
       return(
    <div padding={20}>
+      <MuiThemeProvider theme={Theme}>
+      <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
+              {dialogBox}         
+      </Dialog> 
       <Grid container spacing={2}>
         <Grid item xs={3}>
           {header}
@@ -211,22 +320,35 @@ export default class Form extends Component {
                 onChange={this.handleChange.bind(this)}
                 onKeyPress={this.handleKeyPress.bind(this)}
               />
-              <button
-                className="form__button"
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={this.handleSend.bind(this)}
               >
                 send
-              </button>
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={this.handleClickOpen.bind(this)}
+              >
+                Upload Image
+              </Button>
             </div>
                 <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef}></Feedback>
           </div>
          </Grid>
       </Grid>
+      </MuiThemeProvider>
     </div>
       )
     } else {
       return (
         <div padding={20}>
+          <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
+              {dialogBox}         
+          </Dialog> 
           <Grid container spacing={2}>
             <Grid item xs={3}>
               {header}
@@ -248,12 +370,20 @@ export default class Form extends Component {
                     onChange={this.handleChange.bind(this)}
                     onKeyPress={this.handleKeyPress.bind(this)}
                   />
-                  <button
-                    className="form__button"
-                    onClick={this.handleSend.bind(this)}
-                  >
-                    send
-                  </button>
+                  <Button
+                variant="contained"
+                color="primary"
+                onClick={this.handleSend.bind(this)}
+              >
+                send
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={this.handleClickOpen.bind(this)}
+              >
+                Upload Image
+              </Button>
                 </div>
 
                 <Link to={exitLink} ><Button color="primary">Exit</Button></Link>

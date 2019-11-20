@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import {retrieve, isNullEmptyUndef, cleanupText} from "../../Helpers"
 import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
 import ImageUploader from 'react-images-upload';
+import Filter from 'bad-words';
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -34,6 +35,7 @@ export default class Form extends Component {
       tableRef: props.problemID.concat(props.tutorUID)
     };
 
+    this.filter = new Filter({placeHolder: " "});
     this.exit = this.exit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSendImage = this.handleSendImage.bind(this);
@@ -129,11 +131,17 @@ export default class Form extends Component {
   handleSend() {
     // when the message is typed
     // this sends it
+
     if (this.state.message) {
+      let message = this.state.message;
       // sets the message and username for the databse
+      if (this.filter.isProfane(message)){
+        message = this.filter.clean(message);
+        alert("Please refrain from using profanity in your messages");
+      } 
       var newItem = {
         userName: this.state.userName,
-        message: this.state.message,
+        message: message,
         type: "text"
       }
       // pushes the message

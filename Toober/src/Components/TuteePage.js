@@ -171,8 +171,9 @@ listChats(){
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
               <DialogContent>
               <Grid container justify="center"  direction="row">
-              <form onSubmit={this.handleSubmit} /*Change this to Form Control*/>
-                <input type="text" name="problem" placeholder="Enter your problem here" onChange={this.handleChange} value={this.state.problem}/>
+              <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
+
+                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
                 <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
                     <option value="Math">Math</option>
                     <option value="Biology">Biology</option>

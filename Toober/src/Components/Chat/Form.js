@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './Form.css';
 import Message from './Message';
-import firebase from 'firebase';
+import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
 import {retrieve, isNullEmptyUndef, cleanupText} from "../../Helpers"
 import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
@@ -9,6 +9,8 @@ import ImageUploader from 'react-images-upload';
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+
+import Feedback from './Feedback';
 
 export default class Form extends Component {
 
@@ -29,9 +31,9 @@ export default class Form extends Component {
       open: false,
       pictures:  "",
       loading: false,
+      tableRef: props.problemID.concat(props.tutorUID)
     };
 
-    console.log(props)
     this.exit = this.exit.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSendImage = this.handleSendImage.bind(this);
@@ -40,7 +42,6 @@ export default class Form extends Component {
 
   componentDidMount() {
 
-    console.log(this.state)
     if (this.state.isTutor){
         let startTime = Date.now()
         this.setState({
@@ -87,6 +88,7 @@ export default class Form extends Component {
 
   componentWillUnmount() {
     this.messageRef.off();
+    this.chatRef.off();
     this.exit()
   }
 
@@ -104,7 +106,7 @@ export default class Form extends Component {
     this.setState({message: ''});
   }
 
-  createChat() {
+  async createChat() {
     // creates the chat in firebase
     var welcomeMessage = {
       problem: this.state.problem,
@@ -235,7 +237,6 @@ export default class Form extends Component {
 
 };
 
-
   render() {
     let header;
     const imageURL = this.state.problemImgUrl;
@@ -245,7 +246,7 @@ export default class Form extends Component {
       header = (
         <div>
           <h1>{problemName}</h1>
-          <img src={imageURL} width="100%" alt="Problem" />
+          <img src={imageURL} alt = "the problem" width="100%" />
         </div>
       )
     } else {
@@ -286,10 +287,13 @@ export default class Form extends Component {
       );
     }
 
-    return (
+   
 
-
-    <div padding={20}>
+   
+    if (!this.state.isTutor)
+    {
+      return(
+   <div padding={20}>
       <MuiThemeProvider theme={Theme}>
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
@@ -331,13 +335,64 @@ export default class Form extends Component {
                 Upload Image
               </Button>
             </div>
-            <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
+                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef}></Feedback>
           </div>
          </Grid>
       </Grid>
       </MuiThemeProvider>
     </div>
+      )
+    } else {
+      return (
+        <div padding={20}>
+          <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
+              {dialogBox}         
+          </Dialog> 
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              {header}
+            </Grid>
+            <Grid item xs={9}>
+              <div className="form">
+                <div className="scroller">
+                  { this.state.list.map((item, index) =>
+                    <Message key={index} message={item} />
+                  )}
+                </div>
+                <div className="form__row">
+                  <input
+                    className="form__input"
+                    type="text"
+                    name="message"
+                    placeholder="Type message"
+                    value={this.state.message}
+                    onChange={this.handleChange.bind(this)}
+                    onKeyPress={this.handleKeyPress.bind(this)}
+                  />
+                  <Button
+                variant="contained"
+                color="primary"
+                onClick={this.handleSend.bind(this)}
+              >
+                send
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={this.handleClickOpen.bind(this)}
+              >
+                Upload Image
+              </Button>
+                </div>
+
+                <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
     
+              </div>
+             </Grid>
+          </Grid>
+        </div>    
     );
   }
+}
 }

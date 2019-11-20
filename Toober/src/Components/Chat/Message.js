@@ -39,7 +39,7 @@ export default class Message extends Component {
             <span className="message__author">
                 {this.props.message.userName}:
             </span>
-            <img src={this.state.imageURL} alt="" width={"50%"} />
+            <img src={this.props.message.image} width={"50%"} alt="the problem" />
           
         </div>
       )

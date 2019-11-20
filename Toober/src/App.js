@@ -10,6 +10,7 @@ import Navigation from './Components/Navigation';
 import Chat from './Components/Chat/ChatPage';
 import Login from './Components/Login';
 import SignUp from './Components/SignUp';
+import Profile from './Components/Profile';
 
 import { AuthProvider } from "./Auth";
 import PrivateRoute from "./PrivateRoute";
@@ -32,6 +33,7 @@ class App extends Component {
               <PrivateRoute exact path="/" component={Home}/>
               <PrivateRoute exact path="/tutor" component={Tutor}/>
               <PrivateRoute exact path="/tutee" component={Tutee}/>
+              <PrivateRoute exact path="/profile" component={Profile}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/signup" component={SignUp}/>
             </Switch>

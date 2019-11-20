@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
-import firebase from "firebase";
 import { AuthContext } from "../Auth";
 import {Grid} from '@material-ui/core';
 import Theme from './Theme.js';
@@ -19,7 +18,8 @@ const Login = ({ history }) => {
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ]
   };
-
+  console.log(process.env.REACT_APP_API_KEY);
+  
   const { currentUser } = useContext(AuthContext);
  
   if (currentUser) {

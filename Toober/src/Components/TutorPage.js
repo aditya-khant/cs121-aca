@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
+
 import {Grid, Select, MenuItem, List, ListItem, ListItemText, Paper, Button, Badge} from '@material-ui/core';
+
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import {isNullEmptyUndef} from '../Helpers.js';
@@ -117,7 +119,7 @@ render(){
                             value={this.state.subject}
                             onChange={this.handleChange}
                             name = {"subject"}
-                            autoWidth = "true"
+                            autoWidth = {true}
                             >
                             <MenuItem value={"Math"}>Math</MenuItem>
                             <MenuItem value={"Biology"}>Biology</MenuItem>

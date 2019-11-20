@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
-import {Grid, Paper, CircularProgress, List, ListItem, ListItemText, Tab, AppBar} from "@material-ui/core"
-import {isNullEmptyUndef, retrieve} from '../Helpers.js';
+import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
+import {isNullEmptyUndef, retrieve, retrieveMultiple} from '../Helpers.js';
+
+import Theme from './Theme.js';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 class Profile extends Component {
     constructor() {
@@ -35,9 +38,7 @@ class Profile extends Component {
     }
 
     listProblems() {
-      const problemRef = firebase.database().ref("problems");
-      const chatRef = firebase.database().ref("chat");
-      
+      const problemRef = firebase.database().ref("problems");      
       let newProblems = [];
       problemRef.orderByChild("uid").equalTo(this.state.uid).on('value', async (snapshot) => {
         const problem_dict = snapshot.val();
@@ -85,7 +86,7 @@ class Profile extends Component {
                   )})}
               </List>
         );
-        theTime = this.state.time;
+      theTime = `You have spent a total of ${this.state.time} minutes tutoring.` ;
       }
         var user = firebase.auth().currentUser;
         let header;
@@ -95,8 +96,14 @@ class Profile extends Component {
             if (imageURL !== ""){
                 header = (
                   <div>
-                    <h1>{userName}</h1>
-                    <img src={imageURL} alt = "the user" width="50%" />
+                    <Grid container direction="row" justify="flex-start" alignItems="center">
+                      <Grid item xs={5}>
+                        <Avatar src={imageURL} alt ={userName} style={{ width: 100, height: 100, margin: 10}}/>
+                      </Grid>
+                      <Grid item xs={7}>
+                        <h1>{userName}</h1>
+                      </Grid>
+                    </Grid>  
                   </div>
                 )
               } else {
@@ -109,20 +116,23 @@ class Profile extends Component {
         }
         return (
 
-        <div>
-            <Grid item xs={3}>
+        <div style={{ padding: 20}}>
+        <MuiThemeProvider theme={Theme}>
+        <Grid item xs={3}>
           {header}
         </Grid>
-
+        <Grid item xs={9}>
+          <h3>My Tutor Time</h3>
+          <h4>{theTime}</h4>
+        </Grid>
         <Grid item xs={9}>
           <h3>My Current Problems</h3>
           {list}
         </Grid>
-        <Grid item xs={9}>
-          <h3>My Tutor Time</h3>
-          <p>{theTime}</p>
-        </Grid>
+        
+        </MuiThemeProvider>
         </div>
+        
         )
   }
 }

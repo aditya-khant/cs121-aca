@@ -20,6 +20,7 @@
     "react-scripts": "^3.1.2",
     "react-scroll": "^1.7.14",
     "react-web-gifted-chat": "^0.6.7",
+    "tesseract.js": "^2.0.0-beta.2",
     "typescript": "^3.6.3"
   },
   "scripts": {

@@ -6,7 +6,7 @@ import {Grid, Select, MenuItem, List, ListItem, ListItemText, Paper, Button, Bad
 
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
-import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
+import {isNullEmptyUndef} from '../Helpers.js';
 
 class Tutor extends Component {
     constructor(props) {
@@ -127,10 +127,11 @@ render(){
                         </Select>
                     </ Grid>
                 </ Grid>
-                
+                <List>
                 {this.state.problems.map((problem) => {
                     return this.pickSubject(problem, this.state.subject)
                 })}
+                </List>
             </MuiThemeProvider>
         </div>
      );

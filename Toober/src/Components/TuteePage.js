@@ -7,6 +7,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
 import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
 import Filter from 'bad-words';
+import Tesseract from 'tesseract.js';
 
 class Tutee extends Component {
     constructor() {
@@ -22,7 +23,8 @@ class Tutee extends Component {
           pictures: "",
           pictures_src: "",
           isLoading: true,
-          open: false
+          open: false,
+          loadingDialog: false,
 
         }
 
@@ -36,18 +38,26 @@ class Tutee extends Component {
         this.onDrop = this.onDrop.bind(this);
       }
 
-      onDrop(picture) {
+      async onDrop(picture) {
         // Function that handles image uploads
-        let urlCreator = window.URL || window.webkitURL;
-        let imageBlob = new Blob(picture);
-        let imageUrl = urlCreator.createObjectURL(imageBlob);
-        console.log(imageUrl);
         this.setState({
-            pictures: picture,
-            pictures_src: imageUrl
+          loadingDialog: true,
         });
-
-        alert("Picture Uploaded")
+        let imageBlob = new Blob(picture);
+        const tesseract = await Tesseract.recognize(imageBlob,'eng');
+        const text = tesseract.data.text;
+        if (this.filter.isProfane(text)){
+          alert("Please do not upload images with profanity");
+          this.setState({
+            loadingDialog: false,
+          });
+        } else {
+          this.setState({
+            pictures: picture,
+            loadingDialog: false,
+         });
+         alert("Picture Uploaded")
+        }
 
     };
 
@@ -81,29 +91,27 @@ class Tutee extends Component {
       const storageRef = firebase.storage().ref();
       imageID = 'questions/'+cleanupText(this.state.uid)+cleanupText(this.state.problem) + '.jpg' 
       const questionRef = storageRef.child(imageID);
-      console.log(typeof(file_to_upload))
       questionRef.put(file_to_upload).then(function(snapshot) {
-        console.log('Uploaded a blob or file!');
+
       });
     };
    
     let problem = this.state.problem;
     if (this.filter.isProfane(problem)){
-      problem = this.filter.clean(problem);
       alert("Please refrain from using profane language in your problems.");
-    }
-    // Sets up the submission item
-    const item = {
-      user: this.state.email,
-      problem: problem,
-      subject: this.state.subject, 
-      uid: this.state.uid,
-      imageid: imageID
-    }
+    } else {
+      // Sets up the submission item
+      const item = {
+        user: this.state.email,
+        problem: problem,
+        subject: this.state.subject, 
+        uid: this.state.uid,
+        imageid: imageID
+      }
+    
     // If it cannot push to Firebase, we return an error
-    itemsRef.push(item).catch(function(error) {
-      console.error("Error saving message to Database:", error);
-    });
+    itemsRef.push(item)
+    }
     // Set state back to empty
     this.setState({
       username: '',
@@ -112,8 +120,8 @@ class Tutee extends Component {
       uid: firebase.auth().currentUser.uid,
       pictures: "",
       open: false
-    })
-  }
+    });
+ }
 
   componentDidMount() {
     this.listChats();
@@ -170,14 +178,24 @@ listChats(){
             </List>
       )
     }
-   
-    return (
-      <div style={{ padding: 20}}>
-        
-        <MuiThemeProvider theme={Theme}>
-        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
-              <DialogContent>
+    
+    let dialogBox;
+    if (this.state.loadingDialog){
+      dialogBox = (
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        style={{ height: "100px" }}
+      >
+        <CircularProgress />
+      </Grid>
+      );
+    } else {
+       dialogBox = (
+         <div>
+           <DialogContent>
               <Grid container justify="center"  direction="row">
               <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
 
@@ -207,6 +225,17 @@ listChats(){
                   Cancel
                 </Button>
               </DialogActions>
+         </div>
+       )
+    }
+   
+    return (
+      <div style={{ padding: 20}}>
+        
+        <MuiThemeProvider theme={Theme}>
+        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
+              {dialogBox}
           </Dialog>   
         <Grid container direction = "row">
           <Grid item>

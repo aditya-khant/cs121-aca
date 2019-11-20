@@ -7,6 +7,7 @@ import {retrieve, isNullEmptyUndef, cleanupText} from "../../Helpers"
 import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
 import ImageUploader from 'react-images-upload';
 import Filter from 'bad-words';
+import Tesseract from 'tesseract.js';
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -136,9 +137,8 @@ export default class Form extends Component {
       let message = this.state.message;
       // sets the message and username for the databse
       if (this.filter.isProfane(message)){
-        message = this.filter.clean(message);
         alert("Please refrain from using profanity in your messages");
-      } 
+      } else {
       var newItem = {
         userName: this.state.userName,
         message: message,
@@ -146,6 +146,7 @@ export default class Form extends Component {
       }
       // pushes the message
       this.messageRef.push(newItem);
+     }
       this.setState({ message: '' });
     }
   }
@@ -183,7 +184,6 @@ export default class Form extends Component {
       const storageRef = firebase.storage().ref();
       imageID = 'chat/'+cleanupText(this.state.problem)+cleanupText(this.state.tutorUID)+ '/' + cleanupText(Date.now().toString()) + '.jpg' 
       const questionRef = storageRef.child(imageID);
-      console.log(typeof(file_to_upload))
       await questionRef.put(file_to_upload);
       const newItem = {
         userName: this.state.userName,
@@ -192,13 +192,13 @@ export default class Form extends Component {
       }
       // pushes the message
       this.messageRef.push(newItem);
-      // If it cannot push to Firebase, we return an error
       // Set state back to empty
       this.setState({
         pictures: "",
         open: false,
         loading: false,
       })
+     
     };
 
   }
@@ -231,17 +231,29 @@ export default class Form extends Component {
     }
   }
 
-  onDrop(picture) {
+  async onDrop(picture) {
     // Function that handles image uploads
-    let urlCreator = window.URL || window.webkitURL;
-    let imageBlob = new Blob(picture);
-    let imageUrl = urlCreator.createObjectURL(imageBlob);
-    console.log(imageUrl);
     this.setState({
-        pictures: picture,
+      loading: true,
     });
+    let imageBlob = new Blob(picture);
+    const tesseract = await Tesseract.recognize(imageBlob,'eng');
+    const text = tesseract.data.text;
+    if (this.filter.isProfane(text)){
+      alert("Please do not upload images with profanity");
+      this.setState({
+        loading: false,
+      });
+    } else {
+      this.setState({
+        pictures: picture,
+        loading: false,
+     });
+     alert("Picture Uploaded")
+    }
+   
 
-    alert("Picture Uploaded")
+   
 
 };
 
@@ -267,7 +279,17 @@ export default class Form extends Component {
 
     let dialogBox;
     if (this.state.loading){
-      dialogBox = <CircularProgress />;
+      dialogBox = (
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          style={{ height: "100px" }}
+        >
+          <CircularProgress />
+        </Grid>  
+      );
     } else {
       dialogBox = (
         <div>

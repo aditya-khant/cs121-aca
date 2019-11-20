@@ -82,10 +82,8 @@ export default class Form extends Component {
     }
     this.setState({
        problemText: problemName,
-       problemImgUrl: url,
+       problemImgUrl: url
     })
-
-
   }
 
   componentWillUnmount() {
@@ -343,7 +341,7 @@ export default class Form extends Component {
                 Upload Image
               </Button>
             </div>
-                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef}></Feedback>
+                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} ></Feedback>
           </div>
          </Grid>
       </Grid>

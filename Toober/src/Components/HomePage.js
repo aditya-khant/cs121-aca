@@ -5,6 +5,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Grid from '@material-ui/core/Grid';
 import FancyHomeButtons from'./Subcomponents/FancyHomeButtons';
 import firebase from 'firebase';
+import {retrieve} from '../Helpers.js';
 
 
 class HomePage extends Component {
@@ -16,7 +17,8 @@ class HomePage extends Component {
       problem: "",
       tableTitle: "",
       tuteeID: "",
-      tutorID: ""
+      tutorID: "",
+      imageURL: ""
     }
     if(props.location.query) {
       console.log(props.location.query);
@@ -26,7 +28,8 @@ class HomePage extends Component {
         problem: props.location.query.problem,
         tableTitle: props.location.query.tableTitle,
         tuteeID: props.location.query.tuteeID,
-        tutorID: props.location.query.tutorID
+        tutorID: props.location.query.tutorID,
+        imageURL: props.location.query.imageURL
       }
     }
   };
@@ -38,24 +41,35 @@ class HomePage extends Component {
     this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
     if(this.state.closeChat) {
-      this.chatRef.remove();
+      this.chatRef.remove();    
       if(this.state.closeQuestion) {
+        this.removeImage();
         this.problemRef.remove();
       }
     }
-
-    // this.allChats.orderByChild("problem").equalTo(this.state.problem).remove()
-    //     this.allChats = firebase.database().ref('chat/');
-
     this.setState({
       closeChat: false,
       closeQuestion: false
     })
   }
 
+  async removeImage() {
+    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
+    const storageRef = firebase.storage().ref();
+    let url = ""
+      // removes image file
+      url = imageRelURL;
+      storageRef.child(url).delete().then(function() {
+        console.log("file deleted successfully");
+      }).catch(function(error) {
+        console.log("could not delete file")
+      });
+  }
+
   componentWillUnmount() {
     this.chatRef.off();
     this.problemRef.off();
+    // this.storageRef.off();
     // this.allChats.off();
   }
 

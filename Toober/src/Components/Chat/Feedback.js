@@ -11,10 +11,9 @@ class Feedback extends Component {
         this.state = {
             open: false,
             problem: props.problemID,
-            tableTitle: props.tableTitle
+            tableTitle: props.tableTitle,
+            imageURL: props.imageURL
         }
-        console.log(this.state.tableTitle);
-
         this.handleClickOpen = this.handleClickOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
     }
@@ -40,7 +39,7 @@ class Feedback extends Component {
             <DialogContent>
                 <Grid container spacing = {1} direction = "column" justify = "center" alignItems="center">
                     <Grid item>
-                <Link to= {{ pathname: '/', query: {closeChat: true, closeQuestion: true, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
+                <Link to= {{ pathname: '/', query: {imageURL: this.state.imageURL, closeChat: true, closeQuestion: true, problem: this.state.problem, tableTitle: this.state.tableTitle}}}>
                     <Button style = {{textTransform: 'capitalize' }} variant="contained">
                         My question was answered
                     </Button>

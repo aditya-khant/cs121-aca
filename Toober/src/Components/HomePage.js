@@ -32,7 +32,9 @@ class HomePage extends Component {
   };
   
   componentDidMount() {
-    console.log(this.state.tableTitle);
+    // On load, this opens the database connections and removes
+    // what needs to be removed (the chat or the problem) depending
+    // on the properties passed in
     this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
     if(this.state.closeChat) {
@@ -41,6 +43,9 @@ class HomePage extends Component {
         this.problemRef.remove();
       }
     }
+
+    // this.allChats.orderByChild("problem").equalTo(this.state.problem).remove()
+    //     this.allChats = firebase.database().ref('chat/');
 
     this.setState({
       closeChat: false,
@@ -51,6 +56,7 @@ class HomePage extends Component {
   componentWillUnmount() {
     this.chatRef.off();
     this.problemRef.off();
+    // this.allChats.off();
   }
 
   render() {

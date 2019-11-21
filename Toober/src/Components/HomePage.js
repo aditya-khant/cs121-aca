@@ -38,12 +38,15 @@ class HomePage extends Component {
     // On load, this opens the database connections and removes
     // what needs to be removed (the chat or the problem) depending
     // on the properties passed in
-    this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
+    // this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
+    this.chatRef = firebase.database().ref('chat/')
     if(this.state.closeChat) {
       this.removeChatImages();
-      this.chatRef.remove();    
+      this.chatRef.child(this.state.tableTitle).remove();    
       if(this.state.closeQuestion) {
+        let allChats = this.chatRef.orderByChild("problem").equalTo(this.state.problem);
+        allChats.on('value', snapshot => snapshot.forEach(child => child.ref.remove()));
         this.removeProblemImage();
         this.problemRef.remove();
       }
@@ -68,6 +71,8 @@ class HomePage extends Component {
   }
 
   removeChatImages() {
+    // need to add functionality so that when there are no images with the chats
+    // the console doesn't yell about it not existing
     let path = cleanupText(this.state.problem + this.state.tutorID)
     const storageRef = firebase.storage().ref("chat/" + path);
     storageRef.listAll().then(dir => {

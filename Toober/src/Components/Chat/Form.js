@@ -272,15 +272,19 @@ export default class Form extends Component {
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
     if (imageURL !== ""){
       header = (
-        <div>
-          <p>{problemName}</p>
-          <img src={imageURL} alt = "the problem" width="100%" />
-        </div>
+        // { <Grid container spacing = {4}> }
+          <div class="problem">
+            <h4>{problemName}</h4>
+
+            <img src={imageURL} alt = "the problem" width="100%" />
+            </div>
       )
     } else {
       header = (
         <div>
-          <p>{problemName}</p>
+          <Grid item xs= {10}>
+          <h4>{problemName}</h4>
+          </Grid>
         </div>
       )
     }
@@ -331,17 +335,20 @@ export default class Form extends Component {
     if (!this.state.isTutor)
     {
       return(
-   <div padding={20}>
+   <div>
       <MuiThemeProvider theme={Theme}>
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
               {dialogBox}         
       </Dialog> 
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
+      <div>
+      {/* <Grid container direction= "row" spacing={10}> */}
+        {/* <Grid  item> */}
+          <div class="header">
           {header}
-        </Grid>
-        <Grid item xs={9}>
+          </div>
+        {/* </Grid>
+        <Grid item> */}
           <div className="form">
             <div className="scroller">
               { this.state.list.map((item, index) =>
@@ -375,9 +382,11 @@ export default class Form extends Component {
             </div>
                 <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback>
           </div>
-         </Grid>
-      </Grid>
+         {/* </Grid>
+         </Grid> */}
+         </div>
       </MuiThemeProvider>
+      
     </div>
       )
     } else {
@@ -388,11 +397,13 @@ export default class Form extends Component {
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
               {dialogBox}         
           </Dialog> 
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
+          {/* <Grid container spacing={2}>
+            <Grid item xs={3}> */}
+              <div class="header">
               {header}
-            </Grid>
-            <Grid item xs={9}>
+              </div>
+            {/* </Grid>
+            <Grid item xs={9}> */}
               <div className="form">
                 <div className="scroller">
                   { this.state.list.map((item, index) =>
@@ -428,8 +439,8 @@ export default class Form extends Component {
                 <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
     
               </div>
-             </Grid>
-          </Grid>
+             {/* </Grid>
+          </Grid> */}
           </MuiThemeProvider>
         </div>    
     );

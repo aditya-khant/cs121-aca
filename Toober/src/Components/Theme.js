@@ -16,7 +16,7 @@ const Theme = createMuiTheme({
     // Cannot give tabs custom font size like button
     fontSize: 20,
     button: {
-        fontSize: 14,
+        fontSize: 14
       },
   },
   

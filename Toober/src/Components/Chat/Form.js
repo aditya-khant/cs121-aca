@@ -83,10 +83,8 @@ export default class Form extends Component {
     }
     this.setState({
        problemText: problemName,
-       problemImgUrl: url,
+       problemImgUrl: url
     })
-
-
   }
 
   componentWillUnmount() {
@@ -275,14 +273,14 @@ export default class Form extends Component {
     if (imageURL !== ""){
       header = (
         <div>
-          <h1>{problemName}</h1>
+          <p>{problemName}</p>
           <img src={imageURL} alt = "the problem" width="100%" />
         </div>
       )
     } else {
       header = (
         <div>
-          <h1>{problemName}</h1>
+          <p>{problemName}</p>
         </div>
       )
     }
@@ -375,7 +373,7 @@ export default class Form extends Component {
                 Upload Image
               </Button>
             </div>
-                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef}></Feedback>
+                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback>
           </div>
          </Grid>
       </Grid>

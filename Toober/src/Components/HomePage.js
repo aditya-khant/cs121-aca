@@ -5,6 +5,7 @@ import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import Grid from '@material-ui/core/Grid';
 import FancyHomeButtons from'./Subcomponents/FancyHomeButtons';
 import firebase from 'firebase';
+import {retrieve, cleanupText} from '../Helpers.js';
 
 
 class HomePage extends Component {
@@ -16,7 +17,8 @@ class HomePage extends Component {
       problem: "",
       tableTitle: "",
       tuteeID: "",
-      tutorID: ""
+      tutorID: "",
+      imageURL: ""
     }
     if(props.location.query) {
       console.log(props.location.query);
@@ -26,26 +28,62 @@ class HomePage extends Component {
         problem: props.location.query.problem,
         tableTitle: props.location.query.tableTitle,
         tuteeID: props.location.query.tuteeID,
-        tutorID: props.location.query.tutorID
+        tutorID: props.location.query.tutorID,
+        imageURL: props.location.query.imageURL
       }
     }
   };
   
   componentDidMount() {
-    console.log(this.state.tableTitle);
-    this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
+    // On load, this opens the database connections and removes
+    // what needs to be removed (the chat or the problem) depending
+    // on the properties passed in
+    // this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
+    this.chatRef = firebase.database().ref('chat/')
     if(this.state.closeChat) {
-      this.chatRef.remove();
+      this.removeChatImages();
+      this.chatRef.child(this.state.tableTitle).remove();    
       if(this.state.closeQuestion) {
+        let allChats = this.chatRef.orderByChild("problem").equalTo(this.state.problem);
+        allChats.on('value', snapshot => snapshot.forEach(child => child.ref.remove()));
+        this.removeProblemImage();
         this.problemRef.remove();
       }
     }
-
     this.setState({
       closeChat: false,
       closeQuestion: false
     })
+  }
+
+  async removeProblemImage() {
+    const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
+    const storageRef = firebase.storage().ref();
+    let url = ""
+    // removes image file
+    url = imageRelURL;
+    storageRef.child(url).delete().then(function() {
+      console.log("file deleted successfully");
+    }).catch(function(error) {
+      console.log("could not delete file")
+    });
+  }
+
+  removeChatImages() {
+    // need to add functionality so that when there are no images with the chats
+    // the console doesn't yell about it not existing
+    let path = cleanupText(this.state.problem + this.state.tutorID)
+    const storageRef = firebase.storage().ref("chat/" + path);
+    storageRef.listAll().then(dir => {
+      dir.items.forEach(fileRef => {
+        fileRef.delete().then(function() {
+          console.log("image deleted successfully")
+        }).catch(function(error) {
+          console.log("could not delete")
+        });
+      })
+    })  
   }
 
   componentWillUnmount() {

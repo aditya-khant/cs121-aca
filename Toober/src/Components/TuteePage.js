@@ -126,12 +126,16 @@ class Tutee extends Component {
   componentDidMount() {
     this.listChats();
   }
+  
+  componentWillUnmount() {
+    this.chatRef.off();
+  }
 
 
 listChats(){
-  const chatRef = firebase.database().ref("chat");
+  this.chatRef = firebase.database().ref("chat");
   let newChats = []
-  chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', async (snapshot) => {
+  this.chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', async (snapshot) => {
     const chat_dict = snapshot.val();
     if (!isNullEmptyUndef(chat_dict)){
       for (const [, value] of Object.entries(chat_dict)) {

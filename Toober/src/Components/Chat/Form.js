@@ -3,7 +3,7 @@ import './Form.css';
 import Message from './Message';
 import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {retrieve, isNullEmptyUndef, cleanupText} from "../../Helpers"
+import {retrieve, isNullEmptyUndef, cleanupText, retrieveMultiple} from "../../Helpers"
 import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
 import ImageUploader from 'react-images-upload';
 import Filter from 'bad-words';
@@ -33,7 +33,9 @@ export default class Form extends Component {
       open: false,
       pictures:  "",
       loading: false,
-      tableRef: props.problemID.concat(props.tutorUID)
+      tableRef: props.problemID.concat(props.tutorUID),
+      tutorName: "",
+      // name: ""
     };
 
     this.filter = new Filter({placeHolder: " "});
@@ -74,6 +76,7 @@ export default class Form extends Component {
     // Downloads the problem's text and image and sets it in the state
     const problemName = await retrieve("problems", this.state.problem, "problem")
     const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
+    const tutee = await retrieve("problems", this.state.problem, "name")
     const storageRef = firebase.storage().ref();
     let url = "";
     try{
@@ -83,7 +86,8 @@ export default class Form extends Component {
     }
     this.setState({
        problemText: problemName,
-       problemImgUrl: url
+       problemImgUrl: url,
+      //  name: tutee
     })
   }
 
@@ -109,11 +113,19 @@ export default class Form extends Component {
 
   async createChat() {
     // creates the chat in firebase
+    if(this.state.isTutor) {
+      this.setState({
+        tutorName: firebase.auth().currentUser.displayName
+      })
+    }
+
     var welcomeMessage = {
       problem: this.state.problem,
       tuteeUID: this.state.tuteeUID,
       tutorUID: this.state.tutorUID,
-      tutorEmail: this.state.userName
+      tutorEmail: this.state.userName,
+      tutorName: this.state.tutorName,
+      // tuteeName: this.state.name
     }
 
     this.chatRef.set(welcomeMessage);
@@ -139,7 +151,8 @@ export default class Form extends Component {
         alert("Please refrain from using profanity in your messages");
       } else {
       var newItem = {
-        userName: this.state.userName,
+        // userName: this.state.userName,
+        userName: firebase.auth().currentUser.displayName,
         message: message,
         type: "text"
       }
@@ -185,7 +198,8 @@ export default class Form extends Component {
       const questionRef = storageRef.child(imageID);
       await questionRef.put(file_to_upload);
       const newItem = {
-        userName: this.state.userName,
+        // userName: this.state.userName,
+        userName: firebase.auth().currentUser.displayName,
         image: imageID,
         type: "img"
       }
@@ -345,7 +359,7 @@ export default class Form extends Component {
       <div>
       {/* <Grid container direction= "row" spacing={10}> */}
         {/* <Grid  item> */}
-          <div class="header">
+          <div className="header">
           {header}
           </div>
         {/* </Grid>
@@ -400,7 +414,7 @@ export default class Form extends Component {
           </Dialog> 
           {/* <Grid container spacing={2}>
             <Grid item xs={3}> */}
-              <div class="header">
+              <div className="header">
               {header}
               </div>
             {/* </Grid>

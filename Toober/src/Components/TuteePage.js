@@ -25,7 +25,7 @@ class Tutee extends Component {
           isLoading: true,
           open: false,
           loadingDialog: false,
-
+          name: firebase.auth().currentUser.displayName
         }
 
         this.filter = new Filter({placeHolder: " "});
@@ -106,7 +106,8 @@ class Tutee extends Component {
         problem: problem,
         subject: this.state.subject, 
         uid: this.state.uid,
-        imageid: imageID
+        imageid: imageID,
+        name: this.state.name
       }
     
     // If it cannot push to Firebase, we return an error
@@ -119,7 +120,8 @@ class Tutee extends Component {
       subject: 'Math',
       uid: firebase.auth().currentUser.uid,
       pictures: "",
-      open: false
+      open: false,
+      name: ''
     });
  }
 
@@ -141,9 +143,9 @@ listChats(){
       for (const [, value] of Object.entries(chat_dict)) {
         const problemID = value.problem;
         const tutorUID = value.tutorUID;
-        const tutorEmail = value.tutorEmail;
+        const tutorName = value.tutorName;
         const snapVal = await retrieveMultiple("problems",problemID, ["problem","subject"]);
-        newChats.push({problem: snapVal["problem"], subject: snapVal["subject"], tutorEmail: tutorEmail, problemID:problemID, tutorUID: tutorUID});
+        newChats.push({problem: snapVal["problem"], subject: snapVal["subject"], tutorName: tutorName, problemID:problemID, tutorUID: tutorUID});
       }
       
     } 
@@ -170,8 +172,8 @@ listChats(){
                 return (
                   <Paper>
                     <ListItem>
-                      <ListItemText primary={problem.problem} secondary={ <Link to="/Profile" > {problem.tutorEmail} </Link>} />
-                      <Link style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
+                      <ListItemText primary={problem.problem} secondary={ <p>Tutor: <Link to="/Profile" >{problem.tutorName} </Link> </p>} />
+                      <Link style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID }}}>
                       <Button variant="contained" color="secondary">
                         Chat!
                       </Button>

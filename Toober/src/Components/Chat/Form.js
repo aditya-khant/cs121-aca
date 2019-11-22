@@ -3,7 +3,7 @@ import './Form.css';
 import Message from './Message';
 import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {retrieve, isNullEmptyUndef, cleanupText, retrieveMultiple} from "../../Helpers"
+import {retrieve, isNullEmptyUndef, cleanupText } from "../../Helpers"
 import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
 import ImageUploader from 'react-images-upload';
 import Filter from 'bad-words';
@@ -34,8 +34,7 @@ export default class Form extends Component {
       pictures:  "",
       loading: false,
       tableRef: props.problemID.concat(props.tutorUID),
-      tutorName: "",
-      // name: ""
+      tutorName: ""
     };
 
     this.filter = new Filter({placeHolder: " "});
@@ -76,7 +75,6 @@ export default class Form extends Component {
     // Downloads the problem's text and image and sets it in the state
     const problemName = await retrieve("problems", this.state.problem, "problem")
     const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
-    const tutee = await retrieve("problems", this.state.problem, "name")
     const storageRef = firebase.storage().ref();
     let url = "";
     try{
@@ -86,8 +84,7 @@ export default class Form extends Component {
     }
     this.setState({
        problemText: problemName,
-       problemImgUrl: url,
-      //  name: tutee
+       problemImgUrl: url
     })
   }
 
@@ -124,8 +121,7 @@ export default class Form extends Component {
       tuteeUID: this.state.tuteeUID,
       tutorUID: this.state.tutorUID,
       tutorEmail: this.state.userName,
-      tutorName: this.state.tutorName,
-      // tuteeName: this.state.name
+      tutorName: this.state.tutorName
     }
 
     this.chatRef.set(welcomeMessage);

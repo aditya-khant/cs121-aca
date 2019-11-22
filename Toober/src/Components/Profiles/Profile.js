@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import firebase from '../FirebaseConfig.js';
+import firebase from '../../FirebaseConfig.js';
 import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
-import {isNullEmptyUndef, retrieve} from '../Helpers.js';
+import {isNullEmptyUndef, retrieve} from '../../Helpers.js';
 
-import Theme from './Theme.js';
+import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 class Profile extends Component {

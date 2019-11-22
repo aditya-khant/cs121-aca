@@ -1,0 +1,43 @@
+[debug] [2019-11-21T19:19:43.683Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T19:19:43.685Z] Command:       C:\Users\arielle\AppData\Local\Continuum\anaconda3\envs\cs121\node.exe C:\Users\arielle\AppData\Local\Continuum\anaconda3\envs\cs121\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2019-11-21T19:19:43.685Z] CLI Version:   7.8.1
+[debug] [2019-11-21T19:19:43.685Z] Platform:      win32
+[debug] [2019-11-21T19:19:43.685Z] Node Version:  v12.8.1
+[debug] [2019-11-21T19:19:43.686Z] Time:          Thu Nov 21 2019 11:19:43 GMT-0800 (Pacific Standard Time)
+[debug] [2019-11-21T19:19:43.686Z] ----------------------------------------------------------------------
+[debug] [2019-11-21T19:19:43.686Z] 
+[debug] [2019-11-21T19:19:43.693Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-11-21T19:19:43.694Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\arielle\CS121\Project\cs121-aca\Toober
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2019-11-21T19:19:58.352Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-11-21T19:19:58.353Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-11-21T19:19:58.523Z] <<< HTTP RESPONSE 200
+[debug] [2019-11-21T19:19:58.550Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects?pageSize=100  
+ 
+[debug] [2019-11-21T19:19:58.849Z] <<< HTTP RESPONSE 200
+[info] i  Using project toober-cs121 (toober-cs121)
+[info] 
+=== Hosting Setup
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 

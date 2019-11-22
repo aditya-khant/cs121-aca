@@ -17,6 +17,7 @@ class Tutor extends Component {
           subject: 'Math',
           email: firebase.auth().currentUser.email,
           uid: firebase.auth().currentUser.uid,
+          tutorName: firebase.auth().currentUser.displayName
         }
         this.handleChange = this.handleChange.bind(this);
     }
@@ -86,13 +87,12 @@ pickSubject(problem, subject) {
     // and the subject the tutor wants to see from the dropdown
     // and returns the problems that match that subject
     if (problem.subject === subject) {
-
         return (
                 <Paper>
                     
                         <ListItem key={problem.id}>
                         <ListItemText primary={problem.problem} secondary={problem.username} />
-                        <Link  style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: true, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid, isTutor: "a", }}}>
+                        <Link  style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: true, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid}}}>
                             <Badge invisible={!problem.active} badgeContent= " " color="primary">
                                 <Button variant="contained" color="secondary">Go to chat!</Button>
                             </Badge>

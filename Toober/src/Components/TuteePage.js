@@ -141,8 +141,9 @@ listChats(){
       for (const [, value] of Object.entries(chat_dict)) {
         const problemID = value.problem;
         const tutorUID = value.tutorUID;
+        const tutorEmail = value.tutorEmail;
         const snapVal = await retrieveMultiple("problems",problemID, ["problem","subject"]);
-        newChats.push({problem: snapVal["problem"], subject: snapVal["subject"], problemID:problemID, tutorUID: tutorUID});
+        newChats.push({problem: snapVal["problem"], subject: snapVal["subject"], tutorEmail: tutorEmail, problemID:problemID, tutorUID: tutorUID});
       }
       
     } 
@@ -169,7 +170,7 @@ listChats(){
                 return (
                   <Paper>
                     <ListItem>
-                      <ListItemText primary={problem.problem} secondary={problem.subject} />
+                      <ListItemText primary={problem.problem} secondary={ <Link to="/Profile" > {problem.tutorEmail} </Link>} />
                       <Link style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID}}}>
                       <Button variant="contained" color="secondary">
                         Chat!

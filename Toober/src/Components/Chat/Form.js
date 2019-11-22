@@ -112,7 +112,8 @@ export default class Form extends Component {
     var welcomeMessage = {
       problem: this.state.problem,
       tuteeUID: this.state.tuteeUID,
-      tutorUID: this.state.tutorUID
+      tutorUID: this.state.tutorUID,
+      tutorEmail: this.state.userName
     }
 
     this.chatRef.set(welcomeMessage);
@@ -273,7 +274,7 @@ export default class Form extends Component {
     if (imageURL !== ""){
       header = (
         // { <Grid container spacing = {4}> }
-          <div class="problem">
+          <div className="problem">
             <h4>{problemName}</h4>
 
             <img src={imageURL} alt = "the problem" width="100%" />

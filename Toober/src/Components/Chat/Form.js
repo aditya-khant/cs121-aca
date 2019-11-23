@@ -349,7 +349,7 @@ export default class Form extends Component {
    <div>
       <MuiThemeProvider theme={Theme}>
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
+              <DialogTitle id="form-dialog-title">Send an image</DialogTitle>     
               {dialogBox}         
       </Dialog> 
       <div>

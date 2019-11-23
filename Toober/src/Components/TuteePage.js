@@ -8,6 +8,7 @@ import ImageUploader from 'react-images-upload';
 import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
 import Filter from 'bad-words';
 import Tesseract from 'tesseract.js';
+import DialogBox from './Profiles/DialogBox';
 
 class Tutee extends Component {
     constructor() {
@@ -172,7 +173,7 @@ listChats(){
                 return (
                   <Paper>
                     <ListItem>
-                      <ListItemText primary={problem.problem} secondary={ <Link to="/Profile" > Tutor: {problem.tutorName} </Link> } />
+                      <ListItemText primary={problem.problem} secondary={ <Link to={{pathname: "/Profile", query: {tutorUID: problem.tutorUID, tutorName: problem.tutorName}}} > Tutor: {problem.tutorName} </Link> } />
                       <Link style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID }}}>
                       <Button variant="contained" color="secondary">
                         Chat!
@@ -186,9 +187,9 @@ listChats(){
       )
     }
     
-    let dialogBox;
+    let content;
     if (this.state.loadingDialog){
-      dialogBox = (
+      content = (
       <Grid
         container
         direction="row"
@@ -200,40 +201,31 @@ listChats(){
       </Grid>
       );
     } else {
-       dialogBox = (
-         <div>
-           <DialogContent>
-              <Grid container justify="center"  direction="row">
-              <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
+      content = (
+             <Grid container justify="center"  direction="row">
+             <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
 
-                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
-                <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
-                    <option value="Math">Math</option>
-                    <option value="Biology">Biology</option>
-                    <option value="English">English</option>
-                </select>
-              
-              <ImageUploader
-                    withIcon={false}
-                    buttonText='Upload image'
-                    onChange={this.onDrop}
-                    imgExtension={['.jpg', '.png', '.gif']}
-                    maxFileSize={5242880}
-                    singleImage={true}
-                />
-                <Button variant="contained" type="submit" color="primary">
-                  Submit
-                </Button>
-               </form>
-               </Grid>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={this.handleClose}  variant="contained" color="primary">
-                  Cancel
-                </Button>
-              </DialogActions>
-         </div>
-       )
+               <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
+               <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
+                   <option value="Math">Math</option>
+                   <option value="Biology">Biology</option>
+                   <option value="English">English</option>
+               </select>
+             
+             <ImageUploader
+                   withIcon={false}
+                   buttonText='Upload image'
+                   onChange={this.onDrop}
+                   imgExtension={['.jpg', '.png', '.gif']}
+                   maxFileSize={5242880}
+                   singleImage={true}
+               />
+               <Button variant="contained" type="submit" color="primary">
+                 Submit
+               </Button>
+              </form>
+              </Grid>
+            )
     }
    
     return (
@@ -242,7 +234,7 @@ listChats(){
         <MuiThemeProvider theme={Theme}>
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>
-              {dialogBox}
+              <DialogBox text = {content} closePopup = {this.handleClose}></DialogBox>
           </Dialog>   
         <Grid container direction = "row">
           <Grid item>

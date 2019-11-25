@@ -163,13 +163,6 @@ class Profile extends Component {
           {list}
         </Grid>
         <Grid item xs = {9}>
-
-        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Edit your information</DialogTitle>
-              <DialogBox text = "hi" closePopup = {this.handleClose}></DialogBox>
-          </Dialog>
-
-          <Button onClick={this.handleClickOpen}>Edit my public profile</Button>
         </Grid>
         </MuiThemeProvider>
         </div>

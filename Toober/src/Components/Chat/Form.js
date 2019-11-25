@@ -3,7 +3,7 @@ import './Form.css';
 import Message from './Message';
 import firebase from '../../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {retrieve, isNullEmptyUndef, cleanupText} from "../../Helpers"
+import {retrieve, isNullEmptyUndef, cleanupText } from "../../Helpers"
 import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, CircularProgress} from "@material-ui/core"
 import ImageUploader from 'react-images-upload';
 import Filter from 'bad-words';
@@ -33,7 +33,8 @@ export default class Form extends Component {
       open: false,
       pictures:  "",
       loading: false,
-      tableRef: props.problemID.concat(props.tutorUID)
+      tableRef: props.problemID.concat(props.tutorUID),
+      tutorName: ""
     };
 
     this.filter = new Filter({placeHolder: " "});
@@ -109,10 +110,18 @@ export default class Form extends Component {
 
   async createChat() {
     // creates the chat in firebase
+    if(this.state.isTutor) {
+      this.setState({
+        tutorName: firebase.auth().currentUser.displayName
+      })
+    }
+
     var welcomeMessage = {
       problem: this.state.problem,
       tuteeUID: this.state.tuteeUID,
-      tutorUID: this.state.tutorUID
+      tutorUID: this.state.tutorUID,
+      tutorEmail: this.state.userName,
+      tutorName: this.state.tutorName
     }
 
     this.chatRef.set(welcomeMessage);
@@ -138,7 +147,8 @@ export default class Form extends Component {
         alert("Please refrain from using profanity in your messages");
       } else {
       var newItem = {
-        userName: this.state.userName,
+        // userName: this.state.userName,
+        userName: firebase.auth().currentUser.displayName,
         message: message,
         type: "text"
       }
@@ -184,7 +194,8 @@ export default class Form extends Component {
       const questionRef = storageRef.child(imageID);
       await questionRef.put(file_to_upload);
       const newItem = {
-        userName: this.state.userName,
+        // userName: this.state.userName,
+        userName: firebase.auth().currentUser.displayName,
         image: imageID,
         type: "img"
       }
@@ -272,15 +283,19 @@ export default class Form extends Component {
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
     if (imageURL !== ""){
       header = (
-        <div>
-          <p>{problemName}</p>
-          <img src={imageURL} alt = "the problem" width="100%" />
-        </div>
+        // { <Grid container spacing = {4}> }
+          <div className="problem">
+            <h4>{problemName}</h4>
+
+            <img src={imageURL} alt = "the problem" width="100%" />
+            </div>
       )
     } else {
       header = (
         <div>
-          <p>{problemName}</p>
+          <Grid item xs= {10}>
+          <h4>{problemName}</h4>
+          </Grid>
         </div>
       )
     }
@@ -331,17 +346,20 @@ export default class Form extends Component {
     if (!this.state.isTutor)
     {
       return(
-   <div padding={20}>
+   <div>
       <MuiThemeProvider theme={Theme}>
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
+              <DialogTitle id="form-dialog-title">Send an image</DialogTitle>     
               {dialogBox}         
       </Dialog> 
-      <Grid container spacing={2}>
-        <Grid item xs={3}>
+      <div>
+      {/* <Grid container direction= "row" spacing={10}> */}
+        {/* <Grid  item> */}
+          <div className="header">
           {header}
-        </Grid>
-        <Grid item xs={9}>
+          </div>
+        {/* </Grid>
+        <Grid item> */}
           <div className="form">
             <div className="scroller">
               { this.state.list.map((item, index) =>
@@ -375,9 +393,11 @@ export default class Form extends Component {
             </div>
                 <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback>
           </div>
-         </Grid>
-      </Grid>
+         {/* </Grid>
+         </Grid> */}
+         </div>
       </MuiThemeProvider>
+      
     </div>
       )
     } else {
@@ -388,11 +408,13 @@ export default class Form extends Component {
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
               {dialogBox}         
           </Dialog> 
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
+          {/* <Grid container spacing={2}>
+            <Grid item xs={3}> */}
+              <div className="header">
               {header}
-            </Grid>
-            <Grid item xs={9}>
+              </div>
+            {/* </Grid>
+            <Grid item xs={9}> */}
               <div className="form">
                 <div className="scroller">
                   { this.state.list.map((item, index) =>
@@ -428,8 +450,8 @@ export default class Form extends Component {
                 <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
     
               </div>
-             </Grid>
-          </Grid>
+             {/* </Grid>
+          </Grid> */}
           </MuiThemeProvider>
         </div>    
     );

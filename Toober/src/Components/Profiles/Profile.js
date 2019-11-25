@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import firebase from '../FirebaseConfig.js';
-import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
-import {isNullEmptyUndef, retrieve, retrieveMultiple} from '../Helpers.js';
+import firebase from '../../FirebaseConfig.js';
+import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText, Button, Dialog, DialogActions, DialogTitle, DialogContent } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import {isNullEmptyUndef, retrieve} from '../../Helpers.js';
+import DialogBox from './DialogBox'
 
-import Theme from './Theme.js';
+import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 
 class Profile extends Component {
@@ -19,7 +21,8 @@ class Profile extends Component {
         uid: firebase.auth().currentUser.uid,
         isLoading: true,
         time: 0,
-        problemList: []
+        problemList: [],
+        open: false
     }
 
     if (user != null)
@@ -30,6 +33,10 @@ class Profile extends Component {
         }
 
     this.listProblems = this.listProblems.bind(this);
+    this.handleClickOpen = this.handleClickOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+
+
     }
     
     componentDidMount() {
@@ -64,6 +71,32 @@ class Profile extends Component {
         isLoading: false
       })
     }
+
+    handleClickOpen(){
+      this.setState({
+          open: true,
+      })
+    };
+
+    handleClose(){
+      this.setState({
+          open: false,
+      })
+  };
+
+    // makeContent() {
+    //   <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
+    //     <input type="text" name="problem" placeholder="What is your favorite subject to tutor?" onChange={this.handleChange} value={this.state.problem}/>
+    //       <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
+    //           <option value="Math">Math</option>
+    //           <option value="Biology">Biology</option>
+    //           <option value="English">English</option>
+    //       </select>
+    //       <Button variant="contained" type="submit" color="primary">
+    //         Submit
+    //       </Button>
+    //     </form>
+    // }
 
     render() {
       const problemList = this.state.problemList;
@@ -129,7 +162,8 @@ class Profile extends Component {
           <h3>My Current Problems</h3>
           {list}
         </Grid>
-        
+        <Grid item xs = {9}>
+        </Grid>
         </MuiThemeProvider>
         </div>
         

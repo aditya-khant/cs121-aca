@@ -21,7 +21,6 @@ class HomePage extends Component {
       imageURL: ""
     }
     if(props.location.query) {
-      console.log(props.location.query);
       this.state = {
         closeChat: props.location.query.closeChat,
         closeQuestion: props.location.query.closeQuestion,

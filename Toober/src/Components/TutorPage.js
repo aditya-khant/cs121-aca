@@ -17,8 +17,10 @@ class Tutor extends Component {
           subject: 'Math',
           email: firebase.auth().currentUser.email,
           uid: firebase.auth().currentUser.uid,
+          tutorName: firebase.auth().currentUser.displayName
         }
         this.handleChange = this.handleChange.bind(this);
+        this.pickSubject = this.pickSubject.bind(this);
     }
 
    
@@ -49,7 +51,8 @@ async listProblems(){
                 subject: problems[id].subject,
                 uid: problems[id].uid,
                 id: id,
-                active: active
+                active: active,
+                name: problems[id].name
             });
         }
         this.setState({
@@ -75,7 +78,6 @@ async listChats(){
 
 handleChange(e) {
     // Update the state when necessary
-    console.log(e.target.name)
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -86,13 +88,19 @@ pickSubject(problem, subject) {
     // and the subject the tutor wants to see from the dropdown
     // and returns the problems that match that subject
     if (problem.subject === subject) {
-
         return (
                 <Paper>
                     
                         <ListItem key={problem.id}>
-                        <ListItemText primary={problem.problem} secondary={problem.username} />
-                        <Link  style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {problemID: problem.id, user: this.state.email, tuteeName: true, tuteeUID: problem.uid, tutorUID: firebase.auth().currentUser.uid, isTutor: "a", }}}>
+                        <ListItemText primary={problem.problem} secondary={problem.name} />
+                        <Link  style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', 
+                        query: {
+                            problemID: problem.id,
+                            user: this.state.email,
+                            tuteeName: true,
+                            tuteeUID: problem.uid,
+                            tutorUID: firebase.auth().currentUser.uid,
+                            name: problem.name}}}>
                             <Badge invisible={!problem.active} badgeContent= " " color="primary">
                                 <Button variant="contained" color="secondary">Go to chat!</Button>
                             </Badge>

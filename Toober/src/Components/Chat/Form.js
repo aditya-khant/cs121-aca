@@ -176,6 +176,7 @@ export default class Form extends Component {
     //Modal Close
       this.setState({
           open: false,
+          pictures: "",
       })
   };
 
@@ -268,7 +269,6 @@ export default class Form extends Component {
         pictures: picture,
         loading: false,
      });
-     alert("Picture Uploaded")
     }
    
 
@@ -299,6 +299,21 @@ export default class Form extends Component {
         </div>
       )
     }
+    let imageUploader;
+    if (this.state.pictures !== ""){
+       imageUploader = (<h4>Image Uploaded!</h4>);
+    } else {
+      imageUploader = (
+        <ImageUploader
+        withIcon={false}
+        buttonText='Upload image'
+        onChange={this.onDrop}
+        imgExtension={['.jpg', '.png', '.gif']}
+        maxFileSize={5242880}
+        singleImage={true}
+      />
+      );
+    }
 
     let dialogBox;
     if (this.state.loading){
@@ -318,14 +333,7 @@ export default class Form extends Component {
         <div>
         <DialogContent>
             <Grid container justify="center"  direction="row">     
-              <ImageUploader
-                    withIcon={false}
-                    buttonText='Upload image'
-                    onChange={this.onDrop}
-                    imgExtension={['.jpg', '.png', '.gif']}
-                    maxFileSize={5242880}
-                    singleImage={true}
-                />
+              {imageUploader}
                 <Button variant="contained" color="primary" onClick={this.handleSendImage}>
                   Send
                 </Button>

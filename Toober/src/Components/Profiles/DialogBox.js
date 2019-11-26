@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dialog, DialogActions, DialogTitle, DialogContent, Button } from "@material-ui/core";
+import {DialogActions, DialogContent, Button } from "@material-ui/core";
 
 class DialogBox extends Component {
     render() {

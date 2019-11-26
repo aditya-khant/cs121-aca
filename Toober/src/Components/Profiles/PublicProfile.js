@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../../FirebaseConfig.js';
-import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
-import {isNullEmptyUndef, retrieve} from '../../Helpers.js';
+import {Grid, Paper, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';

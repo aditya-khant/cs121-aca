@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../FirebaseConfig.js';
 import { Link } from "react-router-dom";
-import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, Dialog, DialogActions, DialogTitle, DialogContent} from '@material-ui/core';
+import {CircularProgress, List, ListItem, ListItemText, Button, Grid, Paper, Dialog, DialogTitle} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import ImageUploader from 'react-images-upload';
@@ -57,7 +57,6 @@ class Tutee extends Component {
             pictures: picture,
             loadingDialog: false,
          });
-         alert("Picture Uploaded")
         }
 
     };
@@ -70,6 +69,7 @@ class Tutee extends Component {
   
     handleClose(){
         this.setState({
+           pictures: "",
             open: false,
         })
     };
@@ -171,7 +171,7 @@ listChats(){
         <List>
               {chatList.map((problem) => {
                 return (
-                  <Paper>
+                  <Paper key={problem.problemID + problem.tutorUID}>
                     <ListItem>
                       <ListItemText primary={problem.problem} secondary={ <Link to={{pathname: "/Profile", query: {tutorUID: problem.tutorUID, tutorName: problem.tutorName}}} > Tutor: {problem.tutorName} </Link> } />
                       <Link style={{ textDecoration: 'none' }} to= {{ pathname: '/Chat', query: {user: this.state.email, tuteeName: false, tuteeUID: this.state.uid, tutorUID: problem.tutorUID,  problemID: problem.problemID }}}>
@@ -186,6 +186,24 @@ listChats(){
             </List>
       )
     }
+
+    let imageUploader;
+    if (this.state.pictures !== ""){
+       imageUploader = (<h4>Image Uploaded!</h4>);
+    } else {
+      imageUploader = (
+        <ImageUploader
+        withIcon={false}
+        buttonText='Upload image'
+        onChange={this.onDrop}
+        imgExtension={['.jpg', '.png', '.gif']}
+        maxFileSize={5242880}
+        singleImage={true}
+      />
+      );
+    }
+
+
     
     let content;
     if (this.state.loadingDialog){
@@ -212,14 +230,7 @@ listChats(){
                    <option value="English">English</option>
                </select>
              
-             <ImageUploader
-                   withIcon={false}
-                   buttonText='Upload image'
-                   onChange={this.onDrop}
-                   imgExtension={['.jpg', '.png', '.gif']}
-                   maxFileSize={5242880}
-                   singleImage={true}
-               />
+                {imageUploader}
                <Button variant="contained" type="submit" color="primary">
                  Submit
                </Button>
@@ -239,7 +250,7 @@ listChats(){
         <Grid container direction = "row">
           <Grid item>
             <h1>Tutee</h1>
-            <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
+            <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
               Add Question
             </Button>
                              

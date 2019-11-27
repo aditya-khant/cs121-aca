@@ -106,7 +106,9 @@ export default function ButtonBases() {
           style={{
             width: image.width,
           }}
+          
         >
+          <Link to={image.link} style={{ textDecoration: 'none', color:"white" }}>
           <span
             className={classes.imageSrc}
             style={{
@@ -121,12 +123,13 @@ export default function ButtonBases() {
               color="inherit"
               className={classes.imageTitle}
             >
-              <Link to={image.link} style={{ textDecoration: 'none', color:"white" }}>
+              
               {image.title}
-              </Link>
+              
               <span className={classes.imageMarked} />
             </Typography>
           </span>
+          </Link>
         </ButtonBase>
       ))}
     </div>

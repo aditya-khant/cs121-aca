@@ -5,11 +5,7 @@
     animation: App-logo-spin infinite 20s linear;
     height: 80px;
   }
-  .app__header {
-    background-color: #222;
-    padding: 20px;
-    color: white;
-  }
+
   .app__intro {
     font-size: large;
   }

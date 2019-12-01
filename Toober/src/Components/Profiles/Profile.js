@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../../FirebaseConfig.js';
-import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText, Button, Dialog, DialogActions, DialogTitle, DialogContent } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText } from "@material-ui/core";
 import {isNullEmptyUndef, retrieve} from '../../Helpers.js';
-import DialogBox from './DialogBox'
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';

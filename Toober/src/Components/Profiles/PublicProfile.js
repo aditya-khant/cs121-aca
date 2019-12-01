@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import firebase from '../../FirebaseConfig.js';
-import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
-import {isNullEmptyUndef, retrieve} from '../../Helpers.js';
+import {Grid, Paper, CircularProgress, List, ListItem, ListItemText} from "@material-ui/core"
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -24,22 +23,33 @@ class Profile extends Component {
     }
 
     async getTime(){
+      this.setState({
+        isLoading:true, 
+      })
       const userRef = firebase.database().ref("users/" + this.state.uid);
       let times = []
-      userRef.once("value").then(function(snapshot) {
-        let data = snapshot.val();
-
-        for (let id in data) {
-          times.push({
-            id: id,
-            time: data[id]
-          })
-        }
-      })
+      let snapshot = await userRef.once("value");
+      let data = snapshot.val();
+      for (let id in data) {
+        times.push({
+          id: id,
+          time: data[id]
+        })
+      }
+      
       this.setState({
         listOfTime: times,
         isLoading:false
       })
+    }
+
+    prettifyTimeSubject(inp){
+      let arr = inp.split("_");
+      if (arr.length === 1){
+        return "Overall Time Spent";
+      } else {
+        return "Time spent on " + arr[1];
+      }
     }
 
     render() {
@@ -54,7 +64,11 @@ class Profile extends Component {
           <List>
             {times.map((content) => {
               return(
-                <p>{content.time}</p>
+                <Paper>
+                    <ListItem key={content.id}>
+                      <ListItemText primary={this.prettifyTimeSubject(content.id)} secondary={content.time + " Minutes"} />
+                    </ ListItem>
+                </ Paper>
               )
             })}
             </List>
@@ -77,7 +91,7 @@ class Profile extends Component {
           {header}
         </Grid>
         <Grid item xs={9}>
-          <h4>{list}</h4>
+          {list}
         </Grid>
         
         </MuiThemeProvider>

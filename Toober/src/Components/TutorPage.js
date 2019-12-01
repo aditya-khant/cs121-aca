@@ -89,7 +89,7 @@ pickSubject(problem, subject) {
     // and returns the problems that match that subject
     if (problem.subject === subject) {
         return (
-                <Paper>
+                <Paper key={problem.id}>
                     
                         <ListItem key={problem.id}>
                         <ListItemText primary={problem.problem} secondary={problem.name} />

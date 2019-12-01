@@ -360,7 +360,7 @@ export default class Form extends Component {
               <DialogTitle id="form-dialog-title">Send an image</DialogTitle>     
               {dialogBox}         
       </Dialog> 
-      <div>
+      <div className="all">
       {/* <Grid container direction= "row" spacing={10}> */}
         {/* <Grid  item> */}
           <div className="header">
@@ -410,7 +410,7 @@ export default class Form extends Component {
       )
     } else {
       return (
-        <div padding={20}>
+        <div padding={20} className="all">
           <MuiThemeProvider theme={Theme}>
           <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     

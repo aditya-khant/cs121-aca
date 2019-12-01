@@ -28,6 +28,10 @@ const Login = ({ history }) => {
   }
 
   return (
+    <div>
+    <div>
+      <h1 style={{textAlign: "center"}}>Welcome to Toober!</h1>
+    </div>
     <div style={{ padding: 20}}>
       <MuiThemeProvider theme={Theme}>
       <Grid container direction = "row">
@@ -37,6 +41,7 @@ const Login = ({ history }) => {
         </Grid>
       </Grid>
       </MuiThemeProvider>
+    </div>
     </div>
   );
 };

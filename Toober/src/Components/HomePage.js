@@ -57,10 +57,11 @@ class HomePage extends Component {
   }
 
   async removeProblemImage() {
+    // creates a reference to the image collection in the database and the storage
+    // removes the image associated with the problem
     const imageRelURL = await retrieve("problems", this.state.problem, "imageid")
     const storageRef = firebase.storage().ref();
     let url = ""
-    // removes image file
     url = imageRelURL;
     storageRef.child(url).delete().then(function() {
       console.log("file deleted successfully");

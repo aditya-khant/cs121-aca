@@ -28,6 +28,8 @@ const Navigation = () => {
                    <Button startIcon={<Lock />} color ="secondary" size="large" underline="none" onClick={() => app.auth().signOut()}>Logout</Button>
                    <Button startIcon={<AccountCircle />} color="secondary" component={Link} to="/MyProfile">{"Welcome "+ app.auth().currentUser.email} </Button>     
                  </Typography>
+                 
+                <Typography size = "large" >Toober</Typography>
               </Toolbar>
             </AppBar>
            </MuiThemeProvider>

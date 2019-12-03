@@ -21,9 +21,10 @@ export default class Form extends Component {
     // sets the state from props
     this.state = {
       userName: props.user,
-      isTutor: props.tuteeName,
+      isTutor: props.tuteeName.isTutor,
       tuteeUID: props.tuteeUID,
       tutorUID: props.tutorUID,
+      chattingWith:  props.tuteeName.chattingWith,
       message: '',
       list: [],
       problem: props.problemID,
@@ -34,7 +35,7 @@ export default class Form extends Component {
       pictures:  "",
       loading: false,
       tableRef: props.problemID.concat(props.tutorUID),
-      tutorName: ""
+      tutorName: "",
     };
 
     this.filter = new Filter({placeHolder: " "});
@@ -69,6 +70,12 @@ export default class Form extends Component {
     this.setProblemTextandImage();
     this.listenMessages();
     
+  }
+
+  async setChattingWithName(){
+    if (this.state.isTutor){
+
+    }
   }
 
   async setProblemTextandImage(){
@@ -280,11 +287,13 @@ export default class Form extends Component {
     let header;
     const imageURL = this.state.problemImgUrl;
     const problemName = this.state.problemText;
+    const chattingWith = this.state.chattingWith;
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
     if (imageURL !== ""){
       header = (
         // { <Grid container spacing = {4}> }
           <div className="problem">
+            <h4>Chatting with {chattingWith} about: </h4>
             <h4>{problemName}</h4>
 
             <img src={imageURL} alt = "the problem" width="100%" />
@@ -294,6 +303,7 @@ export default class Form extends Component {
       header = (
         <div>
           <Grid item xs= {10}>
+          <h4>Chatting with {chattingWith} about: </h4>
           <h4>{problemName}</h4>
           </Grid>
         </div>

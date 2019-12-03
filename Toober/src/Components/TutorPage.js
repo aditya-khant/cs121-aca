@@ -97,7 +97,7 @@ pickSubject(problem, subject) {
                         query: {
                             problemID: problem.id,
                             user: this.state.email,
-                            tuteeName: true,
+                            tuteeName: {isTutor: true, chattingWith: problem.name},
                             tuteeUID: problem.uid,
                             tutorUID: firebase.auth().currentUser.uid,
                             name: problem.name}}}>
@@ -120,7 +120,7 @@ render(){
         <div style={{ padding: 20}}>
             <MuiThemeProvider theme={Theme}>
                 <h1>Tutor</h1>
-                <h2>Pick a Subject</h2>
+                <h3>Pick a Subject</h3>
                 <Grid container spacing={3} justify="flex-start"  direction="row" >
                     <Grid item>
                         <Select

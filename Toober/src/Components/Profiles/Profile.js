@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import firebase from '../../FirebaseConfig.js';
 import {Grid, Paper, Avatar, CircularProgress, List, ListItem, ListItemText } from "@material-ui/core";
-import {isNullEmptyUndef, retrieve} from '../../Helpers.js';
+import {isNullEmptyUndef} from '../../Helpers.js';
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -18,7 +18,7 @@ class Profile extends Component {
         photoURL: "",
         uid: firebase.auth().currentUser.uid,
         isLoading: true,
-        time: 0,
+        listOfTime: [],
         problemList: [],
         open: false
     }
@@ -63,10 +63,23 @@ class Profile extends Component {
     }
 
     async getTime(){
-      const tutorTime = await retrieve("users", this.state.uid, "tutorTime");
       this.setState({
-        time: tutorTime,
-        isLoading: false
+        isLoading:true, 
+      })
+      const userRef = firebase.database().ref("users/" + this.state.uid);
+      let times = []
+      let snapshot = await userRef.once("value");
+      let data = snapshot.val();
+      for (let id in data) {
+        times.push({
+          id: id,
+          time: data[id]
+        })
+      }
+      
+      this.setState({
+        listOfTime: times,
+        isLoading:false
       })
     }
 
@@ -96,12 +109,26 @@ class Profile extends Component {
     //     </form>
     // }
 
+    prettifyTimeSubject(inp){
+      let arr = inp.split("_");
+      if (arr.length === 1){
+        return "Overall Time Spent";
+      } else {
+        return "Time spent on " + arr[1];
+      }
+    }
+
+
     render() {
+      const times = this.state.listOfTime;
       const problemList = this.state.problemList;
       let list;
       let theTime;
       if (this.state.isLoading){
         list = (
+          <CircularProgress />
+        );
+        theTime = (
           <CircularProgress />
         );
       } else {
@@ -110,14 +137,26 @@ class Profile extends Component {
                 {problemList.map((problem) => {
                   return (
                     <Paper>
-                      <ListItem>
+                      <ListItem key={problem.problem}>
                         <ListItemText primary={problem.problem} secondary={problem.subject} />
                       </ListItem>
                     </Paper>
                   )})}
               </List>
         );
-      theTime = `You have spent a total of ${this.state.time} minutes tutoring.` ;
+          theTime = (
+            <List>
+              {times.map((content) => {
+                return(
+                  <Paper>
+                      <ListItem key={content.id}>
+                        <ListItemText primary={this.prettifyTimeSubject(content.id)} secondary={content.time + " Minutes"} />
+                      </ ListItem>
+                  </ Paper>
+                )
+              })}
+              </List>
+          );
       }
         var user = firebase.auth().currentUser;
         let header;

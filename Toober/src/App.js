@@ -9,7 +9,6 @@ import Tutee from './Components/TuteePage';
 import Navigation from './Components/Navigation';
 import Chat from './Components/Chat/ChatPage';
 import Login from './Components/Login';
-import SignUp from './Components/SignUp';
 import Profile from './Components/Profiles/Profile';
 import PublicProfile from './Components/Profiles/PublicProfile'
 
@@ -37,7 +36,6 @@ class App extends Component {
               <PrivateRoute exact path="/myprofile" component={Profile}/>
               <PrivateRoute exact path="/profile" component={PublicProfile}/>
               <Route exact path="/login" component={Login}/>
-              <Route exact path="/signup" component={SignUp}/>
             </Switch>
           </div> 
         </Router>

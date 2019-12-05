@@ -7,6 +7,8 @@ import {Grid, Select, MenuItem, List, ListItem, ListItemText, Paper, Button, Bad
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import {isNullEmptyUndef} from '../Helpers.js';
+import {Subjects, createSelectItems} from './Subjects.js'
+
 
 class Tutor extends Component {
     constructor(props) {
@@ -14,7 +16,7 @@ class Tutor extends Component {
         // We will populate this list with data from Firebase
         this.state = {
           problems: [],
-          subject: 'Math',
+          subject: Subjects[0],
           email: firebase.auth().currentUser.email,
           uid: firebase.auth().currentUser.uid,
           tutorName: firebase.auth().currentUser.displayName
@@ -129,9 +131,7 @@ render(){
                             name = {"subject"}
                             autoWidth = {true}
                             >
-                            <MenuItem value={"Math"}>Math</MenuItem>
-                            <MenuItem value={"Biology"}>Biology</MenuItem>
-                            <MenuItem value={"English"}>English</MenuItem>
+                            {createSelectItems("menuItem")}
                         </Select>
                     </ Grid>
                 </ Grid>

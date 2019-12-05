@@ -9,6 +9,7 @@ import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
 import Filter from 'bad-words';
 import Tesseract from 'tesseract.js';
 import DialogBox from './Profiles/DialogBox';
+import {Subjects, createSelectItems} from './Subjects.js'
 
 class Tutee extends Component {
     constructor() {
@@ -18,7 +19,7 @@ class Tutee extends Component {
         this.state = {
           username: '',
           problem: '',
-          subject: 'Math', 
+          subject: Subjects[0], 
           uid: firebase.auth().currentUser.uid,
           email: firebase.auth().currentUser.email,
           pictures: "",
@@ -118,7 +119,7 @@ class Tutee extends Component {
     this.setState({
       username: '',
       problem: '',
-      subject: 'Math',
+      subject: Subjects[0],
       uid: firebase.auth().currentUser.uid,
       pictures: "",
       open: false,
@@ -158,7 +159,7 @@ listChats(){
   
  
 }
-    
+
   render() {
     const chatList = this.state.chatList;
     let list;
@@ -225,9 +226,7 @@ listChats(){
 
                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
                <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
-                   <option value="Math">Math</option>
-                   <option value="Biology">Biology</option>
-                   <option value="English">English</option>
+                 {createSelectItems("option")}
                </select>
              
                 {imageUploader}

@@ -122,8 +122,7 @@ class Tutee extends Component {
       subject: Subjects[0],
       uid: firebase.auth().currentUser.uid,
       pictures: "",
-      open: false,
-      name: ''
+      open: false
     });
  }
 

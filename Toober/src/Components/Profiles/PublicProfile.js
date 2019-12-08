@@ -55,7 +55,7 @@ class Profile extends Component {
     render() {
       let times = this.state.listOfTime;
       let list;
-      if (this.state.isLoading){
+      if (this.fstate.isLoading){
         list = (
           <CircularProgress />
         );
@@ -74,7 +74,7 @@ class Profile extends Component {
             </List>
         )
       }
-      // theTime = `This tutor has spent a total of ${this.state.time} minutes tutoring.` ;
+      {/* // theTime = `This tutor has spent a total of ${this.state.time} minutes tutoring.` ; */}
         let header;
 
         header = (

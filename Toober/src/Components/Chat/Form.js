@@ -8,7 +8,7 @@ import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Circula
 import ImageUploader from 'react-images-upload';
 import Filter from 'bad-words';
 import Tesseract from 'tesseract.js';
-import { animateScroll } from "react-scroll";
+import ProblemHeader from './ProblemHeader'
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -47,7 +47,6 @@ export default class Form extends Component {
   }
 
   componentDidMount() {
-
     if (this.state.isTutor){
         let startTime = Date.now()
         this.setState({
@@ -73,12 +72,6 @@ export default class Form extends Component {
 
   }
 
-  async setChattingWithName(){
-    if (this.state.isTutor){
-
-    }
-  }
-
   async setProblemTextandImage(){
     // Downloads the problem's text and image and sets it in the state
     const problemName = await retrieve("problems", this.state.problem, "problem")
@@ -88,7 +81,6 @@ export default class Form extends Component {
     try{
       url = await storageRef.child(imageRelURL).getDownloadURL()
     } catch {
-
     }
     this.setState({
        problemText: problemName,
@@ -189,7 +181,6 @@ export default class Form extends Component {
   };
 
   async handleSendImage(){
-  
     // Either initializes a problems collection in Firebase
     // Or sends it to the existing one
     let imageID = "";
@@ -282,31 +273,17 @@ export default class Form extends Component {
 
 
   render() {
-    let header;
-    const imageURL = this.state.problemImgUrl;
-    const problemName = this.state.problemText;
-    const chattingWith = this.state.chattingWith;
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
-    if (imageURL !== ""){
-      header = (
-        // { <Grid container spacing = {4}> }
-          <div className="problem">
-            <h4>Chatting with {chattingWith} about: </h4>
-            <h4>{problemName}</h4>
 
-            <img src={imageURL} alt = "the problem" width="100%" />
-            </div>
-      )
+    let exit;
+    if (!this.state.isTutor) {
+      exit = (
+        <div> <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback> </div>
+      ); 
     } else {
-      header = (
-        <div>
-          <Grid item xs= {10}>
-          <h4>Chatting with {chattingWith} about: </h4>
-          <h4>{problemName}</h4>
-          </Grid>
-        </div>
-      )
-    }
+        exit = (<div> <Link to={exitLink} ><Button color="primary">Exit</Button></Link> </div> );
+      }
+
     let imageUploader;
     if (this.state.pictures !== ""){
        imageUploader = (<h4>Image Uploaded!</h4>);
@@ -356,13 +333,8 @@ export default class Form extends Component {
       );
     }
 
-   
-
-   
-    if (!this.state.isTutor)
-    {
-      return(
-   <div>
+    return(
+      <div>
       <MuiThemeProvider theme={Theme}>
       <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
               <DialogTitle id="form-dialog-title">Send an image</DialogTitle>     
@@ -371,7 +343,7 @@ export default class Form extends Component {
       <div className="all">
 
           <div className="header">
-          {header}
+            <ProblemHeader imageURL = {this.state.problemImgUrl} problemName = {this.state.problemText} chattingWith = {this.state.chattingWith} />
           </div>
 
           <div className="form">
@@ -404,63 +376,12 @@ export default class Form extends Component {
               >
                 Upload Image
               </Button>
-            </div>
-                <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback>
-          </div>
-         </div>
-      </MuiThemeProvider>
-      
-    </div>
-      )
-    } else {
-      return (
-        <div padding={20} className="all">
-          <MuiThemeProvider theme={Theme}>
-          <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
-              {dialogBox}         
-          </Dialog> 
-              <div className="header">
-              {header}
-              </div>
-              <div className="form">
-                  <div id="scroll" className="scroller">
-                    { this.state.list.map((item, index) =>
-                      <Message key={index} message={item} />
-                    )}
-                    </div>
-                <div className="form__row">
-                  <input
-                    className="form__input"
-                    type="text"
-                    name="message"
-                    placeholder="Type message"
-                    value={this.state.message}
-                    onChange={this.handleChange.bind(this)}
-                    onKeyPress={this.handleKeyPress.bind(this)}
-                  />
-                  <Button
-                variant="contained"
-                color="primary"
-                onClick={this.handleSend.bind(this)}
-              >
-                send
-              </Button>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={this.handleClickOpen.bind(this)}
-              >
-                Upload Image
-              </Button>
                 </div>
-
-                <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
-    
+                {exit}
               </div>
-          </MuiThemeProvider>
-        </div>    
-    );
+              </div>
+      </MuiThemeProvider>
+      </div>
+    )
   }
-}
 }

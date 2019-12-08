@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import { AuthContext } from "../Auth";
-import {Grid} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';

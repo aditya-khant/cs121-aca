@@ -31,8 +31,7 @@ const Navigation = () => {
                    <Button startIcon={<Lock />} color ="secondary" size="large" underline="none" onClick={() => app.auth().signOut()}>Logout</Button>
                    <Button color="secondary" component={Link} to="/MyProfile"><Avatar alt="Profile" src={ app.auth().currentUser.photoURL} />{"Welcome "+ app.auth().currentUser.displayName} </Button>     
                  </Typography>
-                 
-                {/* <Typography size = "large" >Toober</Typography> */}
+                
               </Toolbar>
             </AppBar>
            </MuiThemeProvider>

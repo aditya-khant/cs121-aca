@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {DialogActions, DialogContent, Button } from "@material-ui/core";
 
 function DialogBox(props) {

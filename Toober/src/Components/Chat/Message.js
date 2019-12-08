@@ -13,7 +13,6 @@ export default class Message extends Component {
 
   componentDidMount(){
     this.downloadImage()
-    
   }
 
   async downloadImage(){

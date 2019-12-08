@@ -25,6 +25,7 @@ class Profile extends Component {
       this.setState({
         isLoading:true, 
       })
+      
       const userRef = firebase.database().ref("users/" + this.state.uid);
       let times = []
       let snapshot = await userRef.once("value");

@@ -47,8 +47,6 @@ const Navigation = () => {
             <Toolbar>
                <Typography>
                 <Button color="secondary"  component={Link} to="/" underline="none" style={{width: "10%" }}><img src={logo} alt="Logo" style={{width: "100%" }}  /></Button>
-                {/* <Button startIcon={<Teach />} color ="inherit" size="large" underline="none" component={Link} to="/Tutor" >Tutor</Button>
-                <Button startIcon={<School />} color ="inherit" size="large" underline="none" component={Link} to="/Tutee" >Tutee</Button> */}
                 <Button startIcon={<LockOpen />}color ="inherit" size="large" underline="none" component={Link} to="/Login">Login</Button>
                </Typography>
             </Toolbar>

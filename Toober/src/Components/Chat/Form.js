@@ -272,6 +272,8 @@ export default class Form extends Component {
 };
 
   componentDidUpdate() {
+    // if messages already exist, we scroll to the bottom
+    // so the user can see the most recent ones
     if (this.newData) {
       this.newData.scrollIntoView({ behavior: "smooth" })
     }

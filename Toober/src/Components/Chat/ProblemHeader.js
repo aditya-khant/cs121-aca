@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 function ProblemHeader(props) {
     let header;
     if (props.imageURL !== ""){
+        // if there is an image, create the header with it
         header = (
             <div >
               <h4>Chatting with {props.chattingWith} about: </h4>

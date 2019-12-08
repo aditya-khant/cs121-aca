@@ -96,20 +96,6 @@ class Profile extends Component {
       })
   };
 
-    // makeContent() {
-    //   <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
-    //     <input type="text" name="problem" placeholder="What is your favorite subject to tutor?" onChange={this.handleChange} value={this.state.problem}/>
-    //       <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
-    //           <option value="Math">Math</option>
-    //           <option value="Biology">Biology</option>
-    //           <option value="English">English</option>
-    //       </select>
-    //       <Button variant="contained" type="submit" color="primary">
-    //         Submit
-    //       </Button>
-    //     </form>
-    // }
-
     prettifyTimeSubject(inp){
       let arr = inp.split("_");
       if (arr.length === 1){
@@ -187,23 +173,23 @@ class Profile extends Component {
         }
         return (
 
-        <div style={{ padding: 20}}>
-        <MuiThemeProvider theme={Theme}>
-        <Grid item xs={3}>
-          {header}
-        </Grid>
-        <Grid item xs={9}>
-          <h3>My Tutor Time</h3>
-          <h4>{theTime}</h4>
-        </Grid>
-        <Grid item xs={9}>
-          <h3>My Current Problems</h3>
-          {list}
-        </Grid>
-        <Grid item xs = {9}>
-        </Grid>
-        </MuiThemeProvider>
-        </div>
+          <div style={{ padding: 20}}>
+            <MuiThemeProvider theme={Theme}>
+              <Grid item xs={3}>
+                {header}
+              </Grid>
+              <Grid item xs={9}>
+                <h3>My Tutor Time</h3>
+                <h4>{theTime}</h4>
+              </Grid>
+              <Grid item xs={9}>
+                <h3>My Current Problems</h3>
+                {list}
+              </Grid>
+              <Grid item xs = {9}>
+              </Grid>
+            </MuiThemeProvider>
+          </div>
         
         )
   }

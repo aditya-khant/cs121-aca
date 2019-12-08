@@ -271,6 +271,11 @@ export default class Form extends Component {
     }
 };
 
+  componentDidUpdate() {
+    if (this.newData) {
+      this.newData.scrollIntoView({ behavior: "smooth" })
+    }
+  }
 
   render() {
     const exitLink = this.state.isTutor ? "/Tutor" : "/Tutee";
@@ -349,7 +354,9 @@ export default class Form extends Component {
           <div className="form">
             <div id = "scroll" className="scroller">
               { this.state.list.map((item, index) =>
+              <div ref={(ref) => this.newData = ref} >
                 <Message key={index} message={item} />
+              </div>
               )}
             </div>
             <div className="form__row">

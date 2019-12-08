@@ -16,7 +16,7 @@ class Profile extends Component {
         username: "",
         email: "",
         photoURL: "",
-        uid: firebase.auth().currentUser.uid,
+        uid: "",
         isLoading: true,
         listOfTime: [],
         problemList: [],
@@ -28,6 +28,7 @@ class Profile extends Component {
             this.state.username = user.displayName;
             this.state.email = user.email;
             this.state.photoUrl = user.photoURL;
+            this.state.uid = user.uid;
         }
 
     this.listProblems = this.listProblems.bind(this);
@@ -112,7 +113,7 @@ class Profile extends Component {
     prettifyTimeSubject(inp){
       let arr = inp.split("_");
       if (arr.length === 1){
-        return "Overall Time Spent";
+        return "Total Time Spent";
       } else {
         return "Time spent on " + arr[1];
       }

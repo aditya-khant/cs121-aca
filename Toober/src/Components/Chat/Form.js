@@ -8,6 +8,7 @@ import {Grid, Button, Dialog, DialogActions, DialogContent, DialogTitle, Circula
 import ImageUploader from 'react-images-upload';
 import Filter from 'bad-words';
 import Tesseract from 'tesseract.js';
+import { animateScroll } from "react-scroll";
 
 import Theme from '../Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -69,7 +70,7 @@ export default class Form extends Component {
     });
     this.setProblemTextandImage();
     this.listenMessages();
-    
+
   }
 
   async setChattingWithName(){
@@ -277,11 +278,8 @@ export default class Form extends Component {
         loading: false,
      });
     }
-   
-
-   
-
 };
+
 
   render() {
     let header;
@@ -371,15 +369,13 @@ export default class Form extends Component {
               {dialogBox}         
       </Dialog> 
       <div className="all">
-      {/* <Grid container direction= "row" spacing={10}> */}
-        {/* <Grid  item> */}
+
           <div className="header">
           {header}
           </div>
-        {/* </Grid>
-        <Grid item> */}
+
           <div className="form">
-            <div className="scroller">
+            <div id = "scroll" className="scroller">
               { this.state.list.map((item, index) =>
                 <Message key={index} message={item} />
               )}
@@ -411,8 +407,6 @@ export default class Form extends Component {
             </div>
                 <Feedback problemID = {this.state.problem} tableTitle = {this.state.tableRef} tutorID = {this.state.tutorUID}></Feedback>
           </div>
-         {/* </Grid>
-         </Grid> */}
          </div>
       </MuiThemeProvider>
       
@@ -426,19 +420,15 @@ export default class Form extends Component {
               <DialogTitle id="form-dialog-title">Add your question</DialogTitle>     
               {dialogBox}         
           </Dialog> 
-          {/* <Grid container spacing={2}>
-            <Grid item xs={3}> */}
               <div className="header">
               {header}
               </div>
-            {/* </Grid>
-            <Grid item xs={9}> */}
               <div className="form">
-                <div className="scroller">
-                  { this.state.list.map((item, index) =>
-                    <Message key={index} message={item} />
-                  )}
-                </div>
+                  <div id="scroll" className="scroller">
+                    { this.state.list.map((item, index) =>
+                      <Message key={index} message={item} />
+                    )}
+                    </div>
                 <div className="form__row">
                   <input
                     className="form__input"
@@ -468,8 +458,6 @@ export default class Form extends Component {
                 <Link to={exitLink} ><Button color="primary">Exit</Button></Link>
     
               </div>
-             {/* </Grid>
-          </Grid> */}
           </MuiThemeProvider>
         </div>    
     );

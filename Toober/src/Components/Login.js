@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { withRouter, Redirect } from "react-router";
 import { AuthContext } from "../Auth";
-import {Grid} from '@material-ui/core';
 import Theme from './Theme.js';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
@@ -29,17 +28,13 @@ const Login = ({ history }) => {
 
   return (
     <div>
-    <div>
-      <h1 style={{textAlign: "center"}}>Welcome to Toober!</h1>
+    <div style={{textAlign: "center"}}>
+      <h1>Welcome to Toober!</h1>
+      <p><i>Toober is designed to connect people who need homework help to those that can offer it</i></p>
     </div>
     <div style={{ padding: 20}}>
       <MuiThemeProvider theme={Theme}>
-      <Grid container direction = "row">
-        <Grid item>
-        <h1>Log in</h1>
       <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>
-        </Grid>
-      </Grid>
       </MuiThemeProvider>
     </div>
     </div>

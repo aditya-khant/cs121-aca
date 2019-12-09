@@ -37,7 +37,6 @@ class HomePage extends Component {
     // On load, this opens the database connections and removes
     // what needs to be removed (the chat or the problem) depending
     // on the properties passed in
-    // this.chatRef = firebase.database().ref('chat/' + this.state.tableTitle);
     this.problemRef = firebase.database().ref('problems/' + this.state.problem);
     this.chatRef = firebase.database().ref('chat/')
     if(this.state.closeChat) {

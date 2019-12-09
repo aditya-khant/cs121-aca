@@ -15,7 +15,6 @@ class Profile extends Component {
         listOfTime: [],
         isLoading: true
       }
-
     }
     
     componentDidMount() {
@@ -26,6 +25,7 @@ class Profile extends Component {
       this.setState({
         isLoading:true, 
       })
+      
       const userRef = firebase.database().ref("users/" + this.state.uid);
       let times = []
       let snapshot = await userRef.once("value");
@@ -55,11 +55,11 @@ class Profile extends Component {
     render() {
       let times = this.state.listOfTime;
       let list;
-      if (this.state.isLoading){
+      if (this.state.isLoading) {
         list = (
           <CircularProgress />
         );
-      }else {
+      } else {
       list =  (
           <List>
             {times.map((content) => {
@@ -74,21 +74,12 @@ class Profile extends Component {
             </List>
         )
       }
-      // theTime = `This tutor has spent a total of ${this.state.time} minutes tutoring.` ;
-        let header;
-
-        header = (
-          <div>
-            <h1>{this.state.username}</h1>
-          </div>
-          )
-
-        return (
-
+      
+      return (
         <div style={{ padding: 20}}>
         <MuiThemeProvider theme={Theme}>
         <Grid item xs={3}>
-          {header}
+        <h1>{this.state.username}</h1>
         </Grid>
         <Grid item xs={9}>
           {list}

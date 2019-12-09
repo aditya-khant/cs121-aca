@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1
-    
 }
 .form__row {
     display: flex;
@@ -61,11 +60,6 @@
     display: flex;
     width: 40%;
   }
-
-
-.problem {
-    flex-grow: 1
-} 
 
 .all {
     display: flex;

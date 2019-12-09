@@ -9,6 +9,7 @@ import {cleanupText, isNullEmptyUndef, retrieveMultiple} from '../Helpers.js';
 import Filter from 'bad-words';
 import Tesseract from 'tesseract.js';
 import DialogBox from './Profiles/DialogBox';
+import {Subjects, createSelectItems} from './Subjects.js'
 
 class Tutee extends Component {
     constructor() {
@@ -18,7 +19,7 @@ class Tutee extends Component {
         this.state = {
           username: '',
           problem: '',
-          subject: 'Math', 
+          subject: Subjects[0], 
           uid: firebase.auth().currentUser.uid,
           email: firebase.auth().currentUser.email,
           pictures: "",
@@ -118,11 +119,10 @@ class Tutee extends Component {
     this.setState({
       username: '',
       problem: '',
-      subject: 'Math',
+      subject: Subjects[0],
       uid: firebase.auth().currentUser.uid,
       pictures: "",
-      open: false,
-      name: ''
+      open: false
     });
  }
 
@@ -134,12 +134,13 @@ class Tutee extends Component {
     this.chatRef.off();
   }
 
-
 listChats(){
   this.chatRef = firebase.database().ref("chat");
   let newChats = []
   this.chatRef.orderByChild("tuteeUID").equalTo(this.state.uid).on('value', async (snapshot) => {
     const chat_dict = snapshot.val();
+    // get all of the important information from the ref
+    // including the problem, the subject, and the tutor who's chatting
     if (!isNullEmptyUndef(chat_dict)){
       for (const [, value] of Object.entries(chat_dict)) {
         const problemID = value.problem;
@@ -158,7 +159,7 @@ listChats(){
   
  
 }
-    
+
   render() {
     const chatList = this.state.chatList;
     let list;
@@ -166,7 +167,7 @@ listChats(){
       list = (
         <CircularProgress />
       );
-    }else {
+    } else {
       list = (
         <List>
               {chatList.map((problem) => {
@@ -221,13 +222,11 @@ listChats(){
     } else {
       content = (
              <Grid container justify="center"  direction="row">
-             <form onSubmit={this.handleSubmit} style={{ width: "500px" }} /*Change this to Form Control*/>
+             <form onSubmit={this.handleSubmit} style={{ width: "500px" }}>
 
                <input type="text" name="problem" placeholder="What is the problem you are working on?" onChange={this.handleChange} value={this.state.problem}/>
                <select id="lang" name="subject" onChange={this.handleChange} value={this.state.subject}>
-                   <option value="Math">Math</option>
-                   <option value="Biology">Biology</option>
-                   <option value="English">English</option>
+                 {createSelectItems("option")}
                </select>
              
                 {imageUploader}
@@ -253,6 +252,7 @@ listChats(){
             <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
               Add Question
             </Button>
+            <Link to = "/myprofile" style={{padding: 10}}>My Submitted Questions</Link>
                              
           </Grid>
         </Grid>

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './Message.css';
 import firebase from '../../FirebaseConfig.js';
-export default class Message extends Component {
 
+export default class Message extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -13,7 +13,6 @@ export default class Message extends Component {
 
   componentDidMount(){
     this.downloadImage()
-    
   }
 
   async downloadImage(){

@@ -252,7 +252,7 @@ listChats(){
             <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
               Add Question
             </Button>
-            <Link to = "/myprofile"><Button>My Submitted Questions</Button></Link>
+            <Link to = "/myprofile" style={{padding: 10}}>My Submitted Questions</Link>
                              
           </Grid>
         </Grid>
